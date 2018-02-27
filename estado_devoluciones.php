@@ -77,6 +77,21 @@ $meses = $mistrings->meses();
     </section>
 
     <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <h3 class="box-title">Totales por estado</h3>
+                    </div>
+                    <div class="box-body">
+                        <h4 class="box-title"><strong> Por procesar: 0 &nbsp;&nbsp;&nbsp;&nbsp;  Programada: 1 &nbsp;&nbsp;&nbsp;&nbsp; Finalizada: 5</strong></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
         <div class="row" style="font-size:11px;">
             <div class="col-xs-12">
                 <div class="box">

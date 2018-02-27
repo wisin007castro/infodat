@@ -117,11 +117,11 @@
                   <th>DESC_4</th>
                   <th>CANT</th>
                   <th>UNIDAD</th>
-                  <th>FECHA_I</th>
-                  <th>FECHA_F</th>
-                  <th>DPTO</th>
+                  <th>FECHA INICIO</th>
+                  <th>FECHA FIN</th>
+                  <th>DEPARTAMENTO</th>
                   <th>ESTADO</th>
-                  <th>REGIONAL</th>
+                  <!-- <th>REGIONAL</th> -->
                 </tr>
               </thead>
               <tbody></tbody>
@@ -201,11 +201,11 @@
                   <th>DESC_4</th>
                   <th>CANT</th>
                   <th>UNIDAD</th>
-                  <th>FECHA_I</th>
-                  <th>FECHA_F</th>
-                  <th>DPTO</th>
+                  <th>FECHA INICIO</th>
+                  <th>FECHA FIN</th>
+                  <th>DEPARTAMENTO</th>
                   <th>ESTADO</th>
-                  <th>REGIONAL</th>
+                  <!-- <th>REGIONAL</th> -->
                 </tr>
               </thead>
               <tbody></tbody>
@@ -281,7 +281,7 @@ $("#boton").click(function(){
         +"<td>"+inventarios.DIA_F+"/"+inventarios.MES_F+"/"+inventarios.ANO_F+"</td>"
         +"<td>"+inventarios.DEPARTAMENTO+"</td>"
         +"<td>"+inventarios.ESTADO+"</td>"
-        +"<td>"+inventarios.REGIONAL+"</td>"
+        // +"<td>"+inventarios.REGIONAL+"</td>"
         +"</tr>";
           $(nuevaFila).appendTo("#tablajson tbody");
         });
@@ -331,7 +331,7 @@ $("#boton").click(function(){
         +"<td>"+inventarios.DIA_F+"/"+inventarios.MES_F+"/"+inventarios.ANO_F+"</td>"
         +"<td>"+inventarios.DEPARTAMENTO+"</td>"
         +"<td>"+inventarios.ESTADO+"</td>"
-        +"<td>"+inventarios.REGIONAL+"</td>"
+        // +"<td>"+inventarios.REGIONAL+"</td>"
         +"</tr>";
           $(nuevaFila).appendTo("#seleccionados tbody");
         });

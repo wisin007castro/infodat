@@ -63,7 +63,7 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="#"><i class="fa fa-circle-o"></i> Reporte de Acceso</a></li>
+            <li><a href="form_rep_acceso.php"><i class="fa fa-circle-o"></i> Reporte de Acceso</a></li>
             <li><a href="form_listado_usuario.php"><i class="fa fa-circle-o"></i> Reporte de usuario</a></li>
           </ul>
         </li>
