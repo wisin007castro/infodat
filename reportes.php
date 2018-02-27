@@ -31,22 +31,19 @@
     <section class="content">
       <!-- Small boxes (Stat box) -->
       <div class="row">
-        <div class="col-lg-1 col-xs-6">
-          <div class="form-group">
-          </div>
-        </div>
-        <div class="col-lg-2 col-xs-6">
+        <div class="col-lg-4 col-xs-6">
           <div class="form-group">
               <label>Número de caja</label>
               <input type="number" class="form-control" id="bNoCaja" name="" min="0">
+              <input type="text" class="form-control" id="bdesc_1" name="" placeholder="Descripción 1">
           </div>
         </div>
 
         <div class="col-lg-4 col-xs-6">
           <div class="form-group">
               <label>Descripción</label>
-              <input type="text" class="form-control" id="bdesc_1" name="" placeholder="Descripción 1">
               <input type="text" class="form-control" id="bdesc_2" name="" placeholder="Descripción 2">
+              <input type="text" class="form-control" id="bdesc_3" name="" placeholder="Descripción 3">
           </div>
         </div>
         <!-- ./col -->
@@ -77,12 +74,25 @@
                 </div>
           </div>
         </div>
-        <div class="col-lg-2 col-xs-6">
+        <div class="col-lg-1 col-xs-6">
           <div class="form-group">
-                <!-- <label>Rango de fecha:</label> -->
                   <div class="input-group">
-                   <button type="button" class="btn btn-default" id="buscar"><i class="fa fa-search"> </i> </button>
-                  <button type="button" class="btn btn-default pull-right" id="limpiar"><i class="fa fa-trash"></i> </button>
+                    <br>
+                    <a id="buscar" class="btn btn-app">
+                      <i class="fa fa-search"></i> Buscar
+                    </a>
+                  </div>
+
+          </div>
+        </div>
+
+        <div class="col-lg-1 col-xs-6">
+          <div class="form-group">
+                  <div class="input-group">
+                    <br>
+                      <a id="limpiar" class="btn btn-app">
+                        <i class="fa fa-trash"></i> Limpiar
+                      </a>
                   </div>
 
           </div>
@@ -137,15 +147,13 @@
 
     <section class="content">
       <div class="row">
-        <div class="col-lg-1 col-xs-6">
-        </div>
-        <div class="col-lg-4 col-xs-6">
+        <div class="col-lg-5 col-xs-6">
           <div class="form-group">
             <label>Dirección de entrega</label>
             <input class="form-control" placeholder="Ingrese su dirección"></input>
           </div>
         </div>
-        <div class="col-lg-4 col-xs-6">
+        <div class="col-lg-5 col-xs-6">
           <div class="form-group">
             <label>Observaciones</label>
             <textarea class="form-control" rows="4" placeholder="Ingrese los detalles"></textarea>

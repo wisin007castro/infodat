@@ -117,7 +117,7 @@ $meses = $mistrings->meses();
                     <div class="box-body table-responsive no-padding">
                         <table class="table table-bordered" id="seleccionados">
                             <thead><tr>
-                                <th></th>
+                                <!-- <th></th> -->
                                 <th>#</th>
                                 <th>CLIENTE</th>
                                 <th>CAJA</th>
@@ -243,7 +243,7 @@ $meses = $mistrings->meses();
                 var nuevaFila =
                     "<tr>"
                     // +"<td><button type='button' class='btn btn-success' ><i class='fa fa-shopping-cart'></i></button></td>"
-                    +"<td><a href='javascript:void(0);' onclick='deleteRow(this)'><i style='font-size:14px;' class='fa fa-trash text-red'></i></a></td>"
+                    // +"<td><a href='javascript:void(0);' onclick='deleteRow(this)'><i style='font-size:14px;' class='fa fa-trash text-red'></i></a></td>"
                     +"<td id='asd'>"+inventarios.ID_INV+"</td>"
                     +"<td>"+inventarios.CLIENTE+"</td>"
                     +"<td>"+inventarios.CAJA+"</td>"
