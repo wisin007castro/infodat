@@ -1,0 +1,73 @@
+.bodylogin{
+    background-image: url(../img/background.jpg);
+    background-size: cover;
+    color: white;
+    background-repeat: no-repeat;
+    background-position: center; 
+    background-attachment: fixed;
+}
+.cabecera-login{
+    background: rgba(245, 2, 36, 0.58);
+    color: white;
+}
+
+.formlogin{
+    background: rgba(245, 2, 36, 0.58);
+    color: white;
+    padding: 40px;
+    margin-top: 80px;
+    padding-bottom: 60px;
+    box-shadow: 10px 10px 5px rgba(6, 1, 1, 0.43)
+}
+.h1-login{
+    text-align: center;
+}
+.btn{
+    width: 100%;
+    border-radius: 0px;
+
+}
+.form-control-login{
+    border-radius: 0px;
+    background-color: rgba(23, 3, 3, 0.48);
+    color: white;
+    border-radius:1px solid #291212
+}
+
+.mybtn-social {
+    display: inline-block;
+    height: 50px;
+    margin: 5px;
+    padding: 15px 20px 0 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid #fff;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 16px;
+    color: #fff;
+    -moz-border-radius: 4px; 
+    -webkit-border-radius: 4px; 
+    border-radius: 4px;
+}
+
+button.mybtn {
+    /*height: 50px;*/
+    background: #f96868;
+    border: 0;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 40px;
+    color: #fff;
+    -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px;
+    -o-transition: all .3s; -moz-transition: all .3s; -webkit-transition: all .3s; -ms-transition: all .3s; transition: all .3s;
+}
+button.mybtn:hover, button.mybtn:active { 
+    opacity: 0.6; 
+    color: #fff; 
+}
+button.mybtn:focus { 
+    opacity: 0.6;  
+    color: #fff; 
+    background: #de615e; 
+}

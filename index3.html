@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>Json PHP</title>
+<link rel="stylesheet" href="css/estilo.css">
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js" ></script> 
+<script type="text/javascript">
+	$(document).ready(function(){
+		//Limpiamos el cuerpo tbody
+		$("#tablajson tbody").html("");
+		$("#error").html("<div class='modal1'><div class='center1'> <center> <img src='img/gif-load.gif'> Cargando Informacion...</center></div></div>");
+		$.getJSON("obtieneConsulta.php",{id:"", control:"0"},function(objetosretorna){
+			$("#error").html("");
+			var TamanoArray = objetosretorna.length;
+			$.each(objetosretorna, function(i,cliente){
+				var nuevaFila =
+				"<tr>"
+				+"<td>"+cliente.id+"</td>"
+				+"<td>"+cliente.nombre+"</td>"
+				+"<td>"+cliente.apellidos+"</td>"
+				+"<td>"+cliente.sexo+"</td>"
+				+"<td>"+cliente.edad+"</td>"
+				+"<td>"+cliente.email+"</td>"
+				+"</tr>";
+				$(nuevaFila).appendTo("#tablajson tbody");
+			});
+			if(TamanoArray==0){
+				var nuevaFila =
+				"<tr><td colspan=6>No Existe Registros</td>"
+				+"</tr>";
+				$(nuevaFila).appendTo("#tablajson tbody");
+			}
+		});
+		$("#buscar").keypress(function(){
+			$("#tablajson tbody").html("");
+		    $("#error").html("<div class='modal1'><div class='center1'> <center> <img src='img/gif-load.gif'> Buscando Informacion...</center></div></div>");
+			var idbuscar = $("#buscar").val();
+			
+			$.getJSON("obtieneConsulta.php",{id:idbuscar, control:"0"},function(objetosretorna){
+				$("#error").html("");
+				var TamanoArray = objetosretorna.length;
+				$.each(objetosretorna, function(i,cliente){
+					var nuevaFila =
+					"<tr>"
+					+"<td>"+cliente.id+"</td>"
+					+"<td>"+cliente.nombre+"</td>"
+					+"<td>"+cliente.apellidos+"</td>"
+					+"<td>"+cliente.sexo+"</td>"
+					+"<td>"+cliente.edad+"</td>"
+					+"<td>"+cliente.email+"</td>"
+					+"</tr>";
+					$(nuevaFila).appendTo("#tablajson tbody");
+				});
+				if(TamanoArray==0){
+					var nuevaFila =
+					"<tr><td colspan=6>No Existe Registros</td>"
+					+"</tr>";
+					$(nuevaFila).appendTo("#tablajson tbody");
+				}
+			});
+		});
+		$("#txtId").keypress(function(){
+			$("#error").html("<div class='modal1'><div class='center1'> <center> <img src='img/gif-load.gif'> Buscando Informacion...</center></div></div>");
+			var txtId = $("#txtId").val();
+			//Limpiamos campo
+			$("#txtNombre").val("");
+			$("#txtApellidos").val("");
+			$("#txtSexo").val("");
+			$("#txtEdad").val("");
+			$("#txtEmail").val("");
+			$.getJSON("obtieneConsulta.php",{id:txtId, control:"1"},function(objetosretorna){
+				$("#error").html("");
+				var TamanoArray = objetosretorna.length;
+				$.each(objetosretorna, function(i,cliente){
+					$("#txtNombre").val(cliente.nombre);
+					$("#txtApellidos").val(cliente.apellidos);
+					$("#txtSexo").val(cliente.sexo);
+					$("#txtEdad").val(cliente.edad);
+					$("#txtEmail").val(cliente.email);
+				});
+				if(TamanoArray==0){
+					$("#error").html("<font color='red'>Error: El Cliente: " + txtId + " No Existe</font>");
+				}
+			});
+		});
+	});
+</script>
+</head>
+<body>
+<fieldset>
+<legend>Mostrar y Buscar Tabla con Json</legend>
+<center>
+Buscar: <input type="text" name="" id="buscar"/>
+<table class="tabla" id="tablajson" width="50%">
+	<thead>
+		<th width="5%">Id</th>
+		<th width="10%">Nombre</th>
+		<th width="10%">Apellidos</th>
+		<th width="10%">Sexo</th>  
+		<th width="5%">Edad</th> 
+		<th width="10%">Email</th>        
+	</thead>
+	<tbody>
+	
+	</tbody>
+</table>
+</center>
+</fieldset>
+
+<fieldset>
+<legend>Llenar Cajas de Texto con Json</legend>
+<center>
+	<div id="error"></div>
+	<small>Ingresa el Id y dale Enter</small>
+<table class="tabla">
+	
+		<tr>
+		<td>Id</td><td><input type="text" name="txtId" id="txtId"/></td>
+		</tr>
+		<tr>
+		<td>Nombre</td><td><input type="text" disabled name="txtNombre" id="txtNombre"/></td>
+		</tr>
+		<tr>
+		<td>Apellidos</td><td><input type="text" disabled name="txtApellidos" id="txtApellidos"/></td>
+		</tr>
+		<tr>
+		<td>Sexo</td>  <td><input type="text" disabled name="txtSexo" id="txtSexo"/></td>
+		</tr>
+		<tr>
+		<td>Edad</td> <td><input type="text" disabled name="txtEdad" id="txtEdad"/></td>
+		</tr>
+		<tr>
+		<td>Email</td>        <td><input type="text" disabled name="txtEmail" id="txtEmail"/></td>
+		</tr>
+	
+
+</table>
+</center>
+</fieldset>
+
+</body>
+</html>
