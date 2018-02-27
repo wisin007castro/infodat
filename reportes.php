@@ -74,35 +74,20 @@
                 </div>
           </div>
         </div>
-        <div class="col-lg-1 col-xs-6">
+        <div class="col-lg-2 col-xs-6">
           <div class="form-group">
+                  <br>
                   <div class="input-group">
-                    <br>
+                    <!-- <br> -->
                     <a id="buscar" class="btn btn-app">
                       <i class="fa fa-search"></i> Buscar
                     </a>
-                  </div>
-
-          </div>
-        </div>
-
-        <div class="col-lg-1 col-xs-6">
-          <div class="form-group">
-                  <div class="input-group">
-                    <br>
-                      <a id="limpiar" class="btn btn-app">
+                    <a id="limpiar" class="btn btn-app">
                         <i class="fa fa-trash"></i> Limpiar
                       </a>
                   </div>
-
           </div>
         </div>
-        <!-- ./col -->
-        <div class="col-lg-2 col-xs-6">
-          <div class="form-group">
-          </div>
-        </div>
-      </div>
       <!-- /.row -->
     </section>
     <!-- /.content -->

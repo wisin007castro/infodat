@@ -1,8 +1,8 @@
  <footer class="main-footer">
     <div class="pull-right hidden-xs">
-      <b>Version</b> 1.0.0
+      <b>Version</b> 3.0.0
     </div>
-    Infodat V3.0 <strong>Copyright &copy; 2018 <a href="http://www.infoactiva.com.bo">infoactiva</a>.</strong> Todos los derechos reservados.
+    <strong>Copyright &copy; 2018 <a href="http://www.infoactiva.com.bo">infoactiva</a>.</strong> Todos los derechos reservados.
   </footer>
 <!-- jQuery 3 -->
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
