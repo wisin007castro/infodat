@@ -49,7 +49,7 @@
           <div class="form-group">
           </br>
           </br>
-          <a class="btn btn-app">
+          <a href="form_nuevo_usuario.php" class="btn btn-app">
                 <i class="fa fa-user-plus"></i> Nuevo
               </a>
           </div>
@@ -143,7 +143,7 @@ $("#boton").click(function(){
           var nuevaFila =
         "<tr>"
         // +"<td><button type='button' class='btn btn-success' ><i class='fa fa-shopping-cart'></i></button></td>"
-        +"<td><a href='javascript:void(0);' onclick='cargar_formulario("+usuarios.ID_INV+");'><i style='font-size:14px;' class='fa fa-edit text-blue'></i></a></td>"
+        +"<td><a href='form_edit_usuario.php'><i style='font-size:14px;' class='fa fa-edit text-blue'></i></a></td>"
         +"<td>"+usuarios.ID_USER+"</td>"
         +"<td>"+usuarios.ID_CLIENTE+"</td>"
         +"<td>"+usuarios.NOMBRE+"-"+usuarios.APELLIDO+"</td>"
@@ -169,6 +169,7 @@ $("#boton").click(function(){
     // $("#agregar").click(function(){
 
   });
+
 
 </script>
  

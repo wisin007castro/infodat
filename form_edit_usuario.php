@@ -1,16 +1,23 @@
-<?php require_once 'header.php'; ?>
+<?php 
+  require_once 'header.php';
+  require_once 'conexionClass.php';
+
+  $conexion = new MiConexion();
+  $clientes = $conexion->clientes();
+  $tipousuarios = $conexion->tipoUsuarios();
+ ?>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Editar Usuarios
+        Registro de usuarios
         <!-- <small>Control panel</small> -->
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Editar Usuarios</li>
+        <li class="active">Registro de usuarios</li>
       </ol>
     </section>
 
@@ -18,7 +25,7 @@
     <section class="content">
       <div class="box box-default">
         <div class="box-header with-border">
-          <h3 class="box-title"> Usuario</h3>
+          <h3 class="box-title">Nuevo usuario</h3>
         </div> 
 
         <form>
@@ -28,8 +35,9 @@
               <div class="form-group">
                 <label>Cliente</label>
                 <select class="form-control">
-                  <option>1</option>
-                  <option>2</option>
+                  <?php foreach ($clientes as $cli) {?>
+                  <option value="<?php echo $cli['ID_CLIENTE'] ?>"><?php echo $cli['CLIENTE'] ?></option>
+                  <?php } ?>
                 </select>
               </div>
               </div>
@@ -119,8 +127,9 @@
                 <div class="form-group">
                   <label>Tipo de usuario</label>
                   <select class="form-control">
-                    <option>1</option>
-                    <option>2</option>
+                    <?php foreach ($tipousuarios as $tusuario) { ?>
+                    <option value="<?php echo $tusuario['TIPO'] ?>"><?php echo $tusuario['TIPO'] ?></option>
+                    <?php } ?>
                   </select>
                 </div>
               </div>
@@ -128,8 +137,8 @@
                 <div class="form-group">
                   <label>Regional</label>
                   <select class="form-control">
-                    <option>1</option>
-                    <option>2</option>
+                    <option value="LP">LP</option>
+                    <option value="SCZ">SCZ</option>
                   </select>
                 </div>
               </div>
@@ -142,7 +151,6 @@
         </form>       
       </div>
     </section>
-    
 
   </div>
   <!-- /.content-wrapper -->
