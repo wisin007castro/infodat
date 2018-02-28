@@ -54,7 +54,7 @@
                   <div class="input-group-addon">
                     <i class="fa fa-calendar"></i>
                   </div>
-                  <select class="form-control" id="mes">
+                  <select class="form-control" id="sel_mes">
                     <?php foreach ($meses as $mes =>$value) {
                      ?>
                       <option class="form-control" value="<?php echo $mes; ?>"><?php echo $value; ?></option>
@@ -65,7 +65,8 @@
                   <div class="input-group-addon">
                     <i class="fa fa-calendar"></i>
                   </div>
-                  <select class="form-control" id="anio">
+                  <select class="form-control" id="sel_anio">
+                      <option class="form-control" value="0">Año</option>
                     <?php foreach ($anios as $anio =>$value) {
                      ?>
                       <option class="form-control" value="<?php echo $value["ANO_I"]; ?>"><?php echo $value["ANO_I"]; ?></option>
@@ -239,6 +240,9 @@ $("#boton").click(function(){
       $("#bNoCaja").val("");
       $("#bdesc_1").val("");
       $("#bdesc_2").val("");
+      $("#bdesc_3").val("");
+      $("#sel_mes").val("");
+      $("#sel_anio").val("");
       $("#tablajson tbody").html("");
     });
 
@@ -247,12 +251,15 @@ $("#boton").click(function(){
         // $("#error").html("<div class='modal1'><div class='center1'> <center> <img src='img/gif-load.gif'> Buscando Informacion...</center></div></div>");
       var bdesc_1 = $("#bdesc_1").val();
       var bdesc_2 = $("#bdesc_2").val();
+      var bdesc_3 = $("#bdesc_3").val();
+      var sel_mes = $("#sel_mes").val();
+      var sel_anio = $("#sel_anio").val();
       var bcaja = $("#bNoCaja").val();
       // var bfecha = $("#reservation").val();//id por defecto de la fecha
       // console.log(bfecha);
-      // console.log($("#mes").val());
-      // console.log($("#anio").val());
-      $.getJSON("obtieneConsulta.php",{id:"", desc_1:bdesc_1, desc_2:bdesc_2, caja:bcaja, control:"0"},function(objetosretorna){
+      console.log($("#bdesc_1").val());
+      console.log($("#sel_anio").val());
+      $.getJSON("obtieneConsulta.php",{id:"", desc_1:bdesc_1, desc_2:bdesc_2, desc_3:bdesc_3, caja:bcaja, mes:sel_mes, anio:sel_anio, control:"0"},function(objetosretorna){
         $("#error").html("");
         var TamanoArray = objetosretorna.length;
         $.each(objetosretorna, function(i,inventarios){
@@ -300,7 +307,7 @@ $("#boton").click(function(){
       $("#txtNombre").val("");
       $("#txtEmail").val("");
 
-      $.getJSON("obtieneConsulta.php",{id:id_inv, desc_1:"", desc_2:"", caja:"", control:"1"},function(objetosretorna){
+      $.getJSON("obtieneConsulta.php",{id:id_inv, desc_1:"", desc_2:"", desc_3:"", caja:"", mes:"0", anio:"0", control:"1"},function(objetosretorna){
           console.log(id_inv);
 
         $("#error").html("");

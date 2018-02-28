@@ -113,6 +113,26 @@ class MiConexion{
                 FROM devoluciones AS d JOIN usuarios AS u ON d.ID_USER = u.ID_USER";
         return $this->getArraySQL($sql);
     }
+
+    public function llamadaSP(){
+        $conexion = $this->conectarBD();
+        //generamos la consulta
+        if(!$result = mysqli_query($conexion, "CALL buscaInventarios(12, ' ');")) die();
+        //  or die("Query fail: " . mysqli_error());
+        $rawdata = array();
+        //guardamos en un array multidimensional todos los datos de la consulta
+        $i=0;
+        while($row = mysqli_fetch_array($result))
+        {   
+            //guardamos en rawdata todos los vectores/filas que nos devuelve la consulta
+            $rawdata[$i] = $row;
+            $i++;
+        }
+        //Cerramos la base de datos
+        $this->desconectarBD($conexion);
+        //devolvemos rawdata
+        return $rawdata;
+    }
 }
 
 ?>
