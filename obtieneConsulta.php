@@ -18,12 +18,12 @@ include('buscadorClass.php');
 		$filtro   = "";
 		}
 		else{
-			if($desc_1 == ""){$desc_1 = " ";}
-			if($desc_2 == ""){$desc_2 = " ";}
-			if($desc_3 == ""){$desc_3 = " ";}
+			if($desc_1 == ""){$desc_1 = "%";}
+			if($desc_2 == ""){$desc_2 = "%";}
+			if($desc_3 == ""){$desc_3 = "%";}
 			if($mes == "0"){$mes = "%";}
 			if($anio == "0"){$anio = "%";}
-			// if($caja == ""){$caja = "";}
+			if($caja == ""){$caja = "%";}
 			$filtro = " WHERE DESC_1 like '%".$desc_1."%' 
 						and DESC_2 like '%".$desc_2."%' 
 						and DESC_3 like '%".$desc_3."%'
