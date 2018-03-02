@@ -1,26 +1,29 @@
-<!-- DROP PROCEDURE IF EXISTS buscaInventarios;
+<!-- 
+DROP PROCEDURE IF EXISTS buscaInventarios;
 DELIMITER $$
-CREATE PROCEDURE buscaInventarios 
-(
-	IN desc1 VARCHAR(250), IN desc2 VARCHAR(250), IN desc3 VARCHAR(250), IN mes VARCHAR(2), IN anio VARCHAR(4), IN caja VARCHAR(200)
-) 
+CREATE PROCEDURE buscaInventarios (
+	IN desc1 VARCHAR(250), IN desc2 VARCHAR(250), IN desc3 VARCHAR(250), IN mes VARCHAR(2), IN anio VARCHAR(4), IN caja INT
+)
 BEGIN
 	
     IF desc1 = '' THEN SET desc1 = '%'; END IF;
     IF desc2 = '' THEN SET desc2 = '%'; END IF;
     IF desc3 = '' THEN SET desc3 = '%'; END IF;
-    IF caja = '' THEN SET caja = '%'; END IF;
     IF mes = '0' THEN SET mes = '%'; END IF;
     IF anio = '0' THEN SET anio = '%'; END IF;
-	SELECT * FROM inventarios
-    WHERE DESC_1 like CONCAT('%', desc1, '%') 
-        AND DESC_2 like CONCAT('%', desc2, '%') 
-        AND DESC_3 like CONCAT('%', desc3,'%')
-        AND MES_I like mes
-        AND ANO_I like CONCAT('%', anio,'%')
-        AND CAJA like CONCAT('%', caja,'%');
-END $$
-DELIMITER ; 
+    SET @consulta = CONCAT('SELECT * FROM inventarios 
+                           WHERE DESC_1 like ''%', desc1,'%''
+                           AND DESC_2 like ''%', desc2,'%''
+                           AND DESC_3 like ''%', desc3,'%''
+                           AND MES_I like ''', mes,'''
+                           AND ANO_I like ''%', anio,'%''
+                           AND CAJA like ''%', caja,'%''
+                           ');
+    PREPARE ejecutar FROM @consulta;
+    EXECUTE ejecutar;
+
+END$$
+DELIMITER ;
 
 
 DROP PROCEDURE IF EXISTS pruebas;
