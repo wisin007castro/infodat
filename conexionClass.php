@@ -114,10 +114,10 @@ class MiConexion{
         return $this->getArraySQL($sql);
     }
 
-    public function llamadaSP($caja, $desc1, $desc2, $desc3){
+    public function llamadaSP($desc1, $desc2, $desc3, $mes, $anio, $caja){
         $conexion = $this->conectarBD();
         //generamos la consulta
-        if(!$result = mysqli_query($conexion, "CALL buscaInventarios('$caja', '$desc1', '$desc2', '$desc3');")) die();
+        if(!$result = mysqli_query($conexion, "CALL buscaInventarios('$desc1', '$desc2', '$desc3', '$mes', '$anio', '$caja');")) die();
         //  or die("Query fail: " . mysqli_error());
         $rawdata = array();
         //guardamos en un array multidimensional todos los datos de la consulta
