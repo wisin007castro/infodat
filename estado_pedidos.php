@@ -11,6 +11,36 @@ $pedidos = $conexion->pedidos();
 
 $mistrings = new MiStrings();
 $meses = $mistrings->meses();
+
+$normal = 0;
+$urgente = 0;
+$tot_tip_ped = 0;
+
+$por_proces = 0;
+$programada = 0;
+$finalizada = 0;
+
+if($pedidos > 0){
+    foreach($pedidos as $ped){
+        if($ped["TIPO_CONSULTA"] == "NORMAL"){
+            $normal++;
+        }
+        else{
+            $urgente++;
+        }
+        if($ped["ESTADO"] == "POR PROCESAR"){
+            $por_proces++;
+        }
+        elseif ($ped["ESTADO"] == "PROGRAMADA") {
+            $programada++;
+        }
+        else{
+            $finalizada++;
+        }
+    }
+    $tot_tip_ped = $normal + $urgente;
+}
+
 ?>
 
 
@@ -57,7 +87,7 @@ $meses = $mistrings->meses();
                             <tbody>
                             <?php foreach ($pedidos as $pedido) { ?>
                                 <tr>
-                                    <td><a href='javascript:void(0);' onclick='cargar_formulario("<?php echo $pedido["ID_SOLICITUD"]; ?>");'><i style='font-size:14px;' class='fa fa-shopping-cart text-green'></i></a></td>
+                                    <td><a href='javascript:void(0);' onclick='cargar_formulario("<?php echo $pedido["ID_INV"]; ?>");'><i style='font-size:14px;' class='fa fa-shopping-cart text-green'></i></a></td>
                                     <td><?php echo $pedido["ID_SOLICITUD"]; ?></td>
                                     <td><?php echo $pedido["NOMBRE"]." ".$pedido["APELLIDO"]; ?></td>
                                     <td><?php echo $pedido["TIPO_CONSULTA"]; ?></td>
@@ -90,7 +120,9 @@ $meses = $mistrings->meses();
                         <h3 class="box-title">Totales por tipo</h3>
                     </div>
                     <div class="box-body">
-                        <h4 class="box-title"><strong> Normales: 0 &nbsp;&nbsp;&nbsp;&nbsp;  Urgentes: 1 &nbsp;&nbsp;&nbsp;&nbsp; Total: 5</strong></h4>
+                        <h4 class="box-title"><strong> 
+                            Normales: <?php echo $normal; ?> &nbsp;&nbsp;&nbsp;&nbsp;  
+                            Urgentes: <?php echo $urgente; ?> &nbsp;&nbsp;&nbsp;&nbsp; Total: 5</strong></h4>
                     </div>
                 </div>
             </div>
@@ -100,7 +132,10 @@ $meses = $mistrings->meses();
                         <h3 class="box-title">Totales por estado</h3>
                     </div>
                     <div class="box-body">
-                        <h4 class="box-title"><strong> Por procesar: 0 &nbsp;&nbsp;&nbsp;&nbsp;  Programada: 1 &nbsp;&nbsp;&nbsp;&nbsp; Finalizada: 5</strong></h4>
+                        <h4 class="box-title"><strong> 
+                            Por procesar: <?php echo $por_proces; ?> &nbsp;&nbsp;&nbsp;&nbsp;  
+                            Programada: <?php echo $programada; ?> &nbsp;&nbsp;&nbsp;&nbsp; 
+                            Finalizada: <?php echo $finalizada; ?></strong></h4>
                     </div>
                 </div>
             </div>

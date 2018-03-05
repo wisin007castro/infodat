@@ -6,8 +6,8 @@
   
   $conexion = new MiConexion();
   $anios = $conexion->anios();
-  // var_dump($anios);
-
+  $solicitudes = $conexion->solicitudes();
+  // var_dump($solicitudes);
   $mistrings = new MiStrings();
   $meses = $mistrings->meses();
  ?>
@@ -47,7 +47,18 @@
                   <th>ESTADO</th>
                 </tr>
               </thead>
-              <tbody></tbody>
+              <tbody>
+              <?php foreach ($solicitudes as $sol) {  ?>
+                  <tr>
+                    <td><a href='javascript:void(0);' onclick='cargar_formulario("<?php echo $sol["ID_INV"]; ?>");'><i style='font-size:14px;' class='fa fa-cart-arrow-down text-green'></i></a></td>
+                    <td><?php echo $sol["ID_SOLICITUD"]; ?></td>
+                    <td><?php echo $sol["NOMBRE"]." ".$sol["APELLIDO"]; ?></td>
+                    <td><?php echo $sol["FECHA_SOLICITUD"]; ?></td>
+                    <td><?php echo $sol["DIRECCION_ENTREGA"]; ?></td>
+                    <td><?php echo $sol["ESTADO"]; ?></td>
+                  </tr>  
+              <?php } ?>
+              </tbody>
             </table>
             </div>
           </div>

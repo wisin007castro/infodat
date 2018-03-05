@@ -50,5 +50,4 @@ $anio = "0";
 // $sql = "SELECT * FROM inventarios LIMIT 5";
 $inv = $conexion->llamadaSP($desc1, $desc2, $desc3, $mes, $anio, $caja);
 var_dump($inv);
-
 ?>

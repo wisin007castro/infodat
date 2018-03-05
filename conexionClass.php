@@ -102,16 +102,31 @@ class MiConexion{
     }
 
     public function pedidos(){
-        $sql = "SELECT ID_SOLICITUD, u.NOMBRE, u.APELLIDO, TIPO_CONSULTA, DIRECCION_ENTREGA, FECHA_SOLICITUD, 
-                      HORA_SOLICITUD, PROCESADO_POR, FECHA_ENTREGA, HORA_ENTREGA, ENTREGADO_POR, ESTADO
-                FROM solicitud AS s JOIN usuarios AS u ON s.ID_USER = u.ID_USER LIMIT 5";
+        $sql = "SELECT inv.ID_INV, s.ID_SOLICITUD, u.NOMBRE, u.APELLIDO, s.TIPO_CONSULTA, s.DIRECCION_ENTREGA, s.FECHA_SOLICITUD, 
+                      s.HORA_SOLICITUD, s.PROCESADO_POR, s.FECHA_ENTREGA, s.HORA_ENTREGA, s.ENTREGADO_POR, item.ESTADO
+                FROM solicitud AS s JOIN usuarios AS u ON s.ID_USER = u.ID_USER 
+                JOIN items AS item ON s.ID_SOLICITUD = item.ID_SOLICITUD
+                JOIN inventarios AS inv ON inv.ID_INV = item.ID_INV
+                WHERE s.ESTADO <> 'ATENDIDA/ENTREGADA' LIMIT 25";
         return $this->getArraySQL($sql);
     }
 
     public function devoluciones(){
-        $sql = "SELECT ID_DEV, u.NOMBRE, u.APELLIDO, d.DIRECCION, FECHA_SOLICITUD, FECHA_PROGRAMADA, PROCESADO_POR, RECOGIDO_POR, ESTADO 
-                FROM devoluciones AS d JOIN usuarios AS u ON d.ID_USER = u.ID_USER";
+        $sql = "SELECT inv.ID_INV, d.ID_DEV, u.NOMBRE, u.APELLIDO, d.DIRECCION, d.FECHA_SOLICITUD, d.FECHA_PROGRAMADA, d.PROCESADO_POR, d.RECOGIDO_POR, d.ESTADO 
+                FROM devoluciones AS d JOIN usuarios AS u ON d.ID_USER = u.ID_USER
+                JOIN dev_item AS d_item ON d.ID_DEV = d_item.ID_DEV
+                JOIN inventarios AS inv ON inv.ID_INV = d_item.ID_INV
+                ";
         return $this->getArraySQL($sql);
+    }
+
+    public function solicitudes(){
+        $sql = "SELECT inv.ID_INV, s.ID_SOLICITUD, u.NOMBRE, u.APELLIDO, s.FECHA_SOLICITUD, s.DIRECCION_ENTREGA, s.ESTADO
+                FROM solicitud AS s JOIN usuarios AS u ON s.ID_USER = u.ID_USER
+                JOIN items AS item ON s.ID_SOLICITUD = item.ID_SOLICITUD
+                JOIN inventarios AS inv ON inv.ID_INV = item.ID_INV
+                WHERE s.ESTADO <> 'ATENDIDA/ENTREGADA' ";
+        return $this-> getArraySQL($sql);
     }
 
     public function llamadaSP($desc1, $desc2, $desc3, $mes, $anio, $caja){

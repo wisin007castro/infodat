@@ -18,12 +18,12 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Reportes
+        Solicitud de documentos
         <!-- <small>Control panel</small> -->
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Reportes</li>
+        <li class="active">Solicitud de documentos</li>
       </ol>
     </section>
 
@@ -100,28 +100,30 @@
               <h3 class="box-title">Lista de archivos</h3>
             </div>
             <div class="box-body table-responsive no-padding">
-              <table class="table table-bordered" id="tablajson">
-                <thead><tr>
-                  <th></th>
-                  <th>#</th>
-                  <th>CLIENTE</th>
-                  <th>CAJA</th>
-                  <th>ITEM</th>
-                  <th>DESC_1</th>
-                  <th>DESC_2</th>
-                  <th>DESC_3</th>
-                  <th>DESC_4</th>
-                  <th>CANT</th>
-                  <th>UNIDAD</th>
-                  <th>FECHA INICIO</th>
-                  <th>FECHA FIN</th>
-                  <th>DEPARTAMENTO</th>
-                  <th>ESTADO</th>
-                  <!-- <th>REGIONAL</th> -->
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
+              <div class="scrollable">
+                <table class="table table-bordered" id="tablajson">
+                  <thead><tr>
+                    <th></th>
+                    <th>#</th>
+                    <th>CLIENTE</th>
+                    <th>CAJA</th>
+                    <th>ITEM</th>
+                    <th>DESC_1</th>
+                    <th>DESC_2</th>
+                    <th>DESC_3</th>
+                    <th>DESC_4</th>
+                    <th>CANT</th>
+                    <th>UNIDAD</th>
+                    <th>FECHA INICIO</th>
+                    <th>FECHA FIN</th>
+                    <th>DEPARTAMENTO</th>
+                    <th>ESTADO</th>
+                    <!-- <th>REGIONAL</th> -->
+                  </tr>
+                </thead>
+                <tbody></tbody>
+                </table>
+              </div>
             </div>
           </div>
           <!-- /.box -->
@@ -181,7 +183,7 @@
             <div class="box-header">
               <h3 class="box-title">Lista de archivos</h3>
             </div>
-            <div class="box-body table-responsive no-padding">
+            <div class="box-body table-responsive no-padding scrollable">
               <table class="table table-bordered" id="seleccionados">
                 <thead><tr>
                   <th></th>
@@ -241,8 +243,8 @@ $("#boton").click(function(){
       $("#bdesc_1").val("");
       $("#bdesc_2").val("");
       $("#bdesc_3").val("");
-      $("#sel_mes").val("");
-      $("#sel_anio").val("");
+      $("#sel_mes").val("0");
+      $("#sel_anio").val("0");
       $("#tablajson tbody").html("");
     });
 

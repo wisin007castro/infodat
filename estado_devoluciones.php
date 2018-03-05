@@ -54,7 +54,7 @@ $meses = $mistrings->meses();
                             <tbody>
                             <?php foreach ($devoluciones as $dev) { ?>
                                 <tr>
-                                    <td><a href='javascript:void(0);' onclick='cargar_formulario("<?php echo $dev["ID_DEV"]; ?>");'><i style='font-size:14px;' class='fa fa-shopping-cart text-green'></i></a></td>
+                                    <td><a href='javascript:void(0);' onclick='cargar_formulario("<?php echo $dev["ID_INV"]; ?>");'><i style='font-size:14px;' class='fa fa-shopping-cart text-green'></i></a></td>
                                     <td><?php echo $dev["ID_DEV"]; ?></td>
                                     <td><?php echo $dev["NOMBRE"]." ".$dev["APELLIDO"]; ?></td>
                                     <td><?php echo $dev["DIRECCION"]; ?></td>
@@ -223,7 +223,7 @@ $meses = $mistrings->meses();
 
             $("#error").html("");
             var TamanoArray = objetosretorna.length;
-            $.each(objetosretorna, function(i,inventarios){
+            $.each(objetosretorna, function(i, inventarios){
                 var nuevaFila =
                     "<tr>"
                     // +"<td><button type='button' class='btn btn-success' ><i class='fa fa-shopping-cart'></i></button></td>"
@@ -245,6 +245,9 @@ $meses = $mistrings->meses();
                     +"<td>"+inventarios.REGIONAL+"</td>"
                     +"</tr>";
                 $(nuevaFila).appendTo("#seleccionados tbody");
+                
+                // $("#seleccionados tbody").append(nuevaFila);
+                
             });
             // console.log($("#asd").val());
             if(TamanoArray==0){
