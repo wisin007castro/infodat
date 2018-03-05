@@ -110,37 +110,18 @@
 
     <section class="content">
       <div class="row">
-        <div class="col-lg-1 col-xs-6">
-        </div>
-        <div class="col-lg-4 col-xs-6">
+        <div class="col-lg-6 col-xs-6">
           <div class="form-group">
             <label>Dirección de entrega</label>
             <input class="form-control" placeholder="Ingrese su dirección"></input>
           </div>
         </div>
-        <div class="col-lg-4 col-xs-6">
+        <div class="col-lg-5 col-xs-6">
           <div class="form-group">
             <label>Observaciones</label>
             <textarea class="form-control" rows="4" placeholder="Ingrese los detalles"></textarea>
           </div>
         </div>
-        <div class="col-lg-1 col-xs-6">
-          <div class="form-group">
-            <div class="radio">
-              <label>
-                <input type="radio" name="optionsRadios" id="normal" value="Normal" checked="">
-                Normal
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input type="radio" name="optionsRadios" id="urgente" value="Urgente">
-                Urgente
-              </label>
-            </div>
-          </div>
-        </div>
-
         <!-- ./col -->
         <div class="col-lg-1 col-xs-6">
           <div class="form-group">
