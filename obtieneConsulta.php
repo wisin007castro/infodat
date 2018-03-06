@@ -11,7 +11,7 @@ include('buscadorClass.php');
 	$tabla    = $_GET["control"];
 
 	if($tabla>0){
-		$filtro = " WHERE ID_INV=".$id;
+		$filtro = " WHERE ID_INV= ".$id;
 	}
 	else{
 		if($desc_1 == "" && $desc_2 == "" && $desc_3 == "" && $caja == "" && $mes == "0" && $anio == "0"){

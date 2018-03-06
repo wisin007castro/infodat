@@ -1,8 +1,6 @@
 <?php
 /*
-Autor: Manuel Cortes Crisanto
 Descripcion: Archivo que da lectura el archivo de configuracion para realizar la conexion con el servidor.
-
 */
 abstract class config {
 	

@@ -189,126 +189,63 @@ if($pedidos > 0){
 <?php require_once 'footer.php' ?>
 
 <script type="text/javascript">
+  $(document).ready(function(){
+    // Limpiamos el cuerpo tbody
 
-    $("#boton").click(function(){
-        $.ajax({
-            type: "post",
-            url: "cargarHotel.php",
-            dataType: "html",
-            success: function(result) {
-                $("#cajaSM").html(result);
-            }
-        })
-    });
-</script>
-<script type="text/javascript">
-    $(document).ready(function(){
-        // Limpiamos el cuerpo tbody
-        $("#limpiar").click(function(){
-            $("#bNoCaja").val("");
-            $("#bdesc_1").val("");
-            $("#bdesc_2").val("");
-            $("#tbEstadoSol tbody").html("");
+   // $("#agregar").click(function(){
+
+  });
+
+      function cargar_formulario(id_inv){
+      // $("#error").html("<div class='modal1'><div class='center1'> <center> <img src='img/gif-load.gif'> Buscando Informacion...</center></div></div>");
+      
+      // var id_inv = $("#id_inv").val();
+      
+      //Limpiamos campo
+      $("#txtNombre").val("");
+      $("#txtEmail").val("");
+
+      $.getJSON("obtieneConsulta.php",{id:id_inv, desc_1:"", desc_2:"", desc_3:"", caja:"",  anio:"",  mes:"",control:"1"},function(objetosretorna){
+          // console.log(id_inv);
+          
+        $("#error").html("");
+        var TamanoArray = objetosretorna.length;
+        $.each(objetosretorna, function(i,inventarios){
+          console.log(inventarios);
+          var nuevaFila =
+        "<tr>"
+        // +"<td><button type='button' class='btn btn-success' ><i class='fa fa-shopping-cart'></i></button></td>"
+        +"<td><a href='javascript:void(0);' onclick='deleteRow(this)'><i style='font-size:14px;' class='fa fa-trash text-red'></i></a></td>"
+        +"<td id='asd'>"+inventarios.ID_INV+"</td>"
+        +"<td>"+inventarios.CLIENTE+"</td>"
+        +"<td>"+inventarios.CAJA+"</td>"
+        +"<td>"+inventarios.ITEM+"</td>"
+        +"<td>"+inventarios.DESC_1+"</td>"
+        +"<td>"+inventarios.DESC_2+"</td>"
+        +"<td>"+inventarios.DESC_3+"</td>"
+        +"<td>"+inventarios.DESC_4+"</td>"
+        +"<td>"+inventarios.CANTIDAD+"</td>"
+        +"<td>"+inventarios.UNIDAD+"</td>"
+        +"<td>"+inventarios.DIA_I+"/"+inventarios.MES_I+"/"+inventarios.ANO_I+"</td>"
+        +"<td>"+inventarios.DIA_F+"/"+inventarios.MES_F+"/"+inventarios.ANO_F+"</td>"
+        +"<td>"+inventarios.DEPARTAMENTO+"</td>"
+        +"<td>"+inventarios.ESTADO+"</td>"
+        +"<td>"+inventarios.REGIONAL+"</td>"
+        +"</tr>";
+          $(nuevaFila).appendTo("#seleccionados tbody");
         });
-
-        $("#buscar").click(function(){
-            $("#tbEstadoSol tbody").html("");
-            // $("#error").html("<div class='modal1'><div class='center1'> <center> <img src='img/gif-load.gif'> Buscando Informacion...</center></div></div>");
-            var bdesc_1 = $("#bdesc_1").val();
-            var bdesc_2 = $("#bdesc_2").val();
-            var bcaja = $("#bNoCaja").val();
-            // var bfecha = $("#reservation").val();//id por defecto de la fecha
-            // console.log(bfecha);
-            // console.log($("#mes").val());
-            // console.log($("#anio").val());
-            $.getJSON("obtieneConsulta.php",{id:"", desc_1:bdesc_1, desc_2:bdesc_2, caja:bcaja, control:"0"},function(objetosretorna){
-                $("#error").html("");
-                var TamanoArray = objetosretorna.length;
-                $.each(objetosretorna, function(i,inventarios){
-                    var nuevaFila =
-                        "<tr>"
-                        // +"<td><button type='button' class='btn btn-success' ><i class='fa fa-shopping-cart'></i></button></td>"
-                        +"<td><a href='javascript:void(0);' onclick='cargar_formulario("+inventarios.ID_INV+");'><i style='font-size:14px;' class='fa fa-shopping-cart text-green'></i></a></td>"
-                        +"<td>"+inventarios.ID_INV+"</td>"
-                        +"<td>"+inventarios.CLIENTE+"</td>"
-                        +"<td>"+inventarios.CAJA+"</td>"
-                        +"<td>"+inventarios.ITEM+"</td>"
-                        +"<td>"+inventarios.DESC_1+"</td>"
-                        +"<td>"+inventarios.DESC_2+"</td>"
-                        +"<td>"+inventarios.DESC_3+"</td>"
-                        +"<td>"+inventarios.DESC_4+"</td>"
-                        +"<td>"+inventarios.CANTIDAD+"</td>"
-                        +"<td>"+inventarios.UNIDAD+"</td>"
-                        +"<td>"+inventarios.DIA_I+"/"+inventarios.MES_I+"/"+inventarios.ANO_I+"</td>"
-                        +"<td>"+inventarios.DIA_F+"/"+inventarios.MES_F+"/"+inventarios.ANO_F+"</td>"
-                        +"<td>"+inventarios.DEPARTAMENTO+"</td>"
-                        +"<td>"+inventarios.ESTADO+"</td>"
-                        +"<td>"+inventarios.REGIONAL+"</td>"
-                        +"</tr>";
-                    $(nuevaFila).appendTo("#tbEstadoSol tbody");
-                });
-                if(TamanoArray==0){
-                    var nuevaFila =
-                        "<tr><td colspan=6>No Existe Registros</td>"
-                        +"</tr>";
-                    $(nuevaFila).appendTo("#tbEstadoSol tbody");
-                }
-            });
-        });
-
-        // $("#agregar").click(function(){
-
-    });
-
-    function cargar_formulario(id_inv){
-        // $("#error").html("<div class='modal1'><div class='center1'> <center> <img src='img/gif-load.gif'> Buscando Informacion...</center></div></div>");
-
-        // var id_inv = $("#id_inv").val();
-
-        //Limpiamos campo
-        $("#txtNombre").val("");
-        $("#txtEmail").val("");
-
-        $.getJSON("obtieneConsulta.php",{id:id_inv, desc_1:"", desc_2:"", caja:"", control:"1"},function(objetosretorna){
-            console.log(id_inv);
-
-            $("#error").html("");
-            var TamanoArray = objetosretorna.length;
-            $.each(objetosretorna, function(i,inventarios){
-                var nuevaFila =
-                    "<tr>"
-                    // +"<td><button type='button' class='btn btn-success' ><i class='fa fa-shopping-cart'></i></button></td>"
-                    // +"<td><a href='javascript:void(0);' onclick='deleteRow(this)'><i style='font-size:14px;' class='fa fa-trash text-red'></i></a></td>"
-                    +"<td id='asd'>"+inventarios.ID_INV+"</td>"
-                    +"<td>"+inventarios.CLIENTE+"</td>"
-                    +"<td>"+inventarios.CAJA+"</td>"
-                    +"<td>"+inventarios.ITEM+"</td>"
-                    +"<td>"+inventarios.DESC_1+"</td>"
-                    +"<td>"+inventarios.DESC_2+"</td>"
-                    +"<td>"+inventarios.DESC_3+"</td>"
-                    +"<td>"+inventarios.DESC_4+"</td>"
-                    +"<td>"+inventarios.CANTIDAD+"</td>"
-                    +"<td>"+inventarios.UNIDAD+"</td>"
-                    +"<td>"+inventarios.DIA_I+"/"+inventarios.MES_I+"/"+inventarios.ANO_I+"</td>"
-                    +"<td>"+inventarios.DIA_F+"/"+inventarios.MES_F+"/"+inventarios.ANO_F+"</td>"
-                    +"<td>"+inventarios.DEPARTAMENTO+"</td>"
-                    +"<td>"+inventarios.ESTADO+"</td>"
-                    +"<td>"+inventarios.REGIONAL+"</td>"
-                    +"</tr>";
-                $(nuevaFila).appendTo("#seleccionados tbody");
-            });
-            // console.log($("#asd").val());
-            if(TamanoArray==0){
-                var nuevaFila =
-                    "<tr><td colspan=6>No Existe Registros</td>"
-                    +"</tr>";
-                $(nuevaFila).appendTo("#seleccionados tbody");
-            }
-        });
+        // console.log($("#asd").val());
+        if(TamanoArray==0){
+          var nuevaFila =
+          "<tr><td colspan=6>No Existe Registros</td>"
+          +"</tr>";
+          $(nuevaFila).appendTo("#seleccionados tbody");
+        }
+      });
     };
     function deleteRow(btn) {
-        var row = btn.parentNode.parentNode;
-        row.parentNode.removeChild(row);
+      var row = btn.parentNode.parentNode;
+      row.parentNode.removeChild(row);
     }
 </script>
 
