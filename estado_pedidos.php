@@ -152,7 +152,7 @@ if($pedidos > 0){
                     <div class="box-body table-responsive no-padding">
                         <table class="table table-bordered" id="seleccionados">
                             <thead><tr>
-                                <!-- <th></th> -->
+                                <th></th>
                                 <th>#</th>
                                 <th>CLIENTE</th>
                                 <th>CAJA</th>
@@ -198,16 +198,14 @@ if($pedidos > 0){
 
       function cargar_formulario(id_inv){
       // $("#error").html("<div class='modal1'><div class='center1'> <center> <img src='img/gif-load.gif'> Buscando Informacion...</center></div></div>");
-      
       // var id_inv = $("#id_inv").val();
       
       //Limpiamos campo
       $("#txtNombre").val("");
       $("#txtEmail").val("");
 
-      $.getJSON("obtieneConsulta.php",{id:id_inv, desc_1:"", desc_2:"", desc_3:"", caja:"",  anio:"",  mes:"",control:"1"},function(objetosretorna){
+      $.getJSON("obtieneConsulta.php",{id:id_inv, desc_1:"", desc_2:"", desc_3:"", caja:"", mes:"", anio:"", control:"1"},function(objetosretorna){
           // console.log(id_inv);
-          
         $("#error").html("");
         var TamanoArray = objetosretorna.length;
         $.each(objetosretorna, function(i,inventarios){

@@ -31,47 +31,55 @@
     <section class="content">
       <!-- Small boxes (Stat box) -->
       <div class="row">
-        <div class="col-lg-4 col-xs-6">
+        <div class="col-lg-2 col-xs-6">
           <div class="form-group">
               <label>Número de caja</label>
               <input type="number" class="form-control" id="bNoCaja" name="" min="0">
-              <input type="text" class="form-control" id="bdesc_1" name="" placeholder="Descripción 1">
           </div>
         </div>
 
-        <div class="col-lg-4 col-xs-6">
+        <div class="col-lg-2 col-xs-6">
           <div class="form-group">
-              <label>Descripción</label>
+              <label>&nbsp;</label>
+              <input type="text" class="form-control" id="bdesc_1" name="" placeholder="Descripción 1">
+              
+          </div>
+        </div>
+        <div class="col-lg-2 col-xs-6">
+          <div class="form-group">
+              <label>Filtro por descripción</label>
               <input type="text" class="form-control" id="bdesc_2" name="" placeholder="Descripción 2">
+          </div>
+        </div>
+        <div class="col-lg-2 col-xs-6">
+          <div class="form-group">
+              <label>&nbsp;</label>
               <input type="text" class="form-control" id="bdesc_3" name="" placeholder="Descripción 3">
           </div>
         </div>
         <!-- ./col -->
         <div class="col-lg-2 col-xs-6">
           <div class="form-group">
-                <label>Rango de fecha:</label>
+                <label>Fecha inicial:</label>
                 <div class="input-group">
                   <div class="input-group-addon">
                     <i class="fa fa-calendar"></i>
                   </div>
-                  <select class="form-control" id="sel_mes">
-                    <?php foreach ($meses as $mes =>$value) {
-                     ?>
-                      <option class="form-control" value="<?php echo $mes; ?>"><?php echo $value; ?></option>
-                    <?php } ?>
-                  </select>
-                </div>
-                <div class="input-group">
-                  <div class="input-group-addon">
-                    <i class="fa fa-calendar"></i>
+                  <div class="col-lg-7">
+                    <select class="form-control" id="sel_mes">
+                      <?php foreach ($meses as $mes =>$value) { ?>
+                        <option class="form-control" value="<?php echo $mes; ?>"><?php echo $value; ?></option>
+                      <?php } ?>
+                    </select>
                   </div>
-                  <select class="form-control" id="sel_anio">
-                      <option class="form-control" value="0">Año</option>
-                    <?php foreach ($anios as $anio =>$value) {
-                     ?>
-                      <option class="form-control" value="<?php echo $value["ANO_I"]; ?>"><?php echo $value["ANO_I"]; ?></option>
-                    <?php } ?>
-                  </select>
+                  <div class="col-lg-5">
+                    <select class="form-control" id="sel_anio">
+                        <option class="form-control" value="0">Año</option>
+                      <?php foreach ($anios as $anio =>$value) { ?>
+                        <option class="form-control" value="<?php echo $value["ANO_I"]; ?>"><?php echo $value["ANO_I"]; ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
                 </div>
           </div>
         </div>
@@ -181,7 +189,7 @@
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header">
-              <h3 class="box-title">Lista de archivos</h3>
+              <h3 class="box-title">Lista de archivos seleccionados</h3>
             </div>
             <div class="box-body table-responsive no-padding scrollable">
               <table class="table table-bordered" id="seleccionados">

@@ -101,7 +101,7 @@ $meses = $mistrings->meses();
                     <div class="box-body table-responsive no-padding">
                         <table class="table table-bordered" id="seleccionados">
                             <thead><tr>
-                                <!-- <th></th> -->
+                                <th></th>
                                 <th>#</th>
                                 <th>CLIENTE</th>
                                 <th>CAJA</th>

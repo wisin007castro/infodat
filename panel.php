@@ -29,14 +29,14 @@
         <li class="treeview">
           <a href="#">
             <i class="fa fa-search"></i>
-            <span>Solicitud</span>
+            <span>Consulta</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
             <li><a href="reportes.php"><i class="fa fa-circle-o"></i> Solicitud de Documentos</a></li>
-            <li><a href="form_sol_dev.php"><i class="fa fa-circle-o"></i> Solicitud de Devolución</a></li>
+            <li><a href="form_sol_dev.php"><i class="fa fa-circle-o"></i> Devolución de Documentos</a></li>
             <!-- <li><a id="boton" href="#"><i class="fa fa-circle-o"></i> Busqueda</a></li> -->
           </ul>
         </li>
@@ -49,7 +49,7 @@
             </span>
               </a>
               <ul class="treeview-menu">
-                  <li><a href="estado_pedidos.php"><i class="fa fa-circle-o"></i> Estado de solicitud</a></li>
+                  <li><a href="estado_pedidos.php"><i class="fa fa-circle-o"></i> Estado de consulta</a></li>
                   <li><a href="estado_devoluciones.php"><i class="fa fa-circle-o"></i> Estado de Devolución</a></li>
                   <!-- <li><a id="boton" href="#"><i class="fa fa-circle-o"></i> Busqueda</a></li> -->
               </ul>

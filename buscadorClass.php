@@ -54,7 +54,9 @@ class Json
 	
 	public function BuscaInventarios($filtro){
 		if($filtro <> ""){
-			$consulta = "SELECT * FROM inventarios".$filtro." LIMIT 100";//Los espacios son importantes
+			$consulta = "SELECT * FROM inventarios AS inv
+						JOIN clientes AS c ON inv.CLIENTE = C.ID_CLIENTE
+						 ".$filtro." LIMIT 100";//Los espacios son importantes
 			//echo $consulta;
 			$conexion = new conectorDB;
 			$this->json = $conexion->EjecutarSentencia($consulta);
