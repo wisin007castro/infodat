@@ -67,7 +67,7 @@ if($pedidos > 0){
                     <div class="box-header">
                         <h3 class="box-title">Lista de solicitudes</h3>
                     </div>
-                    <div class="box-body table-responsive no-padding">
+                    <div class="box-body table-responsive no-padding scrollable">
                         <table class="table table-bordered" id="tbEstadoSol">
                             <thead><tr>
                                 <th></th>
@@ -149,7 +149,7 @@ if($pedidos > 0){
                     <div class="box-header">
                         <h3 class="box-title">Lista de archivos</h3>
                     </div>
-                    <div class="box-body table-responsive no-padding">
+                    <div class="box-body table-responsive no-padding scrollable">
                         <table class="table table-bordered" id="seleccionados">
                             <thead><tr>
                                 <th></th>

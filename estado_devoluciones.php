@@ -37,7 +37,7 @@ $meses = $mistrings->meses();
                     <div class="box-header">
                         <h3 class="box-title">Lista de devoluciones</h3>
                     </div>
-                    <div class="box-body table-responsive no-padding">
+                    <div class="box-body table-responsive no-padding scrollable">
                         <table class="table table-bordered" id="tbEstadoSol">
                             <thead><tr>
                                 <th></th>
@@ -98,7 +98,7 @@ $meses = $mistrings->meses();
                     <div class="box-header">
                         <h3 class="box-title">Lista de archivos</h3>
                     </div>
-                    <div class="box-body table-responsive no-padding">
+                    <div class="box-body table-responsive no-padding scrollable">
                         <table class="table table-bordered" id="seleccionados">
                             <thead><tr>
                                 <th></th>
@@ -140,7 +140,6 @@ $meses = $mistrings->meses();
 <script type="text/javascript">
   $(document).ready(function(){
     // Limpiamos el cuerpo tbody
-
    // $("#agregar").click(function(){
 
   });

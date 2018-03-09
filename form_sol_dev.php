@@ -18,12 +18,12 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Reportes
+        Devolución de documentos
         <!-- <small>Control panel</small> -->
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Reportes</li>
+        <li class="active">Devolución de documentos</li>
       </ol>
     </section>
 
@@ -36,7 +36,7 @@
             <div class="box-header">
               <h3 class="box-title">Solicitudes pendientes de devolución</h3>
             </div>
-            <div class="box-body table-responsive no-padding">
+            <div class="box-body table-responsive no-padding scrollable">
               <table class="table table-bordered" id="tablajson">
                 <thead><tr>
                   <th></th>
@@ -76,7 +76,7 @@
             <div class="box-header">
               <h3 class="box-title">Lista Items pendientes de devolución</h3>
             </div>
-            <div class="box-body table-responsive no-padding">
+            <div class="box-body table-responsive no-padding scrollable">
               <table class="table table-bordered" id="seleccionados">
                 <thead><tr>
                   <th></th>

@@ -2,3 +2,20 @@
     height: 230px;
     overflow-y: scroll;
 }
+
+.two-fields {
+  width:100%;
+}
+.two-fields .input-group {
+  width:100%;
+}
+.two-fields input {
+  width:50% !important;
+}
+.two-fields select {
+  width:50% !important;
+}
+
+.tree-fields input {
+  width:33% !important;
+}
