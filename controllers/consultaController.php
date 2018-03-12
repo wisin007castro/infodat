@@ -45,7 +45,7 @@ if($c > 0){
 		    	}
 		    }
 		    if ($c == $success) {
-		    	echo "Solicitud realizada exitosamente";
+		    	echo "Realizada exitosamente";
 		    }
 		    else{
 		    	echo "Algo salio mal";

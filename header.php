@@ -1,3 +1,29 @@
+<?php
+    session_start();
+    if($_SESSION['EmpUser'] == ''){
+        echo "<script language='javascript'>alert('Debes iniciar sesion')</script>";
+        echo "<meta http-equiv='refresh' content='0;url=login.php' />";
+        exit(0);
+    }   
+    unset($_SESSION['id']);
+    
+    include("include/class.mysqldb.php");
+    include("include/config.inc.php");
+    if(!empty($_GET['did'])){
+        mysql_query("DELETE FROM usuarios WHERE ID_USER='".$_GET['did']."' AND USER = '".$_SESSION['EmpUser']."'");
+        echo "<meta http-equiv=\"refresh\" content=\"0;url=header.php\">";
+        exit(0);
+
+    }
+    $usuario = mysql_query("SELECT * FROM usuarios AS u 
+                            JOIN clientes AS c ON u.ID_CLIENTE = c.ID_CLIENTE
+                            WHERE ID_USER='".$_SESSION['EmpID']."' 
+                        ");
+    $usuario = mysql_fetch_array($usuario); 
+    // var_dump($usuario);
+
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -112,7 +138,7 @@
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
-              <span class="hidden-xs">Cliente</span>
+              <span class="hidden-xs"><?php echo $usuario['NOMBRE']." ".$usuario['APELLIDO']; ?></span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
@@ -120,8 +146,8 @@
                 <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
 
                 <p>
-                  Usuario Soboce - Web Developer
-                  <small>Member since Nov. 2012</small>
+                  Cliente <?php echo $usuario['CLIENTE']; ?> <br> Usuario: <?php echo $usuario['NOMBRE']." ".$usuario['APELLIDO']; ?>
+                  <!-- <small>Member since Nov. 2012</small> -->
                 </p>
               </li>
               <!-- Menu Body -->
@@ -142,10 +168,10 @@
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="#" class="btn btn-default btn-flat">Profile</a>
+                  <a href="#" class="btn btn-default btn-flat">Perfil</a>
                 </div>
                 <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                  <a href="logout.php" class="btn btn-default btn-flat">Salir</a>
                 </div>
               </li>
             </ul>

@@ -1,5 +1,4 @@
-<?php 
-
+<?php
   require_once 'header.php';
   require_once 'conexionClass.php';
   require_once 'stringsClass.php';
@@ -10,9 +9,7 @@
 
   $mistrings = new MiStrings();
   $meses = $mistrings->meses();
-
  ?>
-
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -186,13 +183,13 @@
             <div class="form-group">
               <div class="radio">
                 <label>
-                  <input type="radio" name="optionsRadios" id="normal" value="Normal" checked="">
+                  <input type="radio" name="optionsRadios" id="normal" value="NORMAL" checked="">
                   Normal
                 </label>
               </div>
               <div class="radio">
                 <label>
-                  <input type="radio" name="optionsRadios" id="urgente" value="Urgente">
+                  <input type="radio" name="optionsRadios" id="urgente" value="URGENTE">
                   Urgente
                 </label>
               </div>
@@ -213,7 +210,12 @@
     </section>
 
     <section>
-      <div id="resp"></div>
+      <div class="col-lg-12">
+        <div class="div_contenido" style=" text-align: center">
+          <label id="resp" style='color:#177F6B'></label>
+        </div>
+      </div>
+
       
     </section>
 

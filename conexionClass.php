@@ -107,7 +107,7 @@ class MiConexion{
                 FROM solicitud AS s JOIN usuarios AS u ON s.ID_USER = u.ID_USER 
                 JOIN items AS item ON s.ID_SOLICITUD = item.ID_SOLICITUD
                 JOIN inventarios AS inv ON inv.ID_INV = item.ID_INV
-                WHERE s.ESTADO <> 'ATENDIDA/ENTREGADA' LIMIT 25";
+                WHERE s.ESTADO <> 'ATENDIDA/ENTREGADA' ORDER BY s.ID_SOLICITUD LIMIT 25";
         return $this->getArraySQL($sql);
     }
 
@@ -115,8 +115,7 @@ class MiConexion{
         $sql = "SELECT inv.ID_INV, d.ID_DEV, u.NOMBRE, u.APELLIDO, d.DIRECCION, d.FECHA_SOLICITUD, d.FECHA_PROGRAMADA, d.PROCESADO_POR, d.RECOGIDO_POR, d.ESTADO 
                 FROM devoluciones AS d JOIN usuarios AS u ON d.ID_USER = u.ID_USER
                 JOIN dev_item AS d_item ON d.ID_DEV = d_item.ID_DEV
-                JOIN inventarios AS inv ON inv.ID_INV = d_item.ID_INV
-                ";
+                JOIN inventarios AS inv ON inv.ID_INV = d_item.ID_INV ";
         return $this->getArraySQL($sql);
     }
 

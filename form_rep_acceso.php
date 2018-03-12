@@ -5,6 +5,7 @@
   require_once 'stringsClass.php';
   
   $conexion = new MiConexion();
+  $usuarios = $conexion->usuarios();
   $anios = $conexion->anios();
   // var_dump($anios);
 
@@ -35,8 +36,9 @@
           <div class="form-group">
               <label>Descripción</label>
               <select name="" id=""class="form-control">
-                <option value="1">Usuario1</option>
-                <option value="1">Usuario1</option>
+                <?php foreach ($usuarios as $usuario => $value) { ?>
+                  <option value="<?php echo $usuario['ID_USER']; ?>"><?php echo $value['NOMBRE']." ".$value['APELLIDO'] ?></option>
+                <?php } ?>
               </select>
                 <!-- <button type="button" class="btn btn-default" id="buscar"><i class="fa fa-search"> </i> </button>
                 <button type="button" class="btn btn-default pull-right" id="limpiar"><i class="fa fa-trash"></i> </button> -->
@@ -67,6 +69,7 @@
                     <i class="fa fa-calendar"></i>
                 </div>
                 <select class="form-control" id="anio">
+                  <option class="form-control" value="0">Año</option>
                     <?php foreach ($anios as $anio =>$value) {
                     ?>
                     <option class="form-control" value="<?php echo $value["ANO_I"]; ?>"><?php echo $value["ANO_I"]; ?></option>
