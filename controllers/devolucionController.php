@@ -21,24 +21,24 @@ foreach ($_POST as $key => $value) {
 }
 
 if($c > 0){
-	$sql = "INSERT INTO solicitud (ID_CLIENTE, ID_USER, TIPO_CONSULTA, DIRECCION_ENTREGA, OBSERVACION, FECHA_SOLICITUD, HORA_SOLICITUD, ESTADO, REGIONAL) 
-		VALUES ('".$_POST['cliente']."','".$_POST['usuario']."','".$_POST['optionsRadios']."','".$_POST['direccion']."', '".$_POST['observacion']."', '".$fecha."','".$hora."', 'POR PROCESAR','".$_POST['regional']."')";
+	$sql = "INSERT INTO devoluciones(ID_CLIENTE, ID_USER, DIRECCION, OBSERVACION, FECHA_SOLICITUD, FECHA_PROGRAMADA, PROCESADO_POR, RECOGIDO_POR, ESTADO, REGIONAL) 
+		VALUES ('".$_POST['cliente']."','".$_POST['usuario']."','".$_POST['direccion']."', '".$_POST['observacion']."', '".$fecha."','NULL', 'William Castro', 'NULL', 'POR PROCESAR', 'LA PAZ')";
 
 	if(!$result = mysqli_query($con, $sql)) die();
 
 	if ($result) {
 		
-		$sql = "SELECT * FROM solicitud Order by ID_SOLICITUD desc LIMIT 1";
+		$sql = "SELECT * FROM devoluciones Order by ID_DEV desc LIMIT 1";
 		if(!$resultado = mysqli_query($con, $sql)) die();
 
 		if($resultado){
-			$solicitud = $resultado->fetch_assoc();
+			$devoluciones = $resultado->fetch_assoc();
 			// echo json_encode($data);
 
 		    foreach ($_POST as $key => $value) {
 		    	if (substr($key, 0, 3) == "id-") {
-					$sql = "INSERT INTO items(ID_CLIENTE, ID_SOLICITUD, ID_INV, ESTADO) 
-							VALUES ('".$solicitud['ID_CLIENTE']."', '".$solicitud['ID_SOLICITUD']."','".$value."','".$solicitud['ESTADO']."')";
+					$sql = "INSERT INTO dev_item(ID_CLIENTE, ID_DEV, ID_INV, ESTADO) 
+							VALUES ('".$devoluciones['ID_CLIENTE']."', '".$devoluciones['ID_DEV']."','".$value."','".$devoluciones['ESTADO']."')";
 					if(!$item = mysqli_query($con, $sql)) die();
 					if($item){
 						$success++;
@@ -59,19 +59,4 @@ else{
 	echo "Debe seleccionar al menos un item";
 }
 
-
-
-    // $direccion = $_POST['direccion'];
-    // $observacion  = $_POST['observacion'];
-
-    // // echo "tu dirección es: ".$direccion; 
-    // // echo "<br>";
-    // // echo "observación es: ".$observacion;
-    // // var_dump($_POST);
-
-    // foreach ($_POST as $key => $value) {
-    // 	if (substr($key, 0, 2) == "id") {
-    // 		echo $value;
-    // 	}
-    // }
 ?>

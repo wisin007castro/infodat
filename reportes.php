@@ -5,7 +5,7 @@
   
   $conexion = new MiConexion();
   $anios = $conexion->anios();
-  // var_dump($anios);
+  // var_dump($usuario);
 
   $mistrings = new MiStrings();
   $meses = $mistrings->meses();
@@ -31,6 +31,7 @@
     <!-- Main content -->
     <section class="content">
       <!-- Small boxes (Stat box) -->
+
       <div class="row">
         <div class="col-lg-2 col-xs-6">
           <div class="form-group">
@@ -130,6 +131,9 @@
 
     <section class="content">
       <form method="POST" id="formulario">
+  <input type="hidden" name="cliente" id="cliente" value="<?php echo $usuario['ID_CLIENTE']; ?>">
+  <input type="hidden" name="usuario" id="usuario" value="<?php echo $usuario['ID_USER']; ?>">
+  <input type="hidden" name="regional" id="regional" value="<?php echo $usuario['REGIONAL']; ?>">
         <div class="row" style="font-size:11px;">
           <div class="col-xs-12">
             <div class="box">
@@ -169,6 +173,7 @@
         <div class="row">
           <div class="col-lg-5 col-xs-6">
             <div class="form-group">
+
               <label>Dirección de entrega</label>
               <input name="direccion" class="form-control" placeholder="Ingrese su dirección"></input>
             </div>
@@ -200,8 +205,8 @@
           <div class="col-lg-1 col-xs-6">
             <div class="form-group">
               <a type="button" class="btn btn-app" id="btn-ingresar">
-                  <i class="fa fa-shopping-cart"></i> Enviar
-                </a>
+                <i class="fa fa-shopping-cart"></i> Enviar
+              </a>
             </div>
           </div>
         </div>
@@ -215,8 +220,6 @@
           <label id="resp" style='color:#177F6B'></label>
         </div>
       </div>
-
-      
     </section>
 
   </div>
@@ -229,8 +232,7 @@
 
 <script type="text/javascript">
 
-
-
+  //Nueva solicitud 
   $(document).ready(function(){
     //Envio de formulario
     $('#btn-ingresar').click(function(){
@@ -266,11 +268,13 @@
       var sel_mes = $("#sel_mes").val();
       var sel_anio = $("#sel_anio").val();
       var bcaja = $("#bNoCaja").val();
+      var cliente = $("#cliente").val();
       // var bfecha = $("#reservation").val();//id por defecto de la fecha
       // console.log(bfecha);
       // console.log($("#bdesc_1").val());
-      // console.log($("#sel_anio").val());
-      $.getJSON("obtieneConsulta.php",{id:"", desc_1:bdesc_1, desc_2:bdesc_2, desc_3:bdesc_3, caja:bcaja, mes:sel_mes, anio:sel_anio, control:"0"},function(objetosretorna){
+
+var bcaja = $("#bNoCaja").val();      // console.log($("#sel_anio").val());
+      $.getJSON("obtieneConsulta.php",{id:"", desc_1:bdesc_1, desc_2:bdesc_2, desc_3:bdesc_3, caja:bcaja, mes:sel_mes, anio:sel_anio, control:"0", cli:cliente},function(objetosretorna){
         $("#error").html("");
         var TamanoArray = objetosretorna.length;
         $.each(objetosretorna, function(i,inventarios){
@@ -313,8 +317,8 @@
       // $("#error").html("<div class='modal1'><div class='center1'> <center> <img src='img/gif-load.gif'> Buscando Informacion...</center></div></div>");
       
       // var id_inv = $("#id_inv").val();
-
-      $.getJSON("obtieneConsulta.php",{id:id_inv, desc_1:"", desc_2:"", desc_3:"", caja:"", mes:"0", anio:"0", control:"1"},function(objetosretorna){
+      var cliente = $("#cliente").val();
+      $.getJSON("obtieneConsulta.php",{id:id_inv, desc_1:"", desc_2:"", desc_3:"", caja:"", mes:"0", anio:"0", control:"1", cli:cliente},function(objetosretorna){
           
 
         $("#error").html("");

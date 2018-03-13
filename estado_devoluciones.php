@@ -148,12 +148,8 @@ $meses = $mistrings->meses();
       // $("#error").html("<div class='modal1'><div class='center1'> <center> <img src='img/gif-load.gif'> Buscando Informacion...</center></div></div>");
       
       // var id_inv = $("#id_inv").val();
-      
-      //Limpiamos campo
-      $("#txtNombre").val("");
-      $("#txtEmail").val("");
 
-      $.getJSON("obtieneConsulta.php",{id:id_inv, desc_1:"", desc_2:"", desc_3:"", caja:"",  anio:"",  mes:"",control:"1"},function(objetosretorna){
+      $.getJSON("obtieneConsulta.php",{id:id_inv, desc_1:"", desc_2:"", desc_3:"", caja:"",  anio:"",  mes:"",control:"1", cli:""},function(objetosretorna){
           // console.log(id_inv);
           
         $("#error").html("");

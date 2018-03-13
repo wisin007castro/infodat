@@ -14,11 +14,15 @@
      if($conn->num_rows()==0){
          echo "<script language='javascript'>alert('Nombre de Usuario o Password incorrecto..!')</script>";
      }else{
+        $_SESSION['loggedin'] = true;
         $_SESSION['EmpUser']=$data->USER;
         $_SESSION['EmpId']=$data->ID_USER;
         $_SESSION['EmpID']=$data->ID_USER;
+        $_SESSION['start'] = time();
+        $_SESSION['expire'] = $_SESSION['start'] + (5);
+
         unset($_SESSION['APIUser']);
-        echo "<meta http-equiv='refresh' content='0;url=header.php' />";
+        echo "<meta http-equiv='refresh' content='0;url=index.php' />";
         exit(0);
      }
  }

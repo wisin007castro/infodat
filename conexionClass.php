@@ -1,4 +1,5 @@
 <?php
+
 class MiConexion{
 
     public $IDr = 0 ;
@@ -119,12 +120,14 @@ class MiConexion{
         return $this->getArraySQL($sql);
     }
 
-    public function solicitudes(){
+    public function solicitudes($cliente){
         $sql = "SELECT inv.ID_INV, s.ID_SOLICITUD, u.NOMBRE, u.APELLIDO, s.FECHA_SOLICITUD, s.DIRECCION_ENTREGA, s.ESTADO
                 FROM solicitud AS s JOIN usuarios AS u ON s.ID_USER = u.ID_USER
                 JOIN items AS item ON s.ID_SOLICITUD = item.ID_SOLICITUD
                 JOIN inventarios AS inv ON inv.ID_INV = item.ID_INV
-                WHERE s.ESTADO <> 'ATENDIDA/ENTREGADA' ";
+                WHERE s.ESTADO <> 'ATENDIDA/ENTREGADA'
+                AND s.ID_CLIENTE = $cliente
+                ORDER BY s.ID_SOLICITUD DESC";
         return $this-> getArraySQL($sql);
     }
 

@@ -1,12 +1,11 @@
 <?php 
-
   require_once 'header.php';
   require_once 'conexionClass.php';
   require_once 'stringsClass.php';
-  
+  // var_dump($usuario);
   $conexion = new MiConexion();
   $anios = $conexion->anios();
-  $solicitudes = $conexion->solicitudes();
+  $solicitudes = $conexion->solicitudes($usuario['ID_CLIENTE']);
   // var_dump($solicitudes);
   $mistrings = new MiStrings();
   $meses = $mistrings->meses();
@@ -70,69 +69,80 @@
     </section>
 
     <section class="content">
-      <div class="row" style="font-size:11px;">
-        <div class="col-xs-12">
-          <div class="box">
-            <div class="box-header">
-              <h3 class="box-title">Lista Items pendientes de devolución</h3>
+      <form method="POST" id="formulario">
+  <input type="hidden" name="cliente" id="cliente" value="<?php echo $usuario['ID_CLIENTE']; ?>">
+  <input type="hidden" name="usuario" id="usuario" value="<?php echo $usuario['ID_USER']; ?>">
+        <div class="row" style="font-size:11px;">
+          <div class="col-xs-12">
+            <div class="box">
+              <div class="box-header">
+                <h3 class="box-title">Lista Items pendientes de devolución</h3>
+              </div>
+              <div class="box-body table-responsive no-padding scrollable">
+                <table class="table table-bordered" id="seleccionados">
+                  <thead><tr>
+                    <th></th>
+                    <th>#</th>
+                    <th>CLIENTE</th>
+                    <th>CAJA</th>
+                    <th>ITEM</th>
+                    <th>DESC_1</th>
+                    <th>DESC_2</th>
+                    <th>DESC_3</th>
+                    <th>DESC_4</th>
+                    <th>CANT</th>
+                    <th>UNIDAD</th>
+                    <th>FECHA_I</th>
+                    <th>FECHA_F</th>
+                    <th>DPTO</th>
+                    <th>ESTADO</th>
+                    <th>REGIONAL</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+              </div>
             </div>
-            <div class="box-body table-responsive no-padding scrollable">
-              <table class="table table-bordered" id="seleccionados">
-                <thead><tr>
-                  <th></th>
-                  <th>#</th>
-                  <th>CLIENTE</th>
-                  <th>CAJA</th>
-                  <th>ITEM</th>
-                  <th>DESC_1</th>
-                  <th>DESC_2</th>
-                  <th>DESC_3</th>
-                  <th>DESC_4</th>
-                  <th>CANT</th>
-                  <th>UNIDAD</th>
-                  <th>FECHA_I</th>
-                  <th>FECHA_F</th>
-                  <th>DPTO</th>
-                  <th>ESTADO</th>
-                  <th>REGIONAL</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-            </div>
+            <!-- /.box -->
           </div>
-          <!-- /.box -->
+          <!-- /.col -->
         </div>
-        <!-- /.col -->
-      </div>
       <!-- /.row -->
-    </section>
 
-    <section class="content">
       <div class="row">
         <div class="col-lg-6 col-xs-6">
           <div class="form-group">
-            <label>Dirección de entrega</label>
-            <input class="form-control" placeholder="Ingrese su dirección"></input>
+            <label>Dirección de recojo</label>
+            <input class="form-control" name="direccion" placeholder="Ingrese su dirección"></input>
           </div>
         </div>
         <div class="col-lg-5 col-xs-6">
           <div class="form-group">
             <label>Observaciones</label>
-            <textarea class="form-control" rows="4" placeholder="Ingrese los detalles"></textarea>
+            <textarea class="form-control" rows="4" name="observacion" placeholder="Ingrese los detalles"></textarea>
           </div>
         </div>
         <!-- ./col -->
         <div class="col-lg-1 col-xs-6">
           <div class="form-group">
-            <a class="btn btn-app" href='javascript:void(0);' onclick='cargar_formulario();'>
+              <a type="button" class="btn btn-app" id="btn-ingresar">
                 <i class="fa fa-shopping-cart"></i> Enviar
               </a>
           </div>
         </div>
       </div>
       <!-- /.row -->
+      </form>
     </section>
+
+    <section>
+      <div class="col-lg-12">
+        <div class="div_contenido" style=" text-align: center">
+          <label id="resp" style='color:#177F6B'></label>
+        </div>
+      </div>
+    </section>
+
   </div>
   <!-- /.content-wrapper -->
 
@@ -143,22 +153,26 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-    // Limpiamos el cuerpo tbody
-
-   // $("#agregar").click(function(){
-
+    $('#btn-ingresar').click(function(){
+        var url = "controllers/devolucionController.php";
+        $.ajax({                        
+           type: "POST",                 
+           url: url,                     
+           data: $("#formulario").serialize(), 
+           success: function(data)             
+           {
+             $('#resp').html(data);               
+           }
+       });
+    });
   });
 
       function cargar_formulario(id_inv){
       // $("#error").html("<div class='modal1'><div class='center1'> <center> <img src='img/gif-load.gif'> Buscando Informacion...</center></div></div>");
       
       // var id_inv = $("#id_inv").val();
-      
-      //Limpiamos campo
-      $("#txtNombre").val("");
-      $("#txtEmail").val("");
 
-      $.getJSON("obtieneConsulta.php",{id:id_inv, desc_1:"", desc_2:"", desc_3:"", caja:"",  anio:"",  mes:"",control:"1"},function(objetosretorna){
+      $.getJSON("obtieneConsulta.php",{id:id_inv, desc_1:"", desc_2:"", desc_3:"", caja:"",  anio:"",  mes:"",control:"1", cli:""},function(objetosretorna){
           // console.log(id_inv);
           
         $("#error").html("");
@@ -168,7 +182,7 @@
           var nuevaFila =
         "<tr>"
         // +"<td><button type='button' class='btn btn-success' ><i class='fa fa-shopping-cart'></i></button></td>"
-        +"<td><a href='javascript:void(0);' onclick='deleteRow(this)'><i style='font-size:14px;' class='fa fa-trash text-red'></i></a></td>"
+        +"<td><input type='hidden' name=id-"+inventarios.ID_INV+" value="+inventarios.ID_INV+"><a href='javascript:void(0);' onclick='deleteRow(this)'><i style='font-size:14px;' class='fa fa-trash text-red'></i></a></td>"
         +"<td id='asd'>"+inventarios.ID_INV+"</td>"
         +"<td>"+inventarios.CLIENTE+"</td>"
         +"<td>"+inventarios.CAJA+"</td>"

@@ -7,11 +7,12 @@ include('buscadorClass.php');
 	$caja = $_GET["caja"];
 	$mes = $_GET["mes"];
 	$anio = $_GET["anio"];
+	$cliente = $_GET["cli"];
 
 	$tabla    = $_GET["control"];
 
 	if($tabla>0){
-		$filtro = " WHERE ID_INV= ".$id;
+		$filtro = " WHERE ID_INV= ".$id ;
 	}
 	else{
 		if($desc_1 == "" && $desc_2 == "" && $desc_3 == "" && $caja == "" && $mes == "0" && $anio == "0"){
@@ -27,9 +28,10 @@ include('buscadorClass.php');
 			$filtro = " WHERE DESC_1 like '%".$desc_1."%' 
 						and DESC_2 like '%".$desc_2."%' 
 						and DESC_3 like '%".$desc_3."%'
-						and MES_I like '".$mes."'
-						and ANO_I like '%".$anio."%'
-						and CAJA like '%".$caja."%' " ;
+						and MES_I >= '".$mes."'
+						and ANO_I >= '".$anio."'
+						and CAJA like '%".$caja."%'
+						and ID_CLIENTE = ".$cliente." " ;
 		}
 	}
 	$Json     = new Json;

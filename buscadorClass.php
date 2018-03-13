@@ -2,6 +2,7 @@
 
 require("include/config.php");
 
+
 class conectorDB extends config
 {
 	private $conexion;

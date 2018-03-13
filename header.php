@@ -1,25 +1,46 @@
 <?php
     session_start();
-    if($_SESSION['EmpUser'] == ''){
-        echo "<script language='javascript'>alert('Debes iniciar sesion')</script>";
-        echo "<meta http-equiv='refresh' content='0;url=login.php' />";
-        exit(0);
-    }   
-    unset($_SESSION['id']);
-    
+
+if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
     include("include/class.mysqldb.php");
     include("include/config.inc.php");
-    if(!empty($_GET['did'])){
-        mysql_query("DELETE FROM usuarios WHERE ID_USER='".$_GET['did']."' AND USER = '".$_SESSION['EmpUser']."'");
-        echo "<meta http-equiv=\"refresh\" content=\"0;url=header.php\">";
-        exit(0);
-
-    }
     $usuario = mysql_query("SELECT * FROM usuarios AS u 
                             JOIN clientes AS c ON u.ID_CLIENTE = c.ID_CLIENTE
                             WHERE ID_USER='".$_SESSION['EmpID']."' 
-                        ");
-    $usuario = mysql_fetch_array($usuario); 
+                          ");
+    $usuario = mysql_fetch_array($usuario);
+
+} else {
+
+   echo "<script language='javascript'>alert('Debes iniciar sesion')</script>";
+
+   echo "<meta http-equiv='refresh' content='0;url=login.php' />";
+
+   exit(0);
+}
+
+// $now = time();
+// if($now > $_SESSION['expire']) {
+//   echo "<script language='javascript'>alert('Debes iniciar sesion')</script>";
+//   echo "<meta http-equiv='refresh' content='0;url=login.php' />";
+//   session_destroy();
+// }
+
+    // if($_SESSION['EmpUser'] == ''){
+    //     echo "<script language='javascript'>alert('Debes iniciar sesion')</script>";
+    //     echo "<meta http-equiv='refresh' content='0;url=login.php' />";
+    //     exit(0);
+    // }   
+    // unset($_SESSION['id']);
+    
+
+    // if(!empty($_GET['did'])){
+    //     mysql_query("DELETE FROM usuarios WHERE ID_USER='".$_GET['did']."' AND USER = '".$_SESSION['EmpUser']."'");
+    //     echo "<meta http-equiv=\"refresh\" content=\"0;url=header.php\">";
+    //     exit(0);
+    // }
+
+
     // var_dump($usuario);
 
 ?>
@@ -181,4 +202,7 @@
     </nav>
   </header>
 
-<?php include "panel.php"; ?>
+<?php 
+  include "panel.php"; 
+  include "conexionClass.php";
+?>

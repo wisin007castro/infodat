@@ -67,6 +67,7 @@ if($pedidos > 0){
                     <div class="box-header">
                         <h3 class="box-title">Lista de solicitudes</h3>
                     </div>
+                    <input type="hidden" name="cliente" id="cliente" value="<?php echo $usuario['ID_CLIENTE']; ?>">
                     <div class="box-body table-responsive no-padding scrollable">
                         <table class="table table-bordered" id="tbEstadoSol">
                             <thead><tr>
@@ -122,7 +123,9 @@ if($pedidos > 0){
                     <div class="box-body">
                         <h4 class="box-title"><strong> 
                             Normales: <?php echo $normal; ?> &nbsp;&nbsp;&nbsp;&nbsp;  
-                            Urgentes: <?php echo $urgente; ?> &nbsp;&nbsp;&nbsp;&nbsp; Total: 5</strong></h4>
+                            Urgentes: <?php echo $urgente; ?> &nbsp;&nbsp;&nbsp;&nbsp; 
+                            Total: <?php echo $tot_tip_ped; ?></strong>
+                        </h4>
                     </div>
                 </div>
             </div>
@@ -200,11 +203,7 @@ if($pedidos > 0){
       // $("#error").html("<div class='modal1'><div class='center1'> <center> <img src='img/gif-load.gif'> Buscando Informacion...</center></div></div>");
       // var id_inv = $("#id_inv").val();
       
-      //Limpiamos campo
-      $("#txtNombre").val("");
-      $("#txtEmail").val("");
-
-      $.getJSON("obtieneConsulta.php",{id:id_inv, desc_1:"", desc_2:"", desc_3:"", caja:"", mes:"", anio:"", control:"1"},function(objetosretorna){
+      $.getJSON("obtieneConsulta.php",{id:id_inv, desc_1:"", desc_2:"", desc_3:"", caja:"", mes:"", anio:"", control:"1", cli:""},function(objetosretorna){
           // console.log(id_inv);
         $("#error").html("");
         var TamanoArray = objetosretorna.length;
