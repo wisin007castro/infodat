@@ -4,8 +4,8 @@
  unset($_SESSION['EmpUser']);
  if(isset($_REQUEST['user'])){
      $user = $_REQUEST['user'];
-     $pass = $_REQUEST['pass'];
-     // $pass = md5($_REQUEST['pass']);
+     // $pass = $_REQUEST['pass'];
+     $pass = md5($_REQUEST['pass']);//con hash
      $conn = new mysqldb();
      $sql="SELECT * FROM usuarios where USER = '".$user."' and PASS='".$pass."'";
      $query = $conn ->query($sql);

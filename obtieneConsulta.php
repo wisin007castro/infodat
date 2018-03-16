@@ -1,14 +1,18 @@
 <?php
 include('buscadorClass.php');
+include('controllers/logController.php');
+$log = new Logs();//llamando a la clase Logs
+
 	$id = $_GET["id"];
-	$desc_1 = $_GET["desc_1"];//Si recibimos un dato entonces hacemos filtro si recibimos 0 no hacemos filtro
+	$desc_1 = $_GET["desc_1"];// hacemos filtro si recibimos algun dato
 	$desc_2 = $_GET["desc_2"];
 	$desc_3 = $_GET["desc_3"];
 	$caja = $_GET["caja"];
 	$mes = $_GET["mes"];
 	$anio = $_GET["anio"];
 	$cliente = $_GET["cli"];
-
+	$usuario = $_GET["user"];
+	$evento = "No. Caja: \" ".$caja."\", Desc1: \" ".$desc_1."\", Desc2: \" ".$desc_2."\", Desc3: \" ".$desc_3."\", Mes: \" ".$mes."\", Año: \" ".$anio."\"";
 	$tabla    = $_GET["control"];
 
 	if($tabla>0){
@@ -36,5 +40,11 @@ include('buscadorClass.php');
 	}
 	$Json     = new Json;
 	$inventarios = $Json->BuscaInventarios($filtro);
+	
+
 	echo  json_encode($inventarios);
+
+	$log->eventos($cliente, $usuario, $evento);
+
+
 ?>

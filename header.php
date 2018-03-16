@@ -8,12 +8,11 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
                             JOIN clientes AS c ON u.ID_CLIENTE = c.ID_CLIENTE
                             WHERE ID_USER='".$_SESSION['EmpID']."' 
                           ");
-    $usuario = mysql_fetch_array($usuario);
+    $usuario_session = mysql_fetch_array($usuario);
 
 } else {
 
    echo "<script language='javascript'>alert('Debes iniciar sesion')</script>";
-
    echo "<meta http-equiv='refresh' content='0;url=login.php' />";
 
    exit(0);
@@ -26,22 +25,6 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 //   session_destroy();
 // }
 
-    // if($_SESSION['EmpUser'] == ''){
-    //     echo "<script language='javascript'>alert('Debes iniciar sesion')</script>";
-    //     echo "<meta http-equiv='refresh' content='0;url=login.php' />";
-    //     exit(0);
-    // }   
-    // unset($_SESSION['id']);
-    
-
-    // if(!empty($_GET['did'])){
-    //     mysql_query("DELETE FROM usuarios WHERE ID_USER='".$_GET['did']."' AND USER = '".$_SESSION['EmpUser']."'");
-    //     echo "<meta http-equiv=\"refresh\" content=\"0;url=header.php\">";
-    //     exit(0);
-    // }
-
-
-    // var_dump($usuario);
 
 ?>
 
@@ -159,7 +142,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
-              <span class="hidden-xs"><?php echo $usuario['NOMBRE']." ".$usuario['APELLIDO']; ?></span>
+              <span class="hidden-xs"><?php echo $usuario_session['NOMBRE']." ".$usuario_session['APELLIDO']; ?></span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
@@ -167,7 +150,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
                 <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
 
                 <p>
-                  Cliente <?php echo $usuario['CLIENTE']; ?> <br> Usuario: <?php echo $usuario['NOMBRE']." ".$usuario['APELLIDO']; ?>
+                  Cliente <?php echo $usuario_session['CLIENTE']; ?> <br> Usuario: <?php echo $usuario['NOMBRE']." ".$usuario_session['APELLIDO']; ?>
                   <!-- <small>Member since Nov. 2012</small> -->
                 </p>
               </li>

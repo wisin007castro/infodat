@@ -5,7 +5,7 @@
   // var_dump($usuario);
   $conexion = new MiConexion();
   $anios = $conexion->anios();
-  $solicitudes = $conexion->solicitudes($usuario['ID_CLIENTE']);
+  $solicitudes = $conexion->solicitudes($usuario_session['ID_CLIENTE']);
   // var_dump($solicitudes);
   $mistrings = new MiStrings();
   $meses = $mistrings->meses();
@@ -70,8 +70,8 @@
 
     <section class="content">
       <form method="POST" id="formulario">
-  <input type="hidden" name="cliente" id="cliente" value="<?php echo $usuario['ID_CLIENTE']; ?>">
-  <input type="hidden" name="usuario" id="usuario" value="<?php echo $usuario['ID_USER']; ?>">
+  <input type="hidden" name="cliente" id="cliente" value="<?php echo $usuario_session['ID_CLIENTE']; ?>">
+  <input type="hidden" name="usuario" id="usuario" value="<?php echo $usuario_session['ID_USER']; ?>">
         <div class="row" style="font-size:11px;">
           <div class="col-xs-12">
             <div class="box">
@@ -172,7 +172,7 @@
       
       // var id_inv = $("#id_inv").val();
 
-      $.getJSON("obtieneConsulta.php",{id:id_inv, desc_1:"", desc_2:"", desc_3:"", caja:"",  anio:"",  mes:"",control:"1", cli:""},function(objetosretorna){
+      $.getJSON("obtieneConsulta.php",{id:id_inv, desc_1:"", desc_2:"", desc_3:"", caja:"",  anio:"",  mes:"",control:"1", cli:"", user:""},function(objetosretorna){
           // console.log(id_inv);
           
         $("#error").html("");

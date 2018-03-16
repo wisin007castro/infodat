@@ -84,16 +84,27 @@ class MiConexion{
         return $this->getArraySQL($sql);
     }
 
-    public function usuarios()
+    public function usuarios($cliente)
     {
         $sql = "SELECT ID_USER, c.CLIENTE, NOMBRE, APELLIDO, CARGO, DIRECCION, TELEFONO, INTERNO, CELULAR, CORREO, u.HABILITADO, TIPO, REGIONAL 
-                  FROM usuarios AS u JOIN clientes AS c ON u.ID_CLIENTE = c.ID_CLIENTE 
-                  ORDER BY ID_USER";
+                  FROM usuarios AS u JOIN clientes AS c ON c.ID_CLIENTE = u.ID_CLIENTE 
+                  WHERE u.ID_CLIENTE = $cliente
+                  ORDER BY ID_USER ASC";
+        return $this->getArraySQL($sql);
+    }
+
+    public function usuario($id){
+        $sql = "SELECT * FROM usuarios WHERE ID_USER = $id";
         return $this->getArraySQL($sql);
     }
 
     public function clientes(){
         $sql = "SELECT * FROM clientes";
+        return $this->getArraySQL($sql);
+    }
+
+    public function cliente($id){
+        $sql = "SELECT * FROM clientes WHERE ID_CLIENTE = $id";
         return $this->getArraySQL($sql);
     }
 
@@ -131,6 +142,23 @@ class MiConexion{
         return $this-> getArraySQL($sql);
     }
 
+    public function repAccesso($cliente){
+        $sql = "SELECT * FROM(
+                    SELECT u.ID_CLIENTE, NOMBRE, APELLIDO, (SELECT IF(1>3,'Devolucion','Solicitud')) AS TIPO, s.FECHA_SOLICITUD AS FECHA, inv.CAJA FROM usuarios AS u 
+                        JOIN solicitud AS s ON u.ID_USER = s.ID_USER
+                        JOIN items AS i ON s.ID_SOLICITUD = i.ID_SOLICITUD
+                        JOIN inventarios as inv ON i.ID_INV = inv.ID_INV
+                    UNION ALL
+                    SELECT u.ID_CLIENTE, NOMBRE, APELLIDO, (SELECT IF(3>1,'Devolucion','Solicitud')) AS TIPO, d.FECHA_SOLICITUD AS FECHA, inv.CAJA AS FECHA_DEVOLUCION FROM usuarios AS u 
+                        JOIN devoluciones as d ON u.ID_USER = d.ID_USER
+                        JOIN dev_item as di ON d.ID_DEV = di.ID_DEV
+                        JOIN inventarios as inv ON di.ID_INV = inv.ID_INV
+                ) a 
+                WHERE ID_CLIENTE = $cliente
+                ORDER BY FECHA";
+        return $this->getArraySQL($sql);
+    }
+//
     public function llamadaSP($desc1, $desc2, $desc3, $mes, $anio, $caja){
         $conexion = $this->conectarBD();
         //generamos la consulta

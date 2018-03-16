@@ -5,7 +5,7 @@
   require_once 'stringsClass.php';
   
   $conexion = new MiConexion();
-  $usuarios = $conexion->usuarios();
+  $usuarios = $conexion->usuarios($usuario_session['ID_CLIENTE']);//cliente
   $anios = $conexion->anios();
   // var_dump($usuarios);
 

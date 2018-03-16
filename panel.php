@@ -8,7 +8,7 @@
           <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p><?php echo $usuario['NOMBRE']." ".$usuario['APELLIDO']; ?></p>
+          <p><?php echo $usuario_session['NOMBRE']." ".$usuario_session['APELLIDO']; ?></p>
           <!-- <a href="#"><i class="fa fa-circle text-success"></i> Online</a> -->
         </div>
       </div>

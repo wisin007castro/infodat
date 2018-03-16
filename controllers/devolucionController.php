@@ -21,8 +21,8 @@ foreach ($_POST as $key => $value) {
 }
 
 if($c > 0){
-	$sql = "INSERT INTO devoluciones(ID_CLIENTE, ID_USER, DIRECCION, OBSERVACION, FECHA_SOLICITUD, FECHA_PROGRAMADA, PROCESADO_POR, RECOGIDO_POR, ESTADO, REGIONAL) 
-		VALUES ('".$_POST['cliente']."','".$_POST['usuario']."','".$_POST['direccion']."', '".$_POST['observacion']."', '".$fecha."','NULL', 'William Castro', 'NULL', 'POR PROCESAR', 'LA PAZ')";
+	$sql = "INSERT INTO devoluciones(ID_CLIENTE, ID_USER, DIRECCION, OBSERVACION, ESTADO, REGIONAL) 
+		VALUES ('".$_POST['cliente']."','".$_POST['usuario']."','".$_POST['direccion']."', '".$_POST['observacion']."', '".$fecha."', 'POR PROCESAR', '".$_POST['regional']."')";
 
 	if(!$result = mysqli_query($con, $sql)) die();
 
@@ -51,7 +51,6 @@ if($c > 0){
 		    else{
 		    	echo "Algo salio mal";
 		    }
-
 		}
 	}
 }

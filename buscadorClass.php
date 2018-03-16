@@ -65,5 +65,27 @@ class Json
 		}
 	}
 
+	public function BuscaAcceso($filtro){
+		if($filtro <> ""){
+			$consulta = "SELECT * FROM(
+SELECT u.ID_USER, u.ID_CLIENTE, NOMBRE, APELLIDO, (SELECT IF(1>3,'Devolucion','Solicitud')) AS TIPO, s.FECHA_SOLICITUD AS FECHA, inv.CAJA FROM usuarios AS u 
+        JOIN solicitud AS s ON u.ID_USER = s.ID_USER
+        JOIN items AS i ON s.ID_SOLICITUD = i.ID_SOLICITUD
+        JOIN inventarios as inv ON i.ID_INV = inv.ID_INV
+UNION ALL
+SELECT u.ID_USER, u.ID_CLIENTE, NOMBRE, APELLIDO, (SELECT IF(3>1,'Devolucion','Solicitud')) AS TIPO, d.FECHA_SOLICITUD AS FECHA, inv.CAJA AS FECHA_DEVOLUCION FROM usuarios AS u 
+        JOIN devoluciones as d ON u.ID_USER = d.ID_USER
+        JOIN dev_item as di ON d.ID_DEV = di.ID_DEV
+        JOIN inventarios as inv ON di.ID_INV = inv.ID_INV
+) a 
+".$filtro." ";
+
+			//echo $consulta;
+			$conexion = new conectorDB;
+			$this->json = $conexion->EjecutarSentencia($consulta);
+			return $this->json;
+		}
+	}
+
 
 }/// TERMINA CLASE USUARIOS ///

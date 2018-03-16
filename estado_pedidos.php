@@ -67,7 +67,7 @@ if($pedidos > 0){
                     <div class="box-header">
                         <h3 class="box-title">Lista de solicitudes</h3>
                     </div>
-                    <input type="hidden" name="cliente" id="cliente" value="<?php echo $usuario['ID_CLIENTE']; ?>">
+                    <input type="hidden" name="cliente" id="cliente" value="<?php echo $usuario_session['ID_CLIENTE']; ?>">
                     <div class="box-body table-responsive no-padding scrollable">
                         <table class="table table-bordered" id="tbEstadoSol">
                             <thead><tr>
@@ -121,7 +121,7 @@ if($pedidos > 0){
                         <h3 class="box-title">Totales por tipo</h3>
                     </div>
                     <div class="box-body">
-                        <h4 class="box-title"><strong> 
+                        <h4 class="box-title" align="center"><strong> 
                             Normales: <?php echo $normal; ?> &nbsp;&nbsp;&nbsp;&nbsp;  
                             Urgentes: <?php echo $urgente; ?> &nbsp;&nbsp;&nbsp;&nbsp; 
                             Total: <?php echo $tot_tip_ped; ?></strong>
@@ -135,7 +135,7 @@ if($pedidos > 0){
                         <h3 class="box-title">Totales por estado</h3>
                     </div>
                     <div class="box-body">
-                        <h4 class="box-title"><strong> 
+                        <h4 class="box-title" align="center"><strong> 
                             Por procesar: <?php echo $por_proces; ?> &nbsp;&nbsp;&nbsp;&nbsp;  
                             Programada: <?php echo $programada; ?> &nbsp;&nbsp;&nbsp;&nbsp; 
                             Finalizada: <?php echo $finalizada; ?></strong></h4>
@@ -203,7 +203,7 @@ if($pedidos > 0){
       // $("#error").html("<div class='modal1'><div class='center1'> <center> <img src='img/gif-load.gif'> Buscando Informacion...</center></div></div>");
       // var id_inv = $("#id_inv").val();
       
-      $.getJSON("obtieneConsulta.php",{id:id_inv, desc_1:"", desc_2:"", desc_3:"", caja:"", mes:"", anio:"", control:"1", cli:""},function(objetosretorna){
+      $.getJSON("obtieneConsulta.php",{id:id_inv, desc_1:"", desc_2:"", desc_3:"", caja:"", mes:"", anio:"", control:"1", cli:"", user:""},function(objetosretorna){
           // console.log(id_inv);
         $("#error").html("");
         var TamanoArray = objetosretorna.length;

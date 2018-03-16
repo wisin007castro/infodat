@@ -1,18 +1,27 @@
 <?php 
 Class MiStrings{
 	public function meses(){
-		$meses = array("Mes", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
-		return $meses;
+		return array("Mes", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
 	}
 
 	public function estadoSol(){
-		$estSol = array("POR PROCESAR", "EN PROCESO DE BUSQUEDA", "DESPACHADA", "ATENDIDA/ENTREGADA");
-		return $estSol;
+		return array("POR PROCESAR", "EN PROCESO DE BUSQUEDA", "DESPACHADA", "ATENDIDA/ENTREGADA");
 	}
 
 	public function estadoDev(){
-		$estDev = array("POR PROCESAR", "PROGRAMADA", "FINALIZADA");
-		return $estDev;
+		return array("POR PROCESAR", "PROGRAMADA", "FINALIZADA");
+	}
+
+	public function estadoCliente(){
+		return array("SI", "NO");
+	}
+	
+	public function estadoUsuario(){
+		return array("SI", "NO", "RESET");
+	}
+
+	public function regional(){
+		return array("LP", "SCZ");
 	}
 }
  ?>

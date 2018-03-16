@@ -36,7 +36,7 @@
         <div class="col-lg-2 col-xs-6">
           <div class="form-group">
               <label>Número de caja:</label>
-              <input type="number" class="form-control" id="bNoCaja" name="" min="0">
+               <input type="number" class="form-control" id="bNoCaja" name="" min="0" onkeydown="javascript: return event.keyCode == 69 ? false : true"> <!-- press 'e' = false-->
           </div>
         </div>
 
@@ -131,9 +131,9 @@
 
     <section class="content">
       <form method="POST" id="formulario">
-  <input type="hidden" name="cliente" id="cliente" value="<?php echo $usuario['ID_CLIENTE']; ?>">
-  <input type="hidden" name="usuario" id="usuario" value="<?php echo $usuario['ID_USER']; ?>">
-  <input type="hidden" name="regional" id="regional" value="<?php echo $usuario['REGIONAL']; ?>">
+<input type="hidden" name="cliente" id="cliente" value="<?php echo $usuario_session['ID_CLIENTE']; ?>">
+<input type="hidden" name="usuario" id="usuario" value="<?php echo $usuario_session['ID_USER']; ?>">
+<input type="hidden" name="regional" id="regional" value="<?php echo $usuario_session['REGIONAL']; ?>">
         <div class="row" style="font-size:11px;">
           <div class="col-xs-12">
             <div class="box">
@@ -259,6 +259,12 @@
       $("#tablajson tbody").html("");
     });
 
+    $("#bNoCaja, #bdesc_1, #bdesc_2, #bdesc_3").keyup(function(event) {
+      if (event.keyCode === 13) {//key 'Enter'
+          $("#buscar").click();
+      }
+    });
+    
     $("#buscar").click(function(){
       $("#tablajson tbody").html("");
         // $("#error").html("<div class='modal1'><div class='center1'> <center> <img src='img/gif-load.gif'> Buscando Informacion...</center></div></div>");
@@ -269,12 +275,13 @@
       var sel_anio = $("#sel_anio").val();
       var bcaja = $("#bNoCaja").val();
       var cliente = $("#cliente").val();
+      var usuario = $("#usuario").val();
       // var bfecha = $("#reservation").val();//id por defecto de la fecha
       // console.log(bfecha);
       // console.log($("#bdesc_1").val());
 
-var bcaja = $("#bNoCaja").val();      // console.log($("#sel_anio").val());
-      $.getJSON("obtieneConsulta.php",{id:"", desc_1:bdesc_1, desc_2:bdesc_2, desc_3:bdesc_3, caja:bcaja, mes:sel_mes, anio:sel_anio, control:"0", cli:cliente},function(objetosretorna){
+      var bcaja = $("#bNoCaja").val();      // console.log($("#sel_anio").val());
+      $.getJSON("obtieneConsulta.php",{id:"", desc_1:bdesc_1, desc_2:bdesc_2, desc_3:bdesc_3, caja:bcaja, mes:sel_mes, anio:sel_anio, control:"0", cli:cliente, user:usuario},function(objetosretorna){
         $("#error").html("");
         var TamanoArray = objetosretorna.length;
         $.each(objetosretorna, function(i,inventarios){
@@ -313,12 +320,12 @@ var bcaja = $("#bNoCaja").val();      // console.log($("#sel_anio").val());
 
   });
 
-      function cargar_formulario(id_inv){
+    function cargar_formulario(id_inv){
       // $("#error").html("<div class='modal1'><div class='center1'> <center> <img src='img/gif-load.gif'> Buscando Informacion...</center></div></div>");
       
       // var id_inv = $("#id_inv").val();
       var cliente = $("#cliente").val();
-      $.getJSON("obtieneConsulta.php",{id:id_inv, desc_1:"", desc_2:"", desc_3:"", caja:"", mes:"0", anio:"0", control:"1", cli:cliente},function(objetosretorna){
+      $.getJSON("obtieneConsulta.php",{id:id_inv, desc_1:"", desc_2:"", desc_3:"", caja:"", mes:"0", anio:"0", control:"1", cli:cliente, user:usuario},function(objetosretorna){
           
 
         $("#error").html("");

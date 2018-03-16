@@ -59,6 +59,7 @@
     </section>
     <!-- /.content -->
     <section class="content">
+      <input type="hidden" name="cliente" id="cliente" value="<?php echo $usuario_session['ID_CLIENTE']; ?>">
       <div class="row" style="font-size:11px;">
         <div class="col-xs-12">
           <div class="box">
@@ -132,21 +133,22 @@ $("#boton").click(function(){
       $("#tb_busc_usuario tbody").html("");
         // $("#error").html("<div class='modal1'><div class='center1'> <center> <img src='img/gif-load.gif'> Buscando Informacion...</center></div></div>");
       var bdesc_1 = $("#bdesc_1").val();
+      var cliente = $("#cliente").val();
       // var bfecha = $("#reservation").val();//id por defecto de la fecha
       // console.log(bfecha);
       // console.log($("#mes").val());
       // console.log($("#anio").val());
-      $.getJSON("consultaUsuario.php",{nombre:bdesc_1},function(objetosretorna){
+      $.getJSON("consultaUsuario.php",{nombre:bdesc_1, cli:cliente},function(objetosretorna){
         $("#error").html("");
         var TamanoArray = objetosretorna.length;
         $.each(objetosretorna, function(i,usuarios){
           var nuevaFila =
         "<tr>"
         // +"<td><button type='button' class='btn btn-success' ><i class='fa fa-shopping-cart'></i></button></td>"
-        +"<td><a href='form_edit_usuario.php'><i style='font-size:14px;' class='fa fa-edit text-blue'></i></a></td>"
+        +"<td><a href='form_edit_usuario.php?id="+usuarios.ID_USER+"'><i style='font-size:14px;' class='fa fa-edit text-blue'></i></a></td>"
         +"<td>"+usuarios.ID_USER+"</td>"
         +"<td>"+usuarios.ID_CLIENTE+"</td>"
-        +"<td>"+usuarios.NOMBRE+"-"+usuarios.APELLIDO+"</td>"
+        +"<td>"+usuarios.NOMBRE+" "+usuarios.APELLIDO+"</td>"
         +"<td>"+usuarios.CARGO+"</td>"
         +"<td>"+usuarios.DIRECCION+"</td>"
         +"<td>"+usuarios.TELEFONO+"</td>"
