@@ -38,12 +38,13 @@
         </div> 
 
         <form method="POST" id="form_datos_usuario">
+          <input type="hidden" name="id_user" id="id_user" value="<?php echo $_GET['id']; ?>">
           <div class="box-body">
             <div class="row">
               <div class="col-lg-4">
               <div class="form-group">
                 <label>Cliente</label>
-                <select class="form-control">
+                <select class="form-control" name="id_cliente" >
                   <?php foreach ($clientes as $cli) {
                     if($usuario[0]['ID_CLIENTE'] == $cli['ID_CLIENTE']){
                     ?>
@@ -189,6 +190,14 @@
       </div>
     </section>
 
+    <section>
+      <div class="col-lg-12">
+        <div class="div_contenido" style=" text-align: center">
+          <label id="resp" style='color:#177F6B'></label>
+        </div>
+      </div>
+    </section>
+    
   </div>
   <!-- /.content-wrapper -->
 
@@ -196,17 +205,17 @@
 <!-- ./wrapper -->
 
 <?php require_once 'footer.php';
-// var_dump($_POST)
+// var_dump($_POST);
  ?>
 
 <script type="text/javascript">
   $(document).ready(function(){
         $('#btn-guardar').click(function(){
-        var url = "controllers/consultaController.php";
+        var url = "controllers/editUserController.php";
         $.ajax({                        
            type: "POST",                 
            url: url,                     
-           data: $("#formulario").serialize(), 
+           data: $("#form_datos_usuario").serialize(), 
            success: function(data)             
            {
              $('#resp').html(data);               

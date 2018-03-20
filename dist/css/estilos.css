@@ -1,5 +1,30 @@
+ .aprobado{
+
+background-color: #E9FCFA;
+
+padding: 8px;
+margin-bottom: 10px;
+
+border-radius: 10px 10px 10px 10px;
+-moz-border-radius: 10px 10px 10px 10px;
+-webkit-border-radius: 10px 10px 10px 10px;
+border: 1px dotted #006600;
+
+}
+.rechazado{
+
+background-color: #FFEDED;
+border: 1px dashed #FA206A;
+padding: 8px;
+margin-bottom: 10px;
+}
+
 .scrollable{
     height: 230px;
+    overflow-y: scroll;
+}
+.scrollable-big{
+    height: 460px;
     overflow-y: scroll;
 }
 

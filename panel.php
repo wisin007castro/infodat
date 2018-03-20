@@ -79,8 +79,16 @@
 <!--            <li><a href="form_nuevo_usuario.php"><i class="fa fa-circle-o"></i> Agregar Usuarios</a></li>-->
 <!--            <li><a href="form_edit_usuario.php"><i class="fa fa-circle-o"></i> Editar Usuarios</a></li>-->
             <li><a href="form_buscar_usuario.php"><i class="fa fa-circle-o"></i> Administración de Usuarios</a></li>
+
+            <?php 
+            if($usuario_session['TIPO'] == 'IA_ADMIN'){
+             ?>
               <li><a href="form_ped_admin.php"><i class="fa fa-circle-o"></i> Administración de Solicitudes</a></li>
               <li><a href="form_dev_admin.php"><i class="fa fa-circle-o"></i> Administración de Devoluciones</a></li>
+
+            <?php 
+              }
+             ?>
 
           </ul>
         </li>

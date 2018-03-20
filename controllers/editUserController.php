@@ -1,9 +1,40 @@
 <?php 
 
 require_once '../conexionClass.php';
-$conexion = new MyConexion();
-$con = $conexion->conectarDB();
+$conexion = new MiConexion();
+$con = $conexion->conectarBD();
+$usuario = $conexion->usuario($_POST['id_user']);
+$pass = $usuario[0]['PASS'];
 
-$sql = "INSERT INTO usuarios(ID_CLIENTE, NOMBRE, APELLIDO, CARGO, DIRECCION, TELEFONO, INTERNO, CELULAR, CORREO, USER, PASS, HABILITADO, TIPO, REGIONAL) VALUES ('value-2','value-3','value-4','value-5','value-6','value-7','value-8','value-9','value-10','value-11','value-12','value-13','value-14','value-15')";
+if($_POST['pass'] != $pass){
+	$pass = md5($_POST['pass']);
+}
+
+$sql = "UPDATE usuarios SET ID_CLIENTE='".$_POST['id_cliente']."',
+							NOMBRE='".$_POST['nombre']."',
+							APELLIDO='".$_POST['apellido']."',
+							CARGO='".$_POST['cargo']."',
+							DIRECCION='".$_POST['direccion']."',
+							TELEFONO='".$_POST['telefono']."',
+							INTERNO='".$_POST['interno']."',
+							CELULAR='".$_POST['celular']."',
+							CORREO='".$_POST['correo']."',
+							USER='".$_POST['user']."',
+							PASS='".$pass."',
+							HABILITADO='".$_POST['habilitado']."',
+							TIPO='".$_POST['tipo']."',
+							REGIONAL='".$_POST['regional']."' WHERE ID_USER='".$_POST['id_user']."'";
+
+
+if(!$resultado = mysqli_query($con, $sql)) die();
+
+if($resultado){
+	echo "Usuario editado Correctamente";
+}
+else{
+	echo "Ocurrió un error";
+}
+
+
 
  ?>

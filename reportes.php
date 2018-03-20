@@ -325,7 +325,7 @@
       
       // var id_inv = $("#id_inv").val();
       var cliente = $("#cliente").val();
-      $.getJSON("obtieneConsulta.php",{id:id_inv, desc_1:"", desc_2:"", desc_3:"", caja:"", mes:"0", anio:"0", control:"1", cli:cliente, user:usuario},function(objetosretorna){
+      $.getJSON("obtieneConsulta.php",{id:id_inv, desc_1:"", desc_2:"", desc_3:"", caja:"", mes:"0", anio:"0", control:"1", cli:"", user:""},function(objetosretorna){
           
 
         $("#error").html("");
@@ -336,7 +336,7 @@
         "<tr>"
         // +"<td><button type='button' class='btn btn-success' ><i class='fa fa-shopping-cart'></i></button></td>"
         +"<td><input type='hidden' name=id-"+inventarios.ID_INV+" value="+inventarios.ID_INV+"><a href='javascript:void(0);' onclick='deleteRow(this)'><i style='font-size:14px;' class='fa fa-trash text-red'></i></a></td>"
-        +"<td id='asd'>"+inventarios.ID_INV+"</td>"
+        +"<td>"+inventarios.ID_INV+"</td>"
         +"<td>"+inventarios.CLIENTE+"</td>"
         +"<td>"+inventarios.CAJA+"</td>"
         +"<td>"+inventarios.ITEM+"</td>"

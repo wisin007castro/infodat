@@ -84,6 +84,17 @@ class MiConexion{
         return $this->getArraySQL($sql);
     }
 
+    public function usuarios_almacen()
+    {
+        $sql = "SELECT ID_USER, c.CLIENTE, NOMBRE, APELLIDO, CARGO, DIRECCION, TELEFONO, INTERNO, CELULAR, CORREO, u.HABILITADO, TIPO, REGIONAL 
+                  FROM usuarios AS u JOIN clientes AS c ON c.ID_CLIENTE = u.ID_CLIENTE 
+                  WHERE c.CLIENTE = 'INFOACTIVA SRL'
+                  AND (u.TIPO = 'ALMACEN'
+                  OR u.TIPO = 'CONSULTA')
+                  ORDER BY ID_USER ASC";
+        return $this->getArraySQL($sql);
+    }
+
     public function usuarios($cliente)
     {
         $sql = "SELECT ID_USER, c.CLIENTE, NOMBRE, APELLIDO, CARGO, DIRECCION, TELEFONO, INTERNO, CELULAR, CORREO, u.HABILITADO, TIPO, REGIONAL 
@@ -113,13 +124,23 @@ class MiConexion{
         return $this->getArraySQL($sql);
     }
 
+    // public function pedidos(){
+    //     $sql = "SELECT inv.ID_INV, s.ID_SOLICITUD, u.NOMBRE, u.APELLIDO, s.TIPO_CONSULTA, s.DIRECCION_ENTREGA, s.FECHA_SOLICITUD, 
+    //                   s.HORA_SOLICITUD, s.PROCESADO_POR, s.FECHA_ENTREGA, s.HORA_ENTREGA, s.ENTREGADO_POR, item.ESTADO
+    //             FROM solicitud AS s JOIN usuarios AS u ON s.ID_USER = u.ID_USER 
+    //             JOIN items AS item ON s.ID_SOLICITUD = item.ID_SOLICITUD
+    //             JOIN inventarios AS inv ON inv.ID_INV = item.ID_INV
+    //             WHERE s.ESTADO <> 'ATENDIDA/ENTREGADA' ORDER BY s.ID_SOLICITUD LIMIT 25";
+    //     return $this->getArraySQL($sql);
+    // }
+
     public function pedidos(){
-        $sql = "SELECT inv.ID_INV, s.ID_SOLICITUD, u.NOMBRE, u.APELLIDO, s.TIPO_CONSULTA, s.DIRECCION_ENTREGA, s.FECHA_SOLICITUD, 
-                      s.HORA_SOLICITUD, s.PROCESADO_POR, s.FECHA_ENTREGA, s.HORA_ENTREGA, s.ENTREGADO_POR, item.ESTADO
+        $sql = "SELECT s.ID_SOLICITUD, s.ID_USER, u.NOMBRE, u.APELLIDO, s.TIPO_CONSULTA, s.DIRECCION_ENTREGA, s.FECHA_SOLICITUD, 
+                      s.HORA_SOLICITUD, s.PROCESADO_POR, s.FECHA_ENTREGA, s.HORA_ENTREGA, s.ENTREGADO_POR, s.ESTADO
                 FROM solicitud AS s JOIN usuarios AS u ON s.ID_USER = u.ID_USER 
-                JOIN items AS item ON s.ID_SOLICITUD = item.ID_SOLICITUD
-                JOIN inventarios AS inv ON inv.ID_INV = item.ID_INV
-                WHERE s.ESTADO <> 'ATENDIDA/ENTREGADA' ORDER BY s.ID_SOLICITUD LIMIT 25";
+                -- JOIN items AS item ON s.ID_SOLICITUD = item.ID_SOLICITUD
+                -- JOIN inventarios AS inv ON inv.ID_INV = item.ID_INV
+                 ORDER BY s.ID_SOLICITUD";
         return $this->getArraySQL($sql);
     }
 

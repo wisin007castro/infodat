@@ -20,14 +20,14 @@ foreach ($_POST as $key => $value) {
 	}
 }
 
-if($c > 0){
-	$sql = "INSERT INTO devoluciones(ID_CLIENTE, ID_USER, DIRECCION, OBSERVACION, ESTADO, REGIONAL) 
+if($c >= 0){
+	$sql = "INSERT INTO devoluciones(ID_CLIENTE, ID_USER, DIRECCION, OBSERVACION, FECHA_SOLICITUD, ESTADO, REGIONAL) 
 		VALUES ('".$_POST['cliente']."','".$_POST['usuario']."','".$_POST['direccion']."', '".$_POST['observacion']."', '".$fecha."', 'POR PROCESAR', '".$_POST['regional']."')";
 
 	if(!$result = mysqli_query($con, $sql)) die();
 
 	if ($result) {
-		
+
 		$sql = "SELECT * FROM devoluciones Order by ID_DEV desc LIMIT 1";
 		if(!$resultado = mysqli_query($con, $sql)) die();
 
