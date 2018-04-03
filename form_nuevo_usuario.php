@@ -11,16 +11,21 @@
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
+    <section class="content">
+      <div id="resp" class="col-lg-12">
+    </section>
     <section class="content-header">
       <h1>
         Registro de usuarios
         <!-- <small>Control panel</small> -->
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Registro de usuarios</li>
       </ol>
     </section>
+
+
 
     <!-- Main content -->
     <section class="content">
@@ -35,7 +40,23 @@
               <div class="col-lg-4">
               <div class="form-group">
                 <label>Cliente</label>
+                <?php if ($usuario_session['TIPO'] == 'IA_ADMIN') {
+                 ?>
                 <select class="form-control" name="id_cliente" >
+                  <?php foreach ($clientes as $cli) {
+                    if($usuario_session['ID_CLIENTE'] == $cli['ID_CLIENTE']){
+                    ?>
+                  <option selected="<?php echo $usuario_session['ID_CLIENTE'] ?>" value="<?php echo $cli['ID_CLIENTE'] ?>"><?php echo $cli['CLIENTE']?></option>
+                  <?php }
+                  else{ ?>
+                  <option value="<?php echo $cli['ID_CLIENTE'] ?>"><?php echo $cli['CLIENTE']?></option>
+                  <?php 
+                  }
+                } ?>
+                </select>
+                <?php }
+                else{ ?>
+                  <select class="form-control" name="id_cliente" >
                   <?php foreach ($clientes as $cli) {
                     if($usuario_session['ID_CLIENTE'] == $cli['ID_CLIENTE']){
                     ?>
@@ -44,6 +65,7 @@
                   }
                 } ?>
                 </select>
+                <?php } ?>
               </div>
               </div>
               <div class="col-lg-4">
@@ -132,9 +154,16 @@
                 <div class="form-group">
                   <label>Tipo de usuario</label>
                   <select class="form-control" name="tipo">
-                    <?php foreach ($tipousuarios as $tusuario) { ?>
-                    <option value="<?php echo $tusuario['TIPO'] ?>"><?php echo $tusuario['TIPO'] ?></option>
-                    <?php } ?>
+                      <?php if ($usuario_session['TIPO'] == 'IA_ADMIN'): ?>
+                        <?php foreach ($tipousuarios as $tusuario) { ?>
+                          <option value="<?php echo $tusuario['TIPO'] ?>"><?php echo $tusuario['TIPO'] ?></option>
+                        <?php } ?>    
+                      <?php else: ?>
+                          <option value="CONSULTA">CONSULTA</option>
+                          <option value="VISOR">VISOR</option>
+                          <option value="ADMIN">ADMIN</option>
+                      <?php endif ?>
+                    
                   </select>
                 </div>
               </div>
@@ -173,10 +202,25 @@
            type: "POST",                 
            url: url,                     
            data: $("#form_datos_usuario").serialize(), 
-           success: function(data)             
-           {
-             $('#resp').html(data);           
-           }
+           success: function(result){
+                if (result == 'success') {
+                    $.get("msj_correcto.php?msj=Usuario agregado correctamente", function(result){
+                    $("#resp").html(result);
+                    });
+                }
+                else{
+                    if(result == 'vacio'){
+                        $.get("msj_incorrecto.php?msj=Complete los datos faltantes", function(result){
+                            $("#resp").html(result);
+                        });
+                    }
+                    else{
+                        $.get("msj_incorrecto.php?msj="+"No se pudo agregar usuario", function(result){
+                            $("#resp").html(result);
+                        });
+                    }
+                }
+            }
        });
     });
   });

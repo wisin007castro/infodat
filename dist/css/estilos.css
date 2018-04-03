@@ -1,4 +1,31 @@
- .aprobado{
+.table-fixed thead,
+.table-fixed tfoot{
+  width: 97%;
+}
+
+.table-fixed tbody {
+  height: 230px;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.table-fixed thead,
+.table-fixed tbody,
+.table-fixed tfoot,
+.table-fixed tr,
+.table-fixed td,
+.table-fixed th {
+  display: block;
+}
+
+.table-fixed tbody td,
+.table-fixed thead > tr> th,
+.table-fixed tfoot > tr> td{
+  float: left;
+  border-bottom-width: 0;
+}
+
+.aprobado{
 
 background-color: #E9FCFA;
 
@@ -15,6 +42,17 @@ border: 1px dotted #006600;
 
 background-color: #FFEDED;
 border: 1px dashed #FA206A;
+padding: 8px;
+margin-bottom: 10px;
+}
+
+.restringido{
+
+background-color: #EBE7F8;
+border: 1px dashed #2035FA;
+border-radius: 10px 10px 10px 10px;
+-moz-border-radius: 10px 10px 10px 10px;
+-webkit-border-radius: 10px 10px 10px 10px;
 padding: 8px;
 margin-bottom: 10px;
 }

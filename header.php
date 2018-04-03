@@ -150,25 +150,25 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
                 <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
 
                 <p>
-                  Cliente <?php echo $usuario_session['CLIENTE']; ?> <br> Usuario: <?php echo $usuario['NOMBRE']." ".$usuario_session['APELLIDO']; ?>
+                  Cliente <?php echo $usuario_session['CLIENTE']; ?> <br> Usuario: <?php echo $usuario_session['NOMBRE']." ".$usuario_session['APELLIDO']; ?>
                   <!-- <small>Member since Nov. 2012</small> -->
                 </p>
               </li>
               <!-- Menu Body -->
-              <li class="user-body">
+<!--               <li class="user-body">
                 <div class="row">
                   <div class="col-xs-4 text-center">
                     <a href="#">Followers</a>
                   </div>
                   <div class="col-xs-4 text-center">
-                    <a href="#">Sales</a>
+                    <a href="#">Cargo: <?php //echo $usuario_session['CARGO']; ?></a>
                   </div>
                   <div class="col-xs-4 text-center">
                     <a href="#">Friends</a>
                   </div>
                 </div>
-                <!-- /.row -->
-              </li>
+                
+              </li> -->
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">

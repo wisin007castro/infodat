@@ -6,6 +6,10 @@ $con = $conexion->conectarBD();
 $usuario = $conexion->usuario($_POST['id_user']);
 $pass = $usuario[0]['PASS'];
 
+
+
+if($_POST['nombre'] != "" && $_POST['apellido'] != "" && $_POST['cargo'] != "" && $_POST['telefono'] != "" && $_POST['direccion'] != "" && $_POST['correo'] != "" && $_POST['user'] != "" && $_POST['pass'] != ""){
+
 if($_POST['pass'] != $pass){
 	$pass = md5($_POST['pass']);
 }
@@ -25,16 +29,18 @@ $sql = "UPDATE usuarios SET ID_CLIENTE='".$_POST['id_cliente']."',
 							TIPO='".$_POST['tipo']."',
 							REGIONAL='".$_POST['regional']."' WHERE ID_USER='".$_POST['id_user']."'";
 
+	if(!$resultado = mysqli_query($con, $sql)) die();
 
-if(!$resultado = mysqli_query($con, $sql)) die();
-
-if($resultado){
-	echo "Usuario editado Correctamente";
+	if($resultado){
+	echo "success";
+	}
+	else{
+		echo "Ocurrió un error";
+	}
 }
 else{
-	echo "Ocurrió un error";
+	echo "vacio";
 }
-
 
 
  ?>

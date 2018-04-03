@@ -8,7 +8,8 @@
           <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p><?php echo $usuario_session['NOMBRE']." ".$usuario_session['APELLIDO']; ?></p>
+          <p><?php echo "USER: ".$usuario_session['USER']; ?></p>
+          <small><?php echo "TIPO: ".$usuario_session['TIPO']; ?></small>
           <!-- <a href="#"><i class="fa fa-circle text-success"></i> Online</a> -->
         </div>
       </div>
@@ -26,6 +27,11 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">Menú de Navegación</li>
+
+        <?php 
+        if($usuario_session['TIPO'] == 'CONSULTA' || $usuario_session['TIPO'] == 'IA_CONSULTA' || $usuario_session['TIPO'] == 'VISOR'){
+         ?>
+
         <li class="treeview">
           <a href="#">
             <i class="fa fa-search"></i>
@@ -54,6 +60,13 @@
                   <!-- <li><a id="boton" href="#"><i class="fa fa-circle-o"></i> Busqueda</a></li> -->
               </ul>
           </li>
+
+          <?php } ?>
+
+        <?php 
+        if($usuario_session['TIPO'] == 'IA_ADMIN' || $usuario_session['TIPO'] == 'ADMIN'){
+         ?>
+
         <li class="treeview">
           <a href="#">
             <i class="fa fa-files-o"></i>
@@ -67,6 +80,7 @@
             <li><a href="form_listado_usuario.php"><i class="fa fa-circle-o"></i> Reporte de usuario</a></li>
           </ul>
         </li>
+
         <li class="treeview">
           <a href="#">
             <i class="fa fa-pencil-square-o"></i>
@@ -80,18 +94,35 @@
 <!--            <li><a href="form_edit_usuario.php"><i class="fa fa-circle-o"></i> Editar Usuarios</a></li>-->
             <li><a href="form_buscar_usuario.php"><i class="fa fa-circle-o"></i> Administración de Usuarios</a></li>
 
-            <?php 
-            if($usuario_session['TIPO'] == 'IA_ADMIN'){
-             ?>
-              <li><a href="form_ped_admin.php"><i class="fa fa-circle-o"></i> Administración de Solicitudes</a></li>
-              <li><a href="form_dev_admin.php"><i class="fa fa-circle-o"></i> Administración de Devoluciones</a></li>
+          </ul>
+        </li>
+        <?php 
+          }
+         ?>
 
-            <?php 
-              }
-             ?>
+        <?php 
+        if($usuario_session['TIPO'] == 'ALMACEN'){
+         ?>
+
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-pencil-square-o"></i>
+            <span>Administración</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+             
+              <li><a href="form_ped_admin.php"><i class="fa fa-circle-o"></i> Solicitudes</a></li>
+              <li><a href="form_dev_admin.php"><i class="fa fa-circle-o"></i> Devoluciones</a></li>
 
           </ul>
         </li>
+        <?php 
+          }
+         ?>
+
       </ul>
     </section>
     <!-- /.sidebar -->

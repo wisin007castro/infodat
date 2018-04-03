@@ -6,7 +6,7 @@ require_once 'stringsClass.php';
 
 $conexion = new MiConexion();
 $anios = $conexion->anios();
-$devoluciones = $conexion->devoluciones();
+$devoluciones = $conexion->devoluciones($usuario_session['ID_CLIENTE']);
 // var_dump($anios);
 
 $mistrings = new MiStrings();
@@ -18,14 +18,16 @@ $finalizada = 0;
 
 if($devoluciones >  0){
     foreach ($devoluciones as $dev) {
-        if($dev["ESTADO"] == "POR PROCESAR"){
-            $por_proces++;
-        }
-        elseif ($dev["ESTADO"] == "PROGRAMADA") {
-            $programada++;
-        }
-        else{
-            $finalizada++;
+        if ($dev['REGIONAL'] == $usuario_session['REGIONAL']) {
+            if($dev["ESTADO"] == "POR PROCESAR"){
+                $por_proces++;
+            }
+            elseif ($dev["ESTADO"] == "PROGRAMADA") {
+                $programada++;
+            }
+            else{
+                $finalizada++;
+            }
         }
     }
 }
@@ -72,8 +74,9 @@ if($devoluciones >  0){
                             </thead>
                             <tbody>
                             <?php foreach ($devoluciones as $dev) { ?>
-                                <tr>
-                                    <td><a href='javascript:void(0);' onclick='cargar_formulario("<?php echo $dev["ID_INV"]; ?>");'><i style='font-size:14px;' class='fa fa-shopping-cart text-green'></i></a></td>
+                                <?php if ($dev['REGIONAL'] == $usuario_session['REGIONAL']): ?>
+                                    <tr>
+                                    <td><a href='javascript:void(0);' onclick='cargar_formulario("<?php echo $dev["ID_DEV"]; ?>");'><i style='font-size:14px;' class='fa fa-expand text-blue'></i></a></td>
                                     <td><?php echo $dev["ID_DEV"]; ?></td>
                                     <td><?php echo $dev["NOMBRE"]." ".$dev["APELLIDO"]; ?></td>
                                     <td><?php echo $dev["DIRECCION"]; ?></td>
@@ -81,8 +84,25 @@ if($devoluciones >  0){
                                     <td><?php echo $dev["FECHA_PROGRAMADA"]; ?></td>
                                     <td><?php echo $dev["PROCESADO_POR"]; ?></td>
                                     <td><?php echo $dev["RECOGIDO_POR"]; ?></td>
-                                    <td><?php echo $dev["ESTADO"]; ?></td>
+                                    <?php if ($dev["ESTADO"] == 'FINALIZADA') {?>
+                                    <td style="background-color:#18b515; color: #FFFFFF ">
+                                        <b><?php echo $dev["ESTADO"]; ?></b>
+                                    </td>
+                                    <?php }
+                                    elseif ($dev["ESTADO"] == 'PROGRAMADA'){?>
+                                    <td style="background-color:#326df3; color: #FFFFFF ">
+                                        <b><?php echo $dev["ESTADO"]; ?></b>
+                                    </td>
+                                     <?php }
+                                    elseif ($dev["ESTADO"] == 'POR PROCESAR'){?>
+                                    <td class="bg-red-active color-palette">
+                                        <b><?php echo $dev["ESTADO"]; ?></b>
+                                    </td>
+                                     <?php } ?>
                                 </tr>
+                                <?php else: ?>
+                                    
+                                <?php endif ?>
                             <?php } ?>
                             </tbody>
                         </table>
@@ -123,9 +143,7 @@ if($devoluciones >  0){
                     <div class="box-body table-responsive no-padding scrollable">
                         <table class="table table-bordered" id="seleccionados">
                             <thead><tr>
-                                <th></th>
                                 <th>#</th>
-                                <th>CLIENTE</th>
                                 <th>CAJA</th>
                                 <th>ITEM</th>
                                 <th>DESC_1</th>
@@ -134,11 +152,10 @@ if($devoluciones >  0){
                                 <th>DESC_4</th>
                                 <th>CANT</th>
                                 <th>UNIDAD</th>
-                                <th>FECHA_I</th>
-                                <th>FECHA_F</th>
+                                <th>FECHA INICIAL</th>
+                                <th>FECHA FINAL</th>
                                 <th>DPTO</th>
                                 <th>ESTADO</th>
-                                <th>REGIONAL</th>
                             </tr>
                             </thead>
                             <tbody></tbody>
@@ -162,18 +179,17 @@ if($devoluciones >  0){
 <script type="text/javascript">
   $(document).ready(function(){
     // Limpiamos el cuerpo tbody
+
    // $("#agregar").click(function(){
 
   });
 
-      function cargar_formulario(id_inv){
+      function cargar_formulario(id_sol){
       // $("#error").html("<div class='modal1'><div class='center1'> <center> <img src='img/gif-load.gif'> Buscando Informacion...</center></div></div>");
-      
       // var id_inv = $("#id_inv").val();
-
-      $.getJSON("obtieneConsulta.php",{id:id_inv, desc_1:"", desc_2:"", desc_3:"", caja:"",  anio:"",  mes:"",control:"1", cli:"", user:""},function(objetosretorna){
+      $("#seleccionados tbody").html("");
+      $.getJSON("obtieneEstadoDev.php",{id:id_sol},function(objetosretorna){
           // console.log(id_inv);
-          
         $("#error").html("");
         var TamanoArray = objetosretorna.length;
         $.each(objetosretorna, function(i,inventarios){
@@ -181,9 +197,7 @@ if($devoluciones >  0){
           var nuevaFila =
         "<tr>"
         // +"<td><button type='button' class='btn btn-success' ><i class='fa fa-shopping-cart'></i></button></td>"
-        +"<td><a href='javascript:void(0);' onclick='deleteRow(this)'><i style='font-size:14px;' class='fa fa-trash text-red'></i></a></td>"
-        +"<td id='asd'>"+inventarios.ID_INV+"</td>"
-        +"<td>"+inventarios.CLIENTE+"</td>"
+        +"<td>"+inventarios.ID_DEV+"</td>"
         +"<td>"+inventarios.CAJA+"</td>"
         +"<td>"+inventarios.ITEM+"</td>"
         +"<td>"+inventarios.DESC_1+"</td>"
@@ -196,8 +210,8 @@ if($devoluciones >  0){
         +"<td>"+inventarios.DIA_F+"/"+inventarios.MES_F+"/"+inventarios.ANO_F+"</td>"
         +"<td>"+inventarios.DEPARTAMENTO+"</td>"
         +"<td>"+inventarios.ESTADO+"</td>"
-        +"<td>"+inventarios.REGIONAL+"</td>"
         +"</tr>";
+        
           $(nuevaFila).appendTo("#seleccionados tbody");
         });
         // console.log($("#asd").val());
@@ -209,8 +223,5 @@ if($devoluciones >  0){
         }
       });
     };
-    function deleteRow(btn) {
-      var row = btn.parentNode.parentNode;
-      row.parentNode.removeChild(row);
-    }
+
 </script>

@@ -6,8 +6,9 @@ require_once 'stringsClass.php';
 
 $conexion = new MiConexion();
 $anios = $conexion->anios();
-$pedidos = $conexion->pedidos();
-// var_dump($anios);
+$pedidos = $conexion->pedidos($usuario_session['ID_CLIENTE']);
+// var_dump($usuario_session);
+// echo "------".$usuario_session['ID_CLIENTE'];
 
 $mistrings = new MiStrings();
 $meses = $mistrings->meses();
@@ -17,25 +18,28 @@ $urgente = 0;
 $tot_tip_ped = 0;
 
 $por_proces = 0;
-$programada = 0;
+$buscando = 0;
 $finalizada = 0;
 
 if($pedidos > 0){
     foreach($pedidos as $ped){
-        if($ped["TIPO_CONSULTA"] == "NORMAL"){
-            $normal++;
-        }
-        else{
-            $urgente++;
-        }
-        if($ped["ESTADO"] == "POR PROCESAR"){
-            $por_proces++;
-        }
-        elseif ($ped["ESTADO"] == "PROGRAMADA") {
-            $programada++;
-        }
-        else{
-            $finalizada++;
+        if ($ped['REGIONAL'] == $usuario_session['REGIONAL']) {
+                    
+            if($ped["TIPO_CONSULTA"] == "NORMAL"){
+                $normal++;
+            }
+            else{
+                $urgente++;
+            }
+            if($ped["ESTADO"] == "POR PROCESAR"){
+                $por_proces++;
+            }
+            elseif ($ped["ESTADO"] == "EN PROCESO DE BUSQUEDA") {
+                $buscando++;
+            }
+            elseif ($ped["ESTADO"] == "ATENDIDA/ENTREGADA") {
+                $finalizada++;
+            }
         }
     }
     $tot_tip_ped = $normal + $urgente;
@@ -76,31 +80,51 @@ if($pedidos > 0){
                                 <th>Solicitado por</th>
                                 <th>Tipo de Consulta</th>
                                 <th>Dirección de entrega</th>
-                                <th>Fecha Solicitud</th>
-                                <th>Hora Solicitud</th>
+                                <th>Fecha/Hora Solicitud</th>
                                 <th>Procesado por</th>
-                                <th>Fecha Entrega</th>
-                                <th>Hora Entrega</th>
+                                <th>Fecha/Hora Entrega</th>
                                 <th>Entregado por</th>
                                 <th>Estado</th>
                             </tr>
                             </thead>
                             <tbody>
                             <?php foreach ($pedidos as $pedido) { ?>
-                                <tr>
-                                    <td><a href='javascript:void(0);' onclick='cargar_formulario("<?php echo $pedido["ID_INV"]; ?>");'><i style='font-size:14px;' class='fa fa-shopping-cart text-green'></i></a></td>
+                                <?php if ($pedido['REGIONAL'] == $usuario_session['REGIONAL']): ?>
+                                    <tr>
+                                    <td><a href='javascript:void(0);' onclick='cargar_formulario("<?php echo $pedido["ID_SOLICITUD"]; ?>");'><i style='font-size:14px;' class='fa fa-expand text-blue'></i></a></td>
                                     <td><?php echo $pedido["ID_SOLICITUD"]; ?></td>
                                     <td><?php echo $pedido["NOMBRE"]." ".$pedido["APELLIDO"]; ?></td>
                                     <td><?php echo $pedido["TIPO_CONSULTA"]; ?></td>
                                     <td><?php echo $pedido["DIRECCION_ENTREGA"]; ?></td>
-                                    <td><?php echo $pedido["FECHA_SOLICITUD"]; ?></td>
-                                    <td><?php echo $pedido["HORA_SOLICITUD"]; ?></td>
+                                    <td><?php echo $pedido["FECHA_SOLICITUD"]." ".$pedido["HORA_SOLICITUD"]; ?></td>
                                     <td><?php echo $pedido["PROCESADO_POR"]; ?></td>
-                                    <td><?php echo $pedido["FECHA_ENTREGA"]; ?></td>
-                                    <td><?php echo $pedido["HORA_ENTREGA"]; ?></td>
+                                    <td><?php echo $pedido["FECHA_ENTREGA"]." ".$pedido["HORA_ENTREGA"]; ?></td>
                                     <td><?php echo $pedido["ENTREGADO_POR"]; ?></td>
-                                    <td><?php echo $pedido["ESTADO"]; ?></td>
+                                    <?php if ($pedido["ESTADO"] == 'ATENDIDA/ENTREGADA') {?>
+                                    <td style="background-color:#18b515; color: #FFFFFF ">
+                                        <b><?php echo $pedido["ESTADO"]; ?></b>
+                                    </td>
+                                    <?php }
+                                    elseif ($pedido["ESTADO"] == 'DESPACHADA'){?>
+                                    <td style="background-color:#EAD30F; color: #FFFFFF ">
+                                        <b><?php echo $pedido["ESTADO"]; ?></b>
+                                    </td>
+                                     <?php } 
+                                    elseif ($pedido["ESTADO"] == 'EN PROCESO DE BUSQUEDA'){?>
+                                    <td style="background-color:#326df3; color: #FFFFFF ">
+                                        <b><?php echo $pedido["ESTADO"]; ?></b>
+                                    </td>
+                                     <?php }
+                                    elseif ($pedido["ESTADO"] == 'POR PROCESAR'){?>
+                                    <td class="bg-red-active color-palette">
+                                        <b><?php echo $pedido["ESTADO"]; ?></b>
+                                    </td>
+                                     <?php } ?>
+
                                 </tr>
+<?php else: ?>
+    
+<?php endif ?>
                             <?php } ?>
                             </tbody>
                         </table>
@@ -115,7 +139,7 @@ if($pedidos > 0){
 
     <section class="content">
         <div class="row">
-            <div class="col-xs-6">
+            <div class="col-xs-4">
                 <div class="box box-primary">
                     <div class="box-header">
                         <h3 class="box-title">Totales por tipo</h3>
@@ -129,7 +153,7 @@ if($pedidos > 0){
                     </div>
                 </div>
             </div>
-            <div class="col-xs-6">
+            <div class="col-xs-8">
                 <div class="box box-primary">
                     <div class="box-header">
                         <h3 class="box-title">Totales por estado</h3>
@@ -137,8 +161,8 @@ if($pedidos > 0){
                     <div class="box-body">
                         <h4 class="box-title" align="center"><strong> 
                             Por procesar: <?php echo $por_proces; ?> &nbsp;&nbsp;&nbsp;&nbsp;  
-                            Programada: <?php echo $programada; ?> &nbsp;&nbsp;&nbsp;&nbsp; 
-                            Finalizada: <?php echo $finalizada; ?></strong></h4>
+                            En Proceso de Búsqueda: <?php echo $buscando; ?> &nbsp;&nbsp;&nbsp;&nbsp; 
+                            Atendida/Entregada: <?php echo $finalizada; ?></strong></h4>
                     </div>
                 </div>
             </div>
@@ -155,9 +179,7 @@ if($pedidos > 0){
                     <div class="box-body table-responsive no-padding scrollable">
                         <table class="table table-bordered" id="seleccionados">
                             <thead><tr>
-                                <th></th>
                                 <th>#</th>
-                                <th>CLIENTE</th>
                                 <th>CAJA</th>
                                 <th>ITEM</th>
                                 <th>DESC_1</th>
@@ -166,11 +188,10 @@ if($pedidos > 0){
                                 <th>DESC_4</th>
                                 <th>CANT</th>
                                 <th>UNIDAD</th>
-                                <th>FECHA_I</th>
-                                <th>FECHA_F</th>
+                                <th>FECHA INICIAL</th>
+                                <th>FECHA FINAL</th>
                                 <th>DPTO</th>
                                 <th>ESTADO</th>
-                                <th>REGIONAL</th>
                             </tr>
                             </thead>
                             <tbody></tbody>
@@ -199,11 +220,11 @@ if($pedidos > 0){
 
   });
 
-      function cargar_formulario(id_inv){
+      function cargar_formulario(id_sol){
       // $("#error").html("<div class='modal1'><div class='center1'> <center> <img src='img/gif-load.gif'> Buscando Informacion...</center></div></div>");
       // var id_inv = $("#id_inv").val();
-      
-      $.getJSON("obtieneConsulta.php",{id:id_inv, desc_1:"", desc_2:"", desc_3:"", caja:"", mes:"", anio:"", control:"1", cli:"", user:""},function(objetosretorna){
+      $("#seleccionados tbody").html("");
+      $.getJSON("obtieneEstadoSol.php",{id:id_sol},function(objetosretorna){
           // console.log(id_inv);
         $("#error").html("");
         var TamanoArray = objetosretorna.length;
@@ -212,9 +233,7 @@ if($pedidos > 0){
           var nuevaFila =
         "<tr>"
         // +"<td><button type='button' class='btn btn-success' ><i class='fa fa-shopping-cart'></i></button></td>"
-        +"<td><a href='javascript:void(0);' onclick='deleteRow(this)'><i style='font-size:14px;' class='fa fa-trash text-red'></i></a></td>"
-        +"<td id='asd'>"+inventarios.ID_INV+"</td>"
-        +"<td>"+inventarios.CLIENTE+"</td>"
+        +"<td>"+inventarios.ID_SOLICITUD+"</td>"
         +"<td>"+inventarios.CAJA+"</td>"
         +"<td>"+inventarios.ITEM+"</td>"
         +"<td>"+inventarios.DESC_1+"</td>"
@@ -227,8 +246,8 @@ if($pedidos > 0){
         +"<td>"+inventarios.DIA_F+"/"+inventarios.MES_F+"/"+inventarios.ANO_F+"</td>"
         +"<td>"+inventarios.DEPARTAMENTO+"</td>"
         +"<td>"+inventarios.ESTADO+"</td>"
-        +"<td>"+inventarios.REGIONAL+"</td>"
         +"</tr>";
+        
           $(nuevaFila).appendTo("#seleccionados tbody");
         });
         // console.log($("#asd").val());
@@ -240,9 +259,6 @@ if($pedidos > 0){
         }
       });
     };
-    function deleteRow(btn) {
-      var row = btn.parentNode.parentNode;
-      row.parentNode.removeChild(row);
-    }
+
 </script>
 

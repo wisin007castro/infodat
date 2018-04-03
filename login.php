@@ -7,23 +7,53 @@
      // $pass = $_REQUEST['pass'];
      $pass = md5($_REQUEST['pass']);//con hash
      $conn = new mysqldb();
-     $sql="SELECT * FROM usuarios where USER = '".$user."' and PASS='".$pass."'";
+     // $sql="SELECT * FROM usuarios WHERE USER = '".$user."' AND PASS='".$pass."' ";
+     $sql = sprintf("SELECT * FROM usuarios 
+      WHERE USER='%s' AND PASS='%s'",
+      mysql_real_escape_string($user),
+      mysql_real_escape_string($pass));
+
      $query = $conn ->query($sql);
-     $data = $conn->fetch($query);
+     if (!$query) {
+    $mensaje  = 'Consulta no válida: ' . mysql_error() . "\n";
+    $mensaje .= 'Consulta completa: ' . $consulta;
+    die($mensaje);
+    }
+    else{$data = $conn->fetch($query);}
+     
      
      if($conn->num_rows()==0){
          echo "<script language='javascript'>alert('Nombre de Usuario o Password incorrecto..!')</script>";
      }else{
-        $_SESSION['loggedin'] = true;
-        $_SESSION['EmpUser']=$data->USER;
-        $_SESSION['EmpId']=$data->ID_USER;
-        $_SESSION['EmpID']=$data->ID_USER;
-        $_SESSION['start'] = time();
-        $_SESSION['expire'] = $_SESSION['start'] + (5);
 
-        unset($_SESSION['APIUser']);
-        echo "<meta http-equiv='refresh' content='0;url=index.php' />";
-        exit(0);
+      if ($data->HABILITADO == 'SI') {
+
+       $sql2="SELECT * FROM clientes WHERE ID_CLIENTE = '".$data->ID_CLIENTE."' ";
+       $query2 = $conn ->query($sql2);
+       $data2 = $conn->fetch($query2);
+
+         if ($data2->HABILITADO == 'SI') {
+            $_SESSION['loggedin'] = true;
+            $_SESSION['EmpUser']=$data->USER;
+            $_SESSION['EmpId']=$data->ID_USER;
+            $_SESSION['EmpID']=$data->ID_USER;
+            $_SESSION['start'] = time();
+            $_SESSION['expire'] = $_SESSION['start'] + (5);
+
+            unset($_SESSION['APIUser']);
+            echo "<meta http-equiv='refresh' content='0;url=index.php' />";
+            exit(0);
+         }
+         else{
+            echo "<script language='javascript'>alert('El cliente se encuentra deshabilitado')</script>";
+         }
+
+      }
+      else{
+        echo "<script language='javascript'>alert('Tu usuario se encuentra deshabilitado')</script>";
+      }
+
+
      }
  }
 ?>
@@ -45,20 +75,20 @@
 </head>
 
 
-<body class="bodylogin">      
+<body class="">      
   <div class="container" > 
           
-    <div class="col-sm-12 cabecera-login" >
-      <a class="mybtn-social pull-right" href="">Register</a>
-      <a class="mybtn-social pull-right" href="">Login</a>            
+    <div class="col-sm-12 form" >
+      <!-- <a class="mybtn-social pull-right" href="">Register</a> -->
+      <!-- <a class="mybtn-social pull-right" href="">Login</a>             -->
     </div>
                 
-    <div class="row">
-            <div class="col-sm-12">
+    <div class="row " >
+            <div class="col-sm-12 ">
             </div>
 
-            <div class="col-sm-offset-3 col-sm-6">
-                <form  role="form" action="" method="post" name ="login" class="formlogin">
+            <div class="col-sm-offset-3 col-sm-6 ">
+                <form  role="form" action="" method="post" name ="login" class="form2">
                   <input type="hidden" name="_token" value="">
                     <h1>Login</h1>
                   <div class="form-group">

@@ -124,6 +124,21 @@ class MiConexion{
         return $this->getArraySQL($sql);
     }
 
+    public function item($id_sol){
+        $sql = "SELECT * FROM items WHERE ID_SOLICITUD = $id_sol";
+        return $this->getArraySQL($sql);
+    }
+
+    public function item_sol(){
+        $sql = "SELECT * FROM items";
+        return $this->getArraySQL($sql);
+    }
+
+    public function dev_item($id_dev){
+        $sql = "SELECT * FROM dev_item WHERE ID_DEV = $id_dev";
+        return $this->getArraySQL($sql);
+    }
+
     // public function pedidos(){
     //     $sql = "SELECT inv.ID_INV, s.ID_SOLICITUD, u.NOMBRE, u.APELLIDO, s.TIPO_CONSULTA, s.DIRECCION_ENTREGA, s.FECHA_SOLICITUD, 
     //                   s.HORA_SOLICITUD, s.PROCESADO_POR, s.FECHA_ENTREGA, s.HORA_ENTREGA, s.ENTREGADO_POR, item.ESTADO
@@ -134,30 +149,51 @@ class MiConexion{
     //     return $this->getArraySQL($sql);
     // }
 
-    public function pedidos(){
-        $sql = "SELECT s.ID_SOLICITUD, s.ID_USER, u.NOMBRE, u.APELLIDO, s.TIPO_CONSULTA, s.DIRECCION_ENTREGA, s.FECHA_SOLICITUD, 
-                      s.HORA_SOLICITUD, s.PROCESADO_POR, s.FECHA_ENTREGA, s.HORA_ENTREGA, s.ENTREGADO_POR, s.ESTADO
+    public function pedidos($id_cliente){
+        $sql = "SELECT s.ID_SOLICITUD, s.ID_USER, u.NOMBRE, u.APELLIDO, s.TIPO_CONSULTA, s.DIRECCION_ENTREGA, s.FECHA_SOLICITUD, s.HORA_SOLICITUD, s.PROCESADO_POR, s.FECHA_ENTREGA, s.HORA_ENTREGA, s.ENTREGADO_POR, s.ESTADO, s.REGIONAL
                 FROM solicitud AS s JOIN usuarios AS u ON s.ID_USER = u.ID_USER 
-                -- JOIN items AS item ON s.ID_SOLICITUD = item.ID_SOLICITUD
-                -- JOIN inventarios AS inv ON inv.ID_INV = item.ID_INV
-                 ORDER BY s.ID_SOLICITUD";
+                WHERE s.ID_CLIENTE = $id_cliente
+                ORDER BY s.ID_SOLICITUD DESC";
         return $this->getArraySQL($sql);
     }
 
-    public function devoluciones(){
-        $sql = "SELECT inv.ID_INV, d.ID_DEV, u.NOMBRE, u.APELLIDO, d.DIRECCION, d.FECHA_SOLICITUD, d.FECHA_PROGRAMADA, d.PROCESADO_POR, d.RECOGIDO_POR, d.ESTADO 
-                FROM devoluciones AS d JOIN usuarios AS u ON d.ID_USER = u.ID_USER
-                JOIN dev_item AS d_item ON d.ID_DEV = d_item.ID_DEV
-                JOIN inventarios AS inv ON inv.ID_INV = d_item.ID_INV ";
+    public function pedidos_admin(){
+        $sql = "SELECT s.ID_SOLICITUD, s.ID_USER, u.NOMBRE, u.APELLIDO, s.TIPO_CONSULTA, s.DIRECCION_ENTREGA, s.FECHA_SOLICITUD, 
+                      s.HORA_SOLICITUD, s.PROCESADO_POR, s.FECHA_ENTREGA, s.HORA_ENTREGA, s.ENTREGADO_POR, s.ESTADO, s.REGIONAL
+                FROM solicitud AS s JOIN usuarios AS u ON s.ID_USER = u.ID_USER 
+
+                 ORDER BY s.ID_SOLICITUD DESC";
+        return $this->getArraySQL($sql);
+    }
+
+    // public function devoluciones(){
+    //     $sql = "SELECT inv.ID_INV, d.ID_DEV, u.NOMBRE, u.APELLIDO, d.DIRECCION, d.FECHA_SOLICITUD, d.FECHA_PROGRAMADA, d.PROCESADO_POR, d.RECOGIDO_POR, d.ESTADO 
+    //             FROM devoluciones AS d JOIN usuarios AS u ON d.ID_USER = u.ID_USER
+    //             JOIN dev_item AS d_item ON d.ID_DEV = d_item.ID_DEV
+    //             JOIN inventarios AS inv ON inv.ID_INV = d_item.ID_INV ";
+    //     return $this->getArraySQL($sql);
+    // }
+
+    public function devoluciones($id_cliente){
+        $sql = "SELECT d.ID_DEV, d.ID_DEV, u.NOMBRE, u.APELLIDO, d.DIRECCION, d.FECHA_SOLICITUD, d.FECHA_PROGRAMADA, d.PROCESADO_POR, d.RECOGIDO_POR, d.ESTADO, d.REGIONAL
+                FROM devoluciones AS d JOIN usuarios AS u ON d.ID_USER = u.ID_USER 
+                WHERE d.ID_CLIENTE = $id_cliente 
+                ORDER BY d.ID_DEV DESC";
+        return $this->getArraySQL($sql);
+    }
+
+    public function devoluciones_admin(){
+        $sql = "SELECT d.ID_DEV, u.NOMBRE, u.APELLIDO, d.DIRECCION, d.FECHA_SOLICITUD, d.FECHA_PROGRAMADA, d.PROCESADO_POR, d.RECOGIDO_POR, d.ESTADO, d.REGIONAL
+                FROM devoluciones AS d JOIN usuarios AS u ON d.ID_USER = u.ID_USER ";
         return $this->getArraySQL($sql);
     }
 
     public function solicitudes($cliente){
-        $sql = "SELECT inv.ID_INV, s.ID_SOLICITUD, u.NOMBRE, u.APELLIDO, s.FECHA_SOLICITUD, s.DIRECCION_ENTREGA, s.ESTADO
+        $sql = "SELECT inv.ID_INV, inv.CAJA, s.ID_SOLICITUD, u.NOMBRE, u.APELLIDO, s.FECHA_SOLICITUD, s.DIRECCION_ENTREGA, s.ESTADO, inv.ESTADO as ESTADO_INV
                 FROM solicitud AS s JOIN usuarios AS u ON s.ID_USER = u.ID_USER
                 JOIN items AS item ON s.ID_SOLICITUD = item.ID_SOLICITUD
                 JOIN inventarios AS inv ON inv.ID_INV = item.ID_INV
-                WHERE s.ESTADO <> 'ATENDIDA/ENTREGADA'
+                WHERE s.ESTADO = 'ATENDIDA/ENTREGADA'
                 AND s.ID_CLIENTE = $cliente
                 ORDER BY s.ID_SOLICITUD DESC";
         return $this-> getArraySQL($sql);

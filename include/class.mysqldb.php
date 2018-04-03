@@ -24,8 +24,12 @@
 			return $this->query;
 		}
 		function fetch() {
-			$result = mysql_fetch_object($this->query);
-			return $result;
+			try {
+				$result = mysql_fetch_object($this->query);
+			 	return $result;
+			} catch (Exception $e) {
+				return 0;
+			}
 		}
 		function num_rows() {
 			return mysql_num_rows($this->query); 

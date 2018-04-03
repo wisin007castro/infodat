@@ -9,6 +9,8 @@
 
   $mistrings = new MiStrings();
   $meses = $mistrings->meses();
+
+  $datos_usuario = $conexion->usuario($usuario_session['ID_USER']);
  ?>
 
   <!-- Content Wrapper. Contains page content -->
@@ -100,7 +102,7 @@
                 <table class="table table-bordered" id="tablajson">
                   <thead><tr>
                     <th></th>
-                    <th>#</th>
+                    <!-- <th>#</th> -->
                     <th>CLIENTE</th>
                     <th>CAJA</th>
                     <th>ITEM</th>
@@ -129,10 +131,14 @@
       <!-- /.row -->
     </section>
 
+    <section>
+      <div id="resp" class="col-lg-12">
+    </section>
+
     <section class="content">
       <form method="POST" id="formulario">
 <input type="hidden" name="cliente" id="cliente" value="<?php echo $usuario_session['ID_CLIENTE']; ?>">
-<input type="hidden" name="usuario" id="usuario" value="<?php echo $usuario_session['ID_USER']; ?>">
+<input type="hidden" name="usuario" id="usuario" value="1">
 <input type="hidden" name="regional" id="regional" value="<?php echo $usuario_session['REGIONAL']; ?>">
         <div class="row" style="font-size:11px;">
           <div class="col-xs-12">
@@ -144,7 +150,7 @@
                 <table class="table table-bordered" id="seleccionados">
                   <thead><tr>
                     <th></th>
-                    <th>#</th>
+                    <!-- <th>#</th> -->
                     <th>CLIENTE</th>
                     <th>CAJA</th>
                     <th>ITEM</th>
@@ -170,12 +176,15 @@
           <!-- /.col -->
         </div>
       <!-- /.row -->
+
+      <?php if ($usuario_session['TIPO'] == 'CONSULTA') { ?>
+      <div class="row"><b><span class="text-yellow pull-right" id="msj_urgente"></span></b></div>
         <div class="row">
           <div class="col-lg-5 col-xs-6">
             <div class="form-group">
 
               <label>Dirección de entrega</label>
-              <input name="direccion" class="form-control" placeholder="Ingrese su dirección"></input>
+              <input name="direccion" class="form-control" value="<?php echo $usuario_session['DIRECCION']; ?>"></input>
             </div>
           </div>
           <div class="col-lg-4 col-xs-6">
@@ -185,6 +194,7 @@
             </div>
           </div>
           <div class="col-lg-1 col-xs-6">
+            <br>
             <div class="form-group">
               <div class="radio">
                 <label>
@@ -198,29 +208,27 @@
                   Urgente
                 </label>
               </div>
+
             </div>
           </div>
 
           <!-- ./col -->
           <div class="col-lg-1 col-xs-6">
             <div class="form-group">
+              <br>
               <a type="button" class="btn btn-app" id="btn-ingresar">
                 <i class="fa fa-shopping-cart"></i> Enviar
               </a>
             </div>
           </div>
         </div>
+        
+        <?php } ?>
+
       </form>
       <!-- /.row -->
     </section>
 
-    <section>
-      <div class="col-lg-12">
-        <div class="div_contenido" style=" text-align: center">
-          <label id="resp" style='color:#177F6B'></label>
-        </div>
-      </div>
-    </section>
 
   </div>
   <!-- /.content-wrapper -->
@@ -232,8 +240,24 @@
 
 <script type="text/javascript">
 
+  $(function(){
+
+    $('#urgente').click(function(){
+        // alert('changed');
+        $("#msj_urgente").text("* Las solicitudes de tipo 'Urgente' tienen un costo adicional... ");
+    });
+    $('#normal').click(function(){
+        // alert('changed');
+        $("#msj_urgente").text('');
+    });          
+        
+
+});
+
   //Nueva solicitud 
   $(document).ready(function(){
+
+
     //Envio de formulario
     $('#btn-ingresar').click(function(){
         var url = "controllers/consultaController.php";
@@ -241,10 +265,25 @@
            type: "POST",                 
            url: url,                     
            data: $("#formulario").serialize(), 
-           success: function(data)             
-           {
-             $('#resp').html(data);               
-           }
+           success: function(result){
+                if (result == 'success') {
+                    $.get("msj_correcto.php?msj=Solicitud realizada exitosamente", function(result){
+                    $("#resp").html(result);
+                    });
+                }
+                else{
+                    if(result == 'vacio'){
+                        $.get("msj_incorrecto.php?msj="+"Seleccione al menos un ITEM e ingrese los detalles", function(result){
+                            $("#resp").html(result);
+                        });
+                    }
+                    else{
+                        $.get("msj_incorrecto.php?msj="+"No se pudo realizar la solicitud", function(result){
+                            $("#resp").html(result);
+                        });
+                    }
+                }
+            }
        });
     });
 
@@ -285,11 +324,13 @@
         $("#error").html("");
         var TamanoArray = objetosretorna.length;
         $.each(objetosretorna, function(i,inventarios){
+
+          if (inventarios.ESTADO == 'EN CUSTODIA') {
           var nuevaFila =
         "<tr>"
         // +"<td><button type='button' class='btn btn-success' ><i class='fa fa-shopping-cart'></i></button></td>"
-        +"<td><a href='javascript:void(0);' onclick='cargar_formulario("+inventarios.ID_INV+");'><i style='font-size:14px;' class='fa fa-shopping-cart text-green'></i></a></td>"
-        +"<td>"+inventarios.ID_INV+"</td>"
+        +"<td><a href='javascript:void(0);' onclick='cargar_formulario("+inventarios.ID_INV+");'><i style='font-size:15px;' class='fa fa-shopping-cart text-green'></i></a></td>"
+        // +"<td>"+inventarios.ID_INV+"</td>"
         +"<td>"+inventarios.CLIENTE+"</td>"
         +"<td>"+inventarios.CAJA+"</td>"
         +"<td>"+inventarios.ITEM+"</td>"
@@ -305,6 +346,30 @@
         +"<td>"+inventarios.ESTADO+"</td>"
         // +"<td>"+inventarios.REGIONAL+"</td>"
         +"</tr>";
+          }
+          else{
+          var nuevaFila =
+        "<tr>"
+        // +"<td><button type='button' class='btn btn-success' ><i class='fa fa-shopping-cart'></i></button></td>"
+        +"<td><a href='javascript:void(0);'><i style='font-size:15px;' class='fa fa-shopping-cart text-muted'></i></a></td>"
+        // +"<td>"+inventarios.ID_INV+"</td>"
+        +"<td>"+inventarios.CLIENTE+"</td>"
+        +"<td>"+inventarios.CAJA+"</td>"
+        +"<td>"+inventarios.ITEM+"</td>"
+        +"<td>"+inventarios.DESC_1+"</td>"
+        +"<td>"+inventarios.DESC_2+"</td>"
+        +"<td>"+inventarios.DESC_3+"</td>"
+        +"<td>"+inventarios.DESC_4+"</td>"
+        +"<td>"+inventarios.CANTIDAD+"</td>"
+        +"<td>"+inventarios.UNIDAD+"</td>"
+        +"<td>"+inventarios.DIA_I+"/"+inventarios.MES_I+"/"+inventarios.ANO_I+"</td>"
+        +"<td>"+inventarios.DIA_F+"/"+inventarios.MES_F+"/"+inventarios.ANO_F+"</td>"
+        +"<td>"+inventarios.DEPARTAMENTO+"</td>"
+        +"<td>"+inventarios.ESTADO+"</td>"
+        // +"<td>"+inventarios.REGIONAL+"</td>"
+        +"</tr>";
+          }
+
           $(nuevaFila).appendTo("#tablajson tbody");
         });
         if(TamanoArray==0){
@@ -324,8 +389,9 @@
       // $("#error").html("<div class='modal1'><div class='center1'> <center> <img src='img/gif-load.gif'> Buscando Informacion...</center></div></div>");
       
       // var id_inv = $("#id_inv").val();
+      var usuario = $("#usuario").val();
       var cliente = $("#cliente").val();
-      $.getJSON("obtieneConsulta.php",{id:id_inv, desc_1:"", desc_2:"", desc_3:"", caja:"", mes:"0", anio:"0", control:"1", cli:"", user:""},function(objetosretorna){
+      $.getJSON("obtieneConsulta.php",{id:id_inv, desc_1:"", desc_2:"", desc_3:"", caja:"", mes:"0", anio:"0", control:"1", cli:"", user:usuario},function(objetosretorna){
           
 
         $("#error").html("");
@@ -335,8 +401,9 @@
           var nuevaFila =
         "<tr>"
         // +"<td><button type='button' class='btn btn-success' ><i class='fa fa-shopping-cart'></i></button></td>"
+
         +"<td><input type='hidden' name=id-"+inventarios.ID_INV+" value="+inventarios.ID_INV+"><a href='javascript:void(0);' onclick='deleteRow(this)'><i style='font-size:14px;' class='fa fa-trash text-red'></i></a></td>"
-        +"<td>"+inventarios.ID_INV+"</td>"
+        // +"<td>"+inventarios.ID_INV+"</td>"
         +"<td>"+inventarios.CLIENTE+"</td>"
         +"<td>"+inventarios.CAJA+"</td>"
         +"<td>"+inventarios.ITEM+"</td>"

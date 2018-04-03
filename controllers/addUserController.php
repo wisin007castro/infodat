@@ -24,14 +24,14 @@ if($_POST['nombre'] != "" && $_POST['apellido'] != "" && $_POST['cargo'] != "" &
 	if(!$resultado = mysqli_query($con, $sql)) die();
 
 	if($resultado){
-	echo "Usuario agregado Correctamente";
+	echo "success";
 	}
 	else{
 		echo "Ocurrió un error";
 	}
 }
 else{
-	echo "Llene los campos requeridos";
+	echo "vacio";
 }
 
 

@@ -6,7 +6,7 @@ require_once 'stringsClass.php';
 
 $conexion = new MiConexion();
 $anios = $conexion->anios();
-$pedidos = $conexion->pedidos();
+$pedidos = $conexion->pedidos_admin();
 $usuarios = $conexion->usuarios_almacen();//cliente
 // var_dump($usuarios);
 
@@ -29,20 +29,16 @@ $estados = $mistrings->estadoSol();
             <li class="active">Estado de solicitud</li>
         </ol>
     </section>
-    <!-- Mensajes -->
-    </section>
-        <section>
+
+    <section>
       <div id="resp" class="col-lg-12">
-<!--         <div class="div_contenido" style=" text-align: center">
-          <label id="resp" style='color:#177F6B'></label>
-        </div> -->
-      </div>
     </section>
 
     <!-- Main content -->
     <!-- /.content -->
     <section class="content">
 <input type="hidden" name="usuario" id="usuario" value="<?php echo $usuario_session['ID_USER']; ?>">
+
         <div class="row" style="font-size:11px;">
             <div class="col-xs-12">
                 <div class="box">
@@ -70,6 +66,7 @@ $estados = $mistrings->estadoSol();
                                 </thead>
                                 <tbody>
                                 <?php foreach ($pedidos as $pedido) { ?>
+                                    <?php if ($pedido['REGIONAL'] == $usuario_session['REGIONAL']): ?>
                                     <tr>
                                         <td><?php echo $pedido["ID_SOLICITUD"]; ?></td>
                                         <td><?php echo $pedido["NOMBRE"]." ".$pedido["APELLIDO"]; ?></td>
@@ -81,48 +78,54 @@ $estados = $mistrings->estadoSol();
                                         <td><?php echo $pedido["FECHA_ENTREGA"]; ?></td>
                                         <td><?php echo $pedido["HORA_ENTREGA"]; ?></td>
                                         <td><!-- ENTREGADO POR -->
-                                        <?php if ($pedido["ESTADO"] == "EN PROCESO DE BUSQUEDA") {?>
-                                        <select class="form-control" name="entrega">
-                                        <?php
+
+                                        <?php 
+                                        if ($pedido["ESTADO"] != "EN PROCESO DE BUSQUEDA") {
+                                            foreach ($usuarios as $user) {
+                                                if ($user['NOMBRE']." ".$user['APELLIDO'] == $pedido["ENTREGADO_POR"]) {
+                                        ?>
+                                            <input type="hidden" id="entrega-<?php echo $pedido['ID_SOLICITUD']?>" value="<?php echo $user['ID_USER']; ?>"><?php echo $pedido['ENTREGADO_POR']; ?>
+                                        <?php    
+                                                }
                                             }
-                                            else{
-                                            ?>
-                                        <select disabled class="form-control" name="entrega">
+                                        }
+                                        else{
+                                        ?>
+                                        <select class="form-control" id="entrega-<?php echo $pedido['ID_SOLICITUD']; ?>">
+                                        <?php foreach ($usuarios as $user) { ?>
+                                        <?php if ($user['REGIONAL'] == $pedido['REGIONAL']): ?>
+                                            
+
+                                            <option value="<?php echo $user['ID_USER'] ?>"><?php echo $user['NOMBRE']." ".$user['APELLIDO'] ?></option>
+                                        <?php else: ?>
+                                            
+                                        <?php endif ?>
+                                        <?php 
+                                            }
+                                        ?>
+                                        </select>
                                         <?php } ?>
-                                        <option value=""></option>
-                                        <?php foreach ($usuarios as $us) { 
-                                            if($pedido["ENTREGADO_POR"] == $us['NOMBRE']." ".$us['APELLIDO']){
-                                            ?>
-                                            <option selected="<?php echo $pedido["ENTREGADO_POR"]; ?>" value="<?php echo $pedido["ENTREGADO_POR"] ?>"><?php echo $pedido["ENTREGADO_POR"] ?></option>
-                                            <?php
-                                            }
-                                            else{
-                                            ?>
-                                            <option value="<?php echo $us['NOMBRE']." ".$us['APELLIDO'] ?>"><?php echo $us['NOMBRE']." ".$us['APELLIDO'] ?></option>
-                                            <?php
-                                            }
-                                        } ?>
-                                      </select>
+
                                         </td>
                                         <td><?php echo $pedido["ESTADO"]; ?></td>
                                         <td>
                                             <?php if($pedido["ESTADO"] == "POR PROCESAR"){ ?>
-                                            <button type="button" class="btn btn-block btn-primary btn-sm update-sol" data-id="<?php echo $pedido["ID_SOLICITUD"]; ?>" user-id="<?php echo $pedido["ID_USER"]; ?>">EN PROCESO DE BUSQUEDA</button>
+                                            <button type="button" class="btn btn-block btn-primary btn-sm update-sol" data-id="<?php echo $pedido["ID_SOLICITUD"]; ?>">EN PROCESO DE BUSQUEDA</button>
                                             <?php
                                             }
                                             elseif($pedido["ESTADO"] == "EN PROCESO DE BUSQUEDA"){
                                             ?>
-                                            <button type="button" class="btn btn-block btn-warning btn-sm update-sol" data-id="<?php echo $pedido["ID_SOLICITUD"]; ?>" user-id="<?php echo $pedido["ID_USER"]; ?>">DESPACHADA</button>
+                                            <button type="button" class="btn btn-block btn-warning btn-sm update-sol" data-id="<?php echo $pedido["ID_SOLICITUD"]; ?>">DESPACHADA</button>
                                             <?php
                                             }
                                             elseif($pedido["ESTADO"] == "DESPACHADA"){
                                             ?>
-                                            <button type="button" class="btn btn-block btn-success btn-sm update-sol" data-id="<?php echo $pedido["ID_SOLICITUD"]; ?>" user-id="<?php echo $pedido["ID_USER"]; ?>">ATENDIDA/ENTREGADA</button>
+                                            <button type="button" class="btn btn-block btn-success btn-sm update-sol" data-id="<?php echo $pedido["ID_SOLICITUD"]; ?>">ATENDIDA/ENTREGADA</button>
                                             <?php
                                             }
                                             elseif($pedido["ESTADO"] == "ATENDIDA/ENTREGADA"){
                                             ?>
-                                            <button disabled type="button" class="btn btn-block btn-default btn-sm update-sol" data-id="<?php echo $pedido["ID_SOLICITUD"]; ?>" user-id="<?php echo $pedido["ID_USER"]; ?>">ATENDIDA/ENTREGADA</button>
+                                            <button disabled type="button" class="btn btn-block btn-default btn-sm update-sol" data-id="<?php echo $pedido["ID_SOLICITUD"]; ?>">ATENDIDA/ENTREGADA</button>
                                             <?php
                                             }
                                             else{
@@ -131,6 +134,9 @@ $estados = $mistrings->estadoSol();
                                             <?php } ?>
                                         </td>
                                     </tr>
+                                    <?php else: ?>
+                                        
+                                    <?php endif ?>
                                 <?php } ?>
                                 </tbody>
                             </table>
@@ -153,36 +159,36 @@ $estados = $mistrings->estadoSol();
 
 <script type="text/javascript">
 
-    $("#boton").click(function(){
-        $.ajax({
-            type: "post",
-            url: "cargarHotel.php",
-            dataType: "html",
-            success: function(result) {
-                $("#cajaSM").html(result);
-            }
-        })
-    });
-</script>
-<script type="text/javascript">
-
-var id, user, usuario;
+var id, entrega, usuario;
 $(document).on('click','.update-sol',function(){
     id = $(this).attr('data-id');
-    user = $(this).attr('user-id'); // ENTREGADO POR
     usuario = $("#usuario").val(); //PROCESADO POR
+    entrega = $("#entrega-"+id).val();// ENTREGADO POR
+
+    if (!entrega) {
+        entrega = "0";
+    }
+
+console.log(id);
+    console.log(entrega);
     $.ajax({
         type:'POST',
         url:"controllers/modSolController.php", // sending the request to the same page we're on right now
-        data:{'id':id, 'user':user, 'usuario':usuario},
-           success: function(result)             
-           {
-            // $('#resp').html();
-            $.get("msj_correcto.php", function(result){
-            $("#resp").html(result);
-        });
-           }
-    })
+        data:{'id':id, 'usuario':usuario, 'entrega':entrega},
+           success: function(result){
+                if (result == 'success') {
+                    $.get("msj_correcto.php?msj="+"Solicitud actualizada correctamente", function(result){
+                    $("#resp").html(result);
+                    });
+                }
+                else{
+                    $.get("msj_incorrecto.php?msj="+"No se pudo realizar la actualización de la modificación", function(result){
+                        $("#resp").html(result);
+                    });
+                }
+            }
+        }
+    )
 })
 
 </script>

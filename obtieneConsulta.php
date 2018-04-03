@@ -1,5 +1,6 @@
 <?php
 include('buscadorClass.php');
+include('conexionClass.php');
 include('controllers/logController.php');
 $log = new Logs();//llamando a la clase Logs
 
@@ -12,6 +13,14 @@ $log = new Logs();//llamando a la clase Logs
 	$anio = $_GET["anio"];
 	$cliente = $_GET["cli"];
 	$usuario = $_GET["user"];
+
+	$conexion = new MiConexion();
+	$con = $conexion->conectarBD();
+	$user = $conexion->usuario($usuario);
+
+	$regional = $user[0]['REGIONAL'];
+
+
 	$evento = "No. Caja: \" ".$caja."\", Desc1: \" ".$desc_1."\", Desc2: \" ".$desc_2."\", Desc3: \" ".$desc_3."\", Mes: \" ".$mes."\", Año: \" ".$anio."\"";
 	$tabla    = $_GET["control"];
 
@@ -35,7 +44,8 @@ $log = new Logs();//llamando a la clase Logs
 						and MES_I >= '".$mes."'
 						and ANO_I >= '".$anio."'
 						and CAJA like '%".$caja."%'
-						and ID_CLIENTE = ".$cliente." " ;
+						and ID_CLIENTE = '".$cliente."'  
+						and REGIONAL = '".$regional."' " ;
 		}
 	}
 	$Json     = new Json;

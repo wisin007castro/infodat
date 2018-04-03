@@ -39,7 +39,8 @@
               <table class="table table-bordered" id="tablajson">
                 <thead><tr>
                   <th></th>
-                  <th>#</th>
+                  <th>Nro. SOLICITUD</th>
+                  <th>CAJA</th>
                   <th>SOLICITADO POR</th>
                   <th>FECHA SOLICITUD</th>
                   <th>DIRECCION DE ENTREGA</th>
@@ -49,12 +50,21 @@
               <tbody>
               <?php foreach ($solicitudes as $sol) {  ?>
                   <tr>
-                    <td><a href='javascript:void(0);' onclick='cargar_formulario("<?php echo $sol["ID_INV"]; ?>");'><i style='font-size:14px;' class='fa fa-cart-arrow-down text-green'></i></a></td>
+                    <td>
+
+                      <?php if ($sol['ESTADO_INV'] == 'EN CONSULTA'): ?>
+                        <a href='javascript:void(0);' onclick='cargar_formulario("<?php echo $sol["ID_INV"]; ?>");'><i style='font-size:14px;' class='fa fa-cart-arrow-down text-green'></i></a>
+                      <?php else: ?>
+                        <a href='javascript:void(0);'><i style='font-size:14px;' class='fa fa-cart-arrow-down text-muted'></i></a>
+                      <?php endif ?>
+
+                    </td>
                     <td><?php echo $sol["ID_SOLICITUD"]; ?></td>
+                    <td><?php echo $sol["CAJA"]; ?></td>
                     <td><?php echo $sol["NOMBRE"]." ".$sol["APELLIDO"]; ?></td>
                     <td><?php echo $sol["FECHA_SOLICITUD"]; ?></td>
                     <td><?php echo $sol["DIRECCION_ENTREGA"]; ?></td>
-                    <td><?php echo $sol["ESTADO"]; ?></td>
+                    <td><?php echo $sol["ESTADO_INV"]; ?></td>
                   </tr>  
               <?php } ?>
               </tbody>
@@ -66,6 +76,10 @@
         <!-- /.col -->
       </div>
       <!-- /.row -->
+    </section>
+
+    <section>
+      <div id="resp" class="col-lg-12">
     </section>
 
     <section class="content">
@@ -84,8 +98,8 @@
                 <table class="table table-bordered" id="seleccionados">
                   <thead><tr>
                     <th></th>
-                    <th>#</th>
-                    <th>CLIENTE</th>
+<!--                     <th>#</th>
+                    <th>CLIENTE</th> -->
                     <th>CAJA</th>
                     <th>ITEM</th>
                     <th>DESC_1</th>
@@ -98,7 +112,7 @@
                     <th>FECHA_F</th>
                     <th>DPTO</th>
                     <th>ESTADO</th>
-                    <th>REGIONAL</th>
+                    <!-- <th>REGIONAL</th> -->
                   </tr>
                 </thead>
                 <tbody></tbody>
@@ -111,17 +125,18 @@
         </div>
       <!-- /.row -->
 
+    <?php if ($usuario_session['TIPO'] == 'CONSULTA') { ?>
       <div class="row">
         <div class="col-lg-6 col-xs-6">
           <div class="form-group">
             <label>Dirección de recojo</label>
-            <input class="form-control" name="direccion" placeholder="Ingrese su dirección"></input>
+            <input class="form-control" name="direccion" value="<?php echo $usuario_session['DIRECCION']; ?>"></input>
           </div>
         </div>
         <div class="col-lg-5 col-xs-6">
           <div class="form-group">
             <label>Observaciones</label>
-            <textarea class="form-control" rows="4" name="observacion" placeholder="Ingrese los detalles"></textarea>
+            <textarea class="form-control" rows="4" name="observacion" placevaholder="Ingrese los detalles"></textarea>
           </div>
         </div>
         <!-- ./col -->
@@ -133,6 +148,7 @@
           </div>
         </div>
       </div>
+      <?php } ?>
       <!-- /.row -->
       </form>
     </section>
@@ -162,18 +178,33 @@
            type: "POST",                 
            url: url,                     
            data: $("#formulario_dev").serialize(), 
-           success: function(data)             
-           {
-             $('#resp').html(data);           
-           }
+           success: function(result){
+                if (result == 'success') {
+                    $.get("msj_correcto.php?msj=Solicitud realizada exitosamente", function(result){
+                    $("#resp").html(result);
+                    });
+                }
+                else{
+                    if(result == 'vacio'){
+                        $.get("msj_incorrecto.php?msj="+"Seleccione al menos un ITEM e ingrese los detalles", function(result){
+                            $("#resp").html(result);
+                        });
+                    }
+                    else{
+                        $.get("msj_incorrecto.php?msj="+"No se pudo realizar la solicitud", function(result){
+                            $("#resp").html(result);
+                        });
+                    }
+                }
+            }
        });
     });
   });
 
   function cargar_formulario(id_inv){
 
-
-      $.getJSON("obtieneConsulta.php",{id:id_inv, desc_1:"", desc_2:"", desc_3:"", caja:"",  anio:"0",  mes:"0",control:"1", cli:"", user:""},function(objetosretorna){
+      var usuario = $("#usuario").val();
+      $.getJSON("obtieneConsulta.php",{id:id_inv, desc_1:"", desc_2:"", desc_3:"", caja:"",  anio:"0",  mes:"0",control:"1", cli:"", user:usuario},function(objetosretorna){
           // console.log(id_inv);
           
         $("#error").html("");
@@ -184,8 +215,8 @@
         "<tr>"
         // +"<td><button type='button' class='btn btn-success' ><i class='fa fa-shopping-cart'></i></button></td>"
         +"<td><input type='hidden' name=id-"+inventarios.ID_INV+" value="+inventarios.ID_INV+"><a href='javascript:void(0);' onclick='deleteRow(this)'><i style='font-size:14px;' class='fa fa-trash text-red'></i></a></td>"
-        +"<td>"+inventarios.ID_INV+"</td>"
-        +"<td>"+inventarios.CLIENTE+"</td>"
+        // +"<td>"+inventarios.ID_INV+"</td>"
+        // +"<td>"+inventarios.CLIENTE+"</td>"
         +"<td>"+inventarios.CAJA+"</td>"
         +"<td>"+inventarios.ITEM+"</td>"
         +"<td>"+inventarios.DESC_1+"</td>"
@@ -198,7 +229,7 @@
         +"<td>"+inventarios.DIA_F+"/"+inventarios.MES_F+"/"+inventarios.ANO_F+"</td>"
         +"<td>"+inventarios.DEPARTAMENTO+"</td>"
         +"<td>"+inventarios.ESTADO+"</td>"
-        +"<td>"+inventarios.REGIONAL+"</td>"
+        // +"<td>"+inventarios.REGIONAL+"</td>"
         +"</tr>";
           $(nuevaFila).appendTo("#seleccionados tbody");
         });

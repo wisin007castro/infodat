@@ -4,8 +4,8 @@
 	  <span class="label label-success">Realizado Correctamente <i class="fa fa-check"></i></span><br/>
 	  <label style='color:#177F6B'>
           <?php  
-          //echo $msj; 
-          echo "Succefully"
+          echo $_GET['msj']; 
+          // echo "Succefully";
           ?> 
 	  </label> 
 	</div>

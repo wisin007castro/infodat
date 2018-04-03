@@ -16,9 +16,16 @@
 
  ?>
 
+
+
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
+    <section class="content">
+      <div id="resp" class="col-lg-12">
+    </section>
+    <!-- MOSTRAR SI ES CLIENTE -->
+
     <section class="content-header">
       <h1>
         Registro de usuarios
@@ -30,6 +37,8 @@
       </ol>
     </section>
 
+
+<?php if ($usuario[0]['ID_CLIENTE'] == $usuario_session['ID_CLIENTE']) { ?>
     <!-- Main content -->
     <section class="content">
       <div class="box box-default">
@@ -145,18 +154,32 @@
                 <div class="form-group">
                   <label>Tipo de usuario</label>
                   <select class="form-control" name="tipo">
-                    <?php foreach ($tipousuarios as $tusuario) { 
-                        if($usuario[0]['TIPO'] == $tusuario['TIPO']){
-                        ?>
-                        <option selected="<?php echo $usuario[0]['TIPO'] ?>" value="<?php echo $tusuario['TIPO'] ?>"><?php echo $tusuario['TIPO'] ?></option>
-                        <?php
-                        }
-                        else{
-                        ?>
-                        <option value="<?php echo $tusuario['TIPO'] ?>"><?php echo $tusuario['TIPO'] ?></option>
-                        <?php
-                        }
-                    } ?>
+                    <?php if ($usuario_session['TIPO'] == 'IA_ADMIN'): ?>
+                      <?php foreach ($tipousuarios as $tusuario) { 
+                          if($usuario[0]['TIPO'] == $tusuario['TIPO']){
+                          ?>
+                          <option selected="<?php echo $usuario[0]['TIPO'] ?>" value="<?php echo $tusuario['TIPO'] ?>"><?php echo $tusuario['TIPO'] ?></option>
+                          <?php
+                          }
+                          else{
+                          ?>
+                          <option value="<?php echo $tusuario['TIPO'] ?>"><?php echo $tusuario['TIPO'] ?></option>
+                          <?php
+                          }
+                      } ?>
+                      <?php else: ?>
+                                              <?php foreach ($tipousuarios as $tusuario) { 
+                          if($usuario[0]['TIPO'] == $tusuario['TIPO']){
+                          ?>
+                          <option selected="<?php echo $usuario[0]['TIPO'] ?>" value="<?php echo $tusuario['TIPO'] ?>">* <?php echo $tusuario['TIPO'] ?></option>
+                          <?php
+                          }
+                      } ?>
+                          <option value="CONSULTA">CONSULTA</option>
+                          <option value="VISOR">VISOR</option>
+                          <option value="ADMIN">ADMIN</option>
+                      <?php endif ?>
+                    
                   </select>
 
                 </div>
@@ -189,20 +212,33 @@
         </form>       
       </div>
     </section>
-
-    <section>
-      <div class="col-lg-12">
-        <div class="div_contenido" style=" text-align: center">
-          <label id="resp" style='color:#177F6B'></label>
-        </div>
-      </div>
-    </section>
     
   </div>
   <!-- /.content-wrapper -->
+<?php } 
+else{
+?>
 
+<section>
+  <div class="col-xs-12">
+    <div class='restringido' style="text-align: center">
+      <span class="label label-primary"><i class="fa fa-warning"></i>  Restringido..!!!  <i class="fa fa-warning"></i></span><br/>
+      <label style='color:#1D4FC1'>
+            <?php  
+            echo "No tienes Acceso a este contenido"; 
+            // echo "Succefully";
+            ?> 
+      </label> 
+    </div>
+  </div> 
+</section>
+
+<?php } ?>
 </div>
 <!-- ./wrapper -->
+
+
+<!-- FIN MOSTRAR -->
 
 <?php require_once 'footer.php';
 // var_dump($_POST);
@@ -216,10 +252,25 @@
            type: "POST",                 
            url: url,                     
            data: $("#form_datos_usuario").serialize(), 
-           success: function(data)             
-           {
-             $('#resp').html(data);               
-           }
+           success: function(result){
+                if (result == 'success') {
+                    $.get("msj_correcto.php?msj=Usuario agregado correctamente", function(result){
+                    $("#resp").html(result);
+                    });
+                }
+                else{
+                    if(result == 'vacio'){
+                        $.get("msj_incorrecto.php?msj=Complete los datos faltantes", function(result){
+                            $("#resp").html(result);
+                        });
+                    }
+                    else{
+                        $.get("msj_incorrecto.php?msj="+"No se pudo agregar usuario", function(result){
+                            $("#resp").html(result);
+                        });
+                    }
+                }
+            }
        });
     });
   });
