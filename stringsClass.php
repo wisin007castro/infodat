@@ -23,5 +23,17 @@ Class MiStrings{
 	public function regional(){
 		return array("LP", "SCZ");
 	}
+
+	public function modulos(){
+		return array(
+			"solicitud_consultas",
+			"solicitud_devoluciones",
+			"estado_consultas",
+			"estado_devoluciones",
+			"emision_reportes",
+			"registro_usuarios",
+			"parametricas"
+			);
+	}
 }
  ?>

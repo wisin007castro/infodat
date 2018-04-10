@@ -23,7 +23,7 @@ $finalizada = 0;
 
 if($pedidos > 0){
     foreach($pedidos as $ped){
-        if ($ped['REGIONAL'] == $usuario_session['REGIONAL']) {
+        if ($ped['ID_USER'] == $usuario_session['ID_USER'] && $ped['REGIONAL'] == $usuario_session['REGIONAL']) {
                     
             if($ped["TIPO_CONSULTA"] == "NORMAL"){
                 $normal++;
@@ -72,11 +72,12 @@ if($pedidos > 0){
                         <h3 class="box-title">Lista de solicitudes</h3>
                     </div>
                     <input type="hidden" name="cliente" id="cliente" value="<?php echo $usuario_session['ID_CLIENTE']; ?>">
+                    <input type="hidden" name="id_user" id="id_user" value="<?php echo $usuario_session['ID_USER']; ?>">
                     <div class="box-body table-responsive no-padding scrollable">
                         <table class="table table-bordered" id="tbEstadoSol">
                             <thead><tr>
                                 <th></th>
-                                <th>#</th>
+                                <th>Nro. Solicitud</th>
                                 <th>Solicitado por</th>
                                 <th>Tipo de Consulta</th>
                                 <th>Dirección de entrega</th>
@@ -89,7 +90,7 @@ if($pedidos > 0){
                             </thead>
                             <tbody>
                             <?php foreach ($pedidos as $pedido) { ?>
-                                <?php if ($pedido['REGIONAL'] == $usuario_session['REGIONAL']): ?>
+                                <?php if ($pedido['ID_USER'] == $usuario_session['ID_USER'] && $pedido['REGIONAL'] == $usuario_session['REGIONAL']): ?>
                                     <tr>
                                     <td><a href='javascript:void(0);' onclick='cargar_formulario("<?php echo $pedido["ID_SOLICITUD"]; ?>");'><i style='font-size:14px;' class='fa fa-expand text-blue'></i></a></td>
                                     <td><?php echo $pedido["ID_SOLICITUD"]; ?></td>
@@ -145,10 +146,10 @@ if($pedidos > 0){
                         <h3 class="box-title">Totales por tipo</h3>
                     </div>
                     <div class="box-body">
-                        <h4 class="box-title" align="center"><strong> 
+                        <h4 class="box-title" align="center"> 
                             Normales: <?php echo $normal; ?> &nbsp;&nbsp;&nbsp;&nbsp;  
                             Urgentes: <?php echo $urgente; ?> &nbsp;&nbsp;&nbsp;&nbsp; 
-                            Total: <?php echo $tot_tip_ped; ?></strong>
+                            Total: <?php echo $tot_tip_ped; ?>
                         </h4>
                     </div>
                 </div>
@@ -159,10 +160,10 @@ if($pedidos > 0){
                         <h3 class="box-title">Totales por estado</h3>
                     </div>
                     <div class="box-body">
-                        <h4 class="box-title" align="center"><strong> 
+                        <h4 class="box-title" align="center">
                             Por procesar: <?php echo $por_proces; ?> &nbsp;&nbsp;&nbsp;&nbsp;  
-                            En Proceso de Búsqueda: <?php echo $buscando; ?> &nbsp;&nbsp;&nbsp;&nbsp; 
-                            Atendida/Entregada: <?php echo $finalizada; ?></strong></h4>
+                            En Proceso de Búsqueda: <?php echo $buscando; ?> &nbsp;&nbsp;&nbsp;&nbsp;
+                            Atendida/Entregada: <?php echo $finalizada; ?></h4>
                     </div>
                 </div>
             </div>
@@ -179,7 +180,7 @@ if($pedidos > 0){
                     <div class="box-body table-responsive no-padding scrollable">
                         <table class="table table-bordered" id="seleccionados">
                             <thead><tr>
-                                <th>#</th>
+                                <th>Nro. SOLICITUD</th>
                                 <th>CAJA</th>
                                 <th>ITEM</th>
                                 <th>DESC_1</th>
@@ -224,6 +225,8 @@ if($pedidos > 0){
       // $("#error").html("<div class='modal1'><div class='center1'> <center> <img src='img/gif-load.gif'> Buscando Informacion...</center></div></div>");
       // var id_inv = $("#id_inv").val();
       $("#seleccionados tbody").html("");
+        var id_usuario = $("#id_user").val();
+
       $.getJSON("obtieneEstadoSol.php",{id:id_sol},function(objetosretorna){
           // console.log(id_inv);
         $("#error").html("");

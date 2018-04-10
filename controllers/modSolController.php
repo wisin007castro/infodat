@@ -1,6 +1,8 @@
 <?php 
 require_once '../conexionClass.php';
+
 $conexion = new MiConexion();
+
 $con = $conexion->conectarBD();
 
 date_default_timezone_set('America/La_Paz'); //definiendo zona horaria
@@ -10,35 +12,42 @@ $tiempo = getdate();
 $fecha = $tiempo['year']."-".$tiempo['mon']."-".$tiempo['mday'];
 $hora = $tiempo['hours'].":".$tiempo['minutes'];
 
-$items = $conexion->item($_POST['id']);
+if(isset($_POST['id']) && isset($_POST['entrega']) && isset($_POST['usuario'])){
+	$entrega = $_POST['entrega'];
+	$usuario = $_POST['usuario'];
+	$id = $_POST['id'];
+	$items = $conexion->item($id);
+	$usuario1 = $conexion->usuario($entrega);  //Entregado por
+	$usuario2 = $conexion->usuario($usuario);  //Procesado por
 
-$pedidos = $conexion->pedidos_admin();
 
-$usuario1 = $conexion->usuario($_POST['entrega']);  //Entregado por
+	$pedidos = $conexion->pedidos_admin();
+
+
 $entregado_por = "";
 
-$usuario2 = $conexion->usuario($_POST['usuario']);  //Procesado por
+
 $procesado_por = "";
 
-// echo $usuario2[0]['NOMBRE'];
 
 foreach ($pedidos as $ped) {
-	if ($ped['ID_SOLICITUD'] == $_POST['id']) {
+	if ($ped['ID_SOLICITUD'] == $id) {
 		if ($ped["ESTADO"] == "POR PROCESAR") {
 			$estado = "EN PROCESO DE BUSQUEDA";
 			$procesado_por = $usuario2[0]['NOMBRE']." ".$usuario2[0]['APELLIDO'];
-			$sql = "UPDATE solicitud SET PROCESADO_POR = '".$procesado_por."', ENTREGADO_POR='".$entregado_por."', ESTADO='".$estado."' WHERE ID_SOLICITUD = '".$_POST['id']."' ";
+			$sql = "UPDATE solicitud SET PROCESADO_POR = '".$procesado_por."', ENTREGADO_POR='".$entregado_por."', ESTADO='".$estado."' WHERE ID_SOLICITUD = '".$id."' ";
 
 			foreach ($items as $item) {
 				$sql_inv = "UPDATE inventarios SET ESTADO = '".$estado."' WHERE ID_INV = '".$item['ID_INV']."' ";
 				if(!$resultado = mysqli_query($con, $sql_inv)) die();
 			}
+
 		}
 		elseif ($ped["ESTADO"] == "EN PROCESO DE BUSQUEDA") {
 			$estado = "DESPACHADA";
 			$procesado_por = $ped['PROCESADO_POR'];
 			$entregado_por = $usuario1[0]['NOMBRE']." ".$usuario1[0]['APELLIDO'];
-			$sql = "UPDATE solicitud SET PROCESADO_POR = '".$procesado_por."', ENTREGADO_POR='".$entregado_por."', ESTADO='".$estado."' WHERE ID_SOLICITUD = '".$_POST['id']."' ";
+			$sql = "UPDATE solicitud SET PROCESADO_POR = '".$procesado_por."', ENTREGADO_POR='".$entregado_por."', ESTADO='".$estado."' WHERE ID_SOLICITUD = '".$id."' ";
 			foreach ($items as $item) {
 				$sql_inv = "UPDATE inventarios SET ESTADO = '".$estado."' WHERE ID_INV = '".$item['ID_INV']."' ";
 				if(!$resultado = mysqli_query($con, $sql_inv)) die();
@@ -102,7 +111,7 @@ $headers .= "Cc: wissindrako@gmail.com\r\n"; //cambiar a consultas.lp@infoactiva
 			$entregado_por = $ped['ENTREGADO_POR'];
 
 			$sql = "UPDATE solicitud SET 
-			PROCESADO_POR = '".$procesado_por."', FECHA_ENTREGA='".$fecha."', HORA_ENTREGA='".$hora."', ENTREGADO_POR='".$entregado_por."', ESTADO='".$estado."' WHERE ID_SOLICITUD = '".$_POST['id']."' ";
+			PROCESADO_POR = '".$procesado_por."', FECHA_ENTREGA='".$fecha."', HORA_ENTREGA='".$hora."', ENTREGADO_POR='".$entregado_por."', ESTADO='".$estado."' WHERE ID_SOLICITUD = '".$id."' ";
 
 			foreach ($items as $item) {
 				$sql_inv = "UPDATE inventarios SET ESTADO = 'EN CONSULTA' WHERE ID_INV = '".$item['ID_INV']."' ";
@@ -112,16 +121,27 @@ $headers .= "Cc: wissindrako@gmail.com\r\n"; //cambiar a consultas.lp@infoactiva
 	}
 }
 
-
-try {
-	if(!$resultado = mysqli_query($con, $sql)) die();
-	if ($resultado) {
-		echo "success";
+	try {
+		if(!$resultado = mysqli_query($con, $sql)) die();
+		if ($resultado) {
+			echo "success";
+		}
+	} catch (Exception $e) {
+	    echo "Algo salió mal no se pudo modificar a ".$estado;
 	}
-} catch (Exception $e) {
-    // echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-    echo "Algo salió mal no se pudo modificar a ".$estado;
+// echo "success";
+}else{
+	// $id = "0";
+	// $entrega = "0";
+	// $usuario = "0";
 }
+
+
+
+
+
+
+
 
 
 ?>

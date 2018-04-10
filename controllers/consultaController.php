@@ -26,7 +26,7 @@ foreach ($_POST as $key => $value) {
 
 if($c > 0){
 
-	if($_POST['direccion'] != "" && $_POST['observacion'] != ""){
+	if($_POST['direccion'] != ""){
 	$sql = "INSERT INTO solicitud (ID_CLIENTE, ID_USER, TIPO_CONSULTA, DIRECCION_ENTREGA, OBSERVACION, FECHA_SOLICITUD, HORA_SOLICITUD, ESTADO, REGIONAL) 
 		VALUES ('".$_POST['cliente']."','".$_POST['usuario']."','".$_POST['optionsRadios']."','".$_POST['direccion']."', '".$_POST['observacion']."', '".$fecha."','".$hora."', 'POR PROCESAR','".$_POST['regional']."')";
 
@@ -125,7 +125,7 @@ $headers .= "Cc: wissindrako@gmail.com\r\n"; //cambiar a consultas.lp@infoactiva
 	}
 	}
 	else{
-		echo "vacio";
+		echo "vacio_dir";
 	}
 
 }

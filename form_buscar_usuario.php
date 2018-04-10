@@ -49,8 +49,8 @@
           </br>
           </br>
           <a href="form_nuevo_usuario.php" class="btn btn-app">
-                <i class="fa fa-user-plus"></i> Nuevo
-              </a>
+            <i class="fa fa-user-plus"></i> Nuevo
+          </a>
           </div>
         </div>
       </div>
@@ -107,17 +107,7 @@
 
 <script type="text/javascript">
 
-$("#boton").click(function(){
-     $.ajax({
-            type: "post",
-            url: "cargarHotel.php",
-            dataType: "html",
-            success: function(result) {
-                $("#cajaSM").html(result);
-            }
-        })
- });
-</script>
+
 <script type="text/javascript">
   $(document).ready(function(){
     // Limpiamos el cuerpo tbody

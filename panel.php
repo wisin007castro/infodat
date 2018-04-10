@@ -13,18 +13,7 @@
           <!-- <a href="#"><i class="fa fa-circle text-success"></i> Online</a> -->
         </div>
       </div>
-      <!-- search form -->
-<!--       <form action="#" method="get" class="sidebar-form">
-        <div class="input-group">
-          <input type="text" name="q" class="form-control" placeholder="Search...">
-          <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                </button>
-          </span>
-        </div>
-      </form> -->
-      <!-- /.search form -->
-      <!-- sidebar menu: : style can be found in sidebar.less -->
+
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">Menú de Navegación</li>
 
@@ -35,15 +24,15 @@
         <li class="treeview">
           <a href="#">
             <i class="fa fa-search"></i>
-            <span>Consulta</span>
+            <span>Requerimientos</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="reportes.php"><i class="fa fa-circle-o"></i> Solicitud de Documentos</a></li>
-            <li><a href="form_sol_dev.php"><i class="fa fa-circle-o"></i> Devolución de Documentos</a></li>
-            <!-- <li><a id="boton" href="#"><i class="fa fa-circle-o"></i> Busqueda</a></li> -->
+            <li><a href="reportes.php"><i class="fa fa-circle-o"></i> Consultas </a></li>
+            <li><a href="form_sol_dev.php"><i class="fa fa-circle-o"></i> Devoluciones </a></li>
+
           </ul>
         </li>
           <li class="treeview">
@@ -55,8 +44,8 @@
             </span>
               </a>
               <ul class="treeview-menu">
-                  <li><a href="estado_pedidos.php"><i class="fa fa-circle-o"></i> Estado de consulta</a></li>
-                  <li><a href="estado_devoluciones.php"><i class="fa fa-circle-o"></i> Estado de Devolución</a></li>
+                  <li><a href="estado_pedidos.php"><i class="fa fa-circle-o"></i> Consultas</a></li>
+                  <li><a href="estado_devoluciones.php"><i class="fa fa-circle-o"></i> Devoluciones</a></li>
                   <!-- <li><a id="boton" href="#"><i class="fa fa-circle-o"></i> Busqueda</a></li> -->
               </ul>
           </li>
@@ -70,7 +59,7 @@
         <li class="treeview">
           <a href="#">
             <i class="fa fa-files-o"></i>
-            <span>Reporte</span>
+            <span>Reportes</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -90,9 +79,10 @@
             </span>
           </a>
           <ul class="treeview-menu">
-<!--            <li><a href="form_nuevo_usuario.php"><i class="fa fa-circle-o"></i> Agregar Usuarios</a></li>-->
+            <li><a href="form_nuevo_usuario.php"><i class="fa fa-circle-o"></i> Agregar Usuarios </a></li>
+            <li><a href="form_param_user.php"><i class="fa fa-circle-o"></i> Parametrización </a></li>
 <!--            <li><a href="form_edit_usuario.php"><i class="fa fa-circle-o"></i> Editar Usuarios</a></li>-->
-            <li><a href="form_buscar_usuario.php"><i class="fa fa-circle-o"></i> Administración de Usuarios</a></li>
+<!--             <li><a href="form_buscar_usuario.php"><i class="fa fa-circle-o"></i> Administración de Usuarios</a></li> -->
 
           </ul>
         </li>

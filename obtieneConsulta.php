@@ -17,6 +17,7 @@ $log = new Logs();//llamando a la clase Logs
 	$conexion = new MiConexion();
 	$con = $conexion->conectarBD();
 	$user = $conexion->usuario($usuario);
+	$id_user = $user[0]['ID_USER'];
 
 	$regional = $user[0]['REGIONAL'];
 
@@ -38,18 +39,21 @@ $log = new Logs();//llamando a la clase Logs
 			if($mes == "0"){$mes = "%";}
 			if($anio == "0"){$anio = "%";}
 			if($caja == ""){$caja = "%";}
+
 			$filtro = " WHERE DESC_1 like '%".$desc_1."%' 
-						and DESC_2 like '%".$desc_2."%' 
-						and DESC_3 like '%".$desc_3."%'
-						and MES_I >= '".$mes."'
-						and ANO_I >= '".$anio."'
-						and CAJA like '%".$caja."%'
-						and ID_CLIENTE = '".$cliente."'  
-						and REGIONAL = '".$regional."' " ;
+			and DESC_2 like '%".$desc_2."%' 
+			and DESC_3 like '%".$desc_3."%'
+			and MES_I >= '".$mes."'
+			and ANO_I >= '".$anio."'
+			and CAJA like '%".$caja."%'
+			and ID_CLIENTE = '".$cliente."'  
+			and REGIONAL = '".$regional."' " ;
+
+
 		}
 	}
 	$Json     = new Json;
-	$inventarios = $Json->BuscaInventarios($filtro);
+	$inventarios = $Json->BuscaInventarios($filtro, $id_user);
 	
 
 	echo  json_encode($inventarios);

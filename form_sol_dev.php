@@ -33,7 +33,7 @@
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header">
-              <h3 class="box-title">Solicitudes pendientes de devolución</h3>
+              <h3 class="box-title">Items pendientes de devolución</h3>
             </div>
             <div class="box-body table-responsive no-padding scrollable">
               <table class="table table-bordered" id="tablajson">
@@ -48,7 +48,9 @@
                 </tr>
               </thead>
               <tbody>
-              <?php foreach ($solicitudes as $sol) {  ?>
+              <?php foreach ($solicitudes as $sol) {  
+                if($sol['ID_USER'] == $usuario_session['ID_USER'] ){
+                ?>
                   <tr>
                     <td>
 
@@ -66,7 +68,8 @@
                     <td><?php echo $sol["DIRECCION_ENTREGA"]; ?></td>
                     <td><?php echo $sol["ESTADO_INV"]; ?></td>
                   </tr>  
-              <?php } ?>
+              <?php }
+                  } ?>
               </tbody>
             </table>
             </div>
@@ -92,7 +95,7 @@
           <div class="col-xs-12">
             <div class="box">
               <div class="box-header">
-                <h3 class="box-title">Lista Items pendientes de devolución</h3>
+                <h3 class="box-title">Lista de Items pendientes a devolver</h3>
               </div>
               <div class="box-body table-responsive no-padding scrollable">
                 <table class="table table-bordered" id="seleccionados">

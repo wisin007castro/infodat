@@ -47,7 +47,7 @@ $estados = $mistrings->estadoSol();
                     </div>
                     <div class="box-body table-responsive no-padding">
                         <div class="scrollable-big">
-                            <table class="table table-bordered" id="tbEstadoSol">
+                            <table class="table" id="tbEstadoSol">
                                 <thead><tr>
                                     <!-- <th></th> -->
                                     <th>#</th>
@@ -107,6 +107,7 @@ $estados = $mistrings->estadoSol();
                                         <?php } ?>
 
                                         </td>
+                                        <!-- ESTADOS -->
                                         <td><?php echo $pedido["ESTADO"]; ?></td>
                                         <td>
                                             <?php if($pedido["ESTADO"] == "POR PROCESAR"){ ?>
@@ -116,6 +117,8 @@ $estados = $mistrings->estadoSol();
                                             elseif($pedido["ESTADO"] == "EN PROCESO DE BUSQUEDA"){
                                             ?>
                                             <button type="button" class="btn btn-block btn-warning btn-sm update-sol" data-id="<?php echo $pedido["ID_SOLICITUD"]; ?>">DESPACHADA</button>
+<!--                                             <button type="button" class="btn btn-block btn-warning" data-toggle="modal" data-target="#modal-default">DESPACHADA -->
+                                            </button>
                                             <?php
                                             }
                                             elseif($pedido["ESTADO"] == "DESPACHADA"){
@@ -149,6 +152,27 @@ $estados = $mistrings->estadoSol();
         </div>
         <!-- /.row -->
 
+        <div class="modal fade" id="modal-default">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Lista de items a entregar</h4>
+              </div>
+              <div class="modal-body">
+                <p>One fine body&hellip;</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-block btn-warning btn-sm update-sol" data-id="<?php echo $pedido["ID_SOLICITUD"]; ?>">DESPACHADA</button>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+
 </div>
 <!-- /.content-wrapper -->
 
@@ -180,6 +204,7 @@ console.log(id);
                     $.get("msj_correcto.php?msj="+"Solicitud actualizada correctamente", function(result){
                     $("#resp").html(result);
                     });
+                    form(id);
                 }
                 else{
                     $.get("msj_incorrecto.php?msj="+"No se pudo realizar la actualización de la modificación", function(result){
@@ -189,7 +214,18 @@ console.log(id);
             }
         }
     )
-})
+});
+
+    function form(id_sol) {
+        window.open('pdf/formClass.php?id_sol='+id_sol+'&procesado_por='+usuario);
+
+    }
+ 
+    
+ 
+    // window.onload=function(){
+        
+    // }
 
 </script>
 

@@ -84,6 +84,21 @@ class MiConexion{
         return $this->getArraySQL($sql);
     }
 
+    // public function deptos($id_usuario)
+    // {
+        // $sql = "SELECT DISTINCT DEPARTAMENTO FROM (
+        //             SELECT * FROM accesos where ID_USER = $id_usuario
+        //         ) a ";
+        // return $this->getArraySQL($sql);
+    // }
+
+    public function dptos_access($id_cliente){
+        $sql = "SELECT DISTINCT DEPARTAMENTO FROM (
+                    SELECT * FROM inventarios where CLIENTE = $id_cliente
+                ) a ";
+        return $this->getArraySQL($sql);
+    }
+
     public function usuarios_almacen()
     {
         $sql = "SELECT ID_USER, c.CLIENTE, NOMBRE, APELLIDO, CARGO, DIRECCION, TELEFONO, INTERNO, CELULAR, CORREO, u.HABILITADO, TIPO, REGIONAL 
@@ -148,6 +163,13 @@ class MiConexion{
     //             WHERE s.ESTADO <> 'ATENDIDA/ENTREGADA' ORDER BY s.ID_SOLICITUD LIMIT 25";
     //     return $this->getArraySQL($sql);
     // }
+    public function id_pedidos($id_sol)//forms
+    {
+        $sql = "SELECT c.CLIENTE, u.NOMBRE, u.APELLIDO, u.CARGO, u.TELEFONO, u.INTERNO, u.CELULAR, s.DIRECCION_ENTREGA, s.TIPO_CONSULTA, s.ID_SOLICITUD, inv.CAJA, inv.ITEM, inv.DESC_1, inv.DESC_2, inv.DESC_3, inv.DESC_4, inv.CANTIDAD, inv.UNIDAD, inv.DIA_I, inv.MES_I, inv.ANO_I, inv.DIA_F, inv.MES_F, inv.ANO_F, inv.DEPARTAMENTO, inv.ESTADO, s.OBSERVACION, s.PROCESADO_POR, s.REGIONAL, s.FECHA_SOLICITUD, s.HORA_SOLICITUD
+        FROM solicitud AS s JOIN usuarios AS u ON s.ID_USER = u.ID_USER JOIN clientes as c ON s.ID_CLIENTE = c.ID_CLIENTE JOIN items AS item ON s.ID_SOLICITUD = item.ID_SOLICITUD JOIN inventarios AS inv ON inv.ID_INV = item.ID_INV WHERE s.ID_SOLICITUD = $id_sol";
+        return $this->getArraySQL($sql);
+
+    }
 
     public function pedidos($id_cliente){
         $sql = "SELECT s.ID_SOLICITUD, s.ID_USER, u.NOMBRE, u.APELLIDO, s.TIPO_CONSULTA, s.DIRECCION_ENTREGA, s.FECHA_SOLICITUD, s.HORA_SOLICITUD, s.PROCESADO_POR, s.FECHA_ENTREGA, s.HORA_ENTREGA, s.ENTREGADO_POR, s.ESTADO, s.REGIONAL
@@ -162,7 +184,7 @@ class MiConexion{
                       s.HORA_SOLICITUD, s.PROCESADO_POR, s.FECHA_ENTREGA, s.HORA_ENTREGA, s.ENTREGADO_POR, s.ESTADO, s.REGIONAL
                 FROM solicitud AS s JOIN usuarios AS u ON s.ID_USER = u.ID_USER 
 
-                 ORDER BY s.ID_SOLICITUD DESC";
+                 ORDER BY s.ESTADO DESC, s.ID_SOLICITUD  DESC";
         return $this->getArraySQL($sql);
     }
 
@@ -175,7 +197,7 @@ class MiConexion{
     // }
 
     public function devoluciones($id_cliente){
-        $sql = "SELECT d.ID_DEV, d.ID_DEV, u.NOMBRE, u.APELLIDO, d.DIRECCION, d.FECHA_SOLICITUD, d.FECHA_PROGRAMADA, d.PROCESADO_POR, d.RECOGIDO_POR, d.ESTADO, d.REGIONAL
+        $sql = "SELECT d.ID_DEV, d.ID_DEV, u.NOMBRE, u.APELLIDO, d.DIRECCION, d.FECHA_SOLICITUD, d.FECHA_PROGRAMADA, d.PROCESADO_POR, d.RECOGIDO_POR, d.ESTADO, d.REGIONAL, d.ID_USER
                 FROM devoluciones AS d JOIN usuarios AS u ON d.ID_USER = u.ID_USER 
                 WHERE d.ID_CLIENTE = $id_cliente 
                 ORDER BY d.ID_DEV DESC";
@@ -184,12 +206,13 @@ class MiConexion{
 
     public function devoluciones_admin(){
         $sql = "SELECT d.ID_DEV, u.NOMBRE, u.APELLIDO, d.DIRECCION, d.FECHA_SOLICITUD, d.FECHA_PROGRAMADA, d.PROCESADO_POR, d.RECOGIDO_POR, d.ESTADO, d.REGIONAL
-                FROM devoluciones AS d JOIN usuarios AS u ON d.ID_USER = u.ID_USER ";
+                FROM devoluciones AS d JOIN usuarios AS u ON d.ID_USER = u.ID_USER 
+                ORDER BY d.ESTADO DESC, d.ID_DEV  DESC";
         return $this->getArraySQL($sql);
     }
 
     public function solicitudes($cliente){
-        $sql = "SELECT inv.ID_INV, inv.CAJA, s.ID_SOLICITUD, u.NOMBRE, u.APELLIDO, s.FECHA_SOLICITUD, s.DIRECCION_ENTREGA, s.ESTADO, inv.ESTADO as ESTADO_INV
+        $sql = "SELECT inv.ID_INV, inv.CAJA, s.ID_SOLICITUD, u.NOMBRE, u.APELLIDO, s.FECHA_SOLICITUD, s.DIRECCION_ENTREGA, s.ESTADO, inv.ESTADO as ESTADO_INV, s.ID_USER
                 FROM solicitud AS s JOIN usuarios AS u ON s.ID_USER = u.ID_USER
                 JOIN items AS item ON s.ID_SOLICITUD = item.ID_SOLICITUD
                 JOIN inventarios AS inv ON inv.ID_INV = item.ID_INV

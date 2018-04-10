@@ -65,24 +65,51 @@ class Json
 
 	public function BuscaUsuarios($filtro){
 		if($filtro <> ""){
-			$consulta = "SELECT * FROM usuarios".$filtro." LIMIT 10";//Los espacios son importantes
+			$consulta = "SELECT * FROM usuarios ".$filtro." ";//Los espacios son importantes
 			//echo $consulta;
 			$conexion = new conectorDB;
 			$this->json = $conexion->EjecutarSentencia($consulta);
 			return $this->json;
 		}
 	}
+
+	public function deptos($id_usuario)
+    {
+    	$conexion = new conectorDB;
+        $sql = "SELECT DISTINCT DEPARTAMENTO FROM (
+                    SELECT * FROM accesos WHERE ID_USER = $id_usuario AND HABILITADO = 'SI'
+                ) a ";
+        			$this->json = $conexion->EjecutarSentencia($sql);
+		return $this->json;
+    }
 	
-	public function BuscaInventarios($filtro){
+	public function BuscaInventarios($filtro, $id_usuario){
+
+		$conexion = new conectorDB;
+		$resultado = array();
+		$deptos = $this->deptos($id_usuario);
+
 		if($filtro <> ""){
-			$consulta = "SELECT * FROM inventarios AS inv
+
+			//Los espacios son importantes
+			foreach ($deptos as $key => $value) {
+				if($value['DEPARTAMENTO'] != 'TODAS'){
+					$consulta = "SELECT * FROM inventarios AS inv
 						JOIN clientes AS c ON inv.CLIENTE = C.ID_CLIENTE
-						 ".$filtro." LIMIT 100";//Los espacios son importantes
-			//echo $consulta;
-			$conexion = new conectorDB;
-			$this->json = $conexion->EjecutarSentencia($consulta);
-			return $this->json;
+						 ".$filtro." 
+						 AND DEPARTAMENTO = '".$value['DEPARTAMENTO']."' LIMIT 100";
+						 $resultado = array_merge($resultado, $conexion->EjecutarSentencia($consulta));
+				}
+				else{
+					$consulta = "SELECT * FROM inventarios AS inv
+						JOIN clientes AS c ON inv.CLIENTE = C.ID_CLIENTE
+						 ".$filtro." LIMIT 100";
+					$resultado = $conexion->EjecutarSentencia($consulta);
+				}
+
+			}
 		}
+		return $resultado;
 	}
 
 	public function BuscaAcceso($filtro){

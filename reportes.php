@@ -103,7 +103,7 @@
                   <thead><tr>
                     <th></th>
                     <!-- <th>#</th> -->
-                    <th>CLIENTE</th>
+                    <!-- <th>CLIENTE</th> -->
                     <th>CAJA</th>
                     <th>ITEM</th>
                     <th>DESC_1</th>
@@ -138,7 +138,7 @@
     <section class="content">
       <form method="POST" id="formulario">
 <input type="hidden" name="cliente" id="cliente" value="<?php echo $usuario_session['ID_CLIENTE']; ?>">
-<input type="hidden" name="usuario" id="usuario" value="1">
+<input type="hidden" name="usuario" id="usuario" value="<?php echo $usuario_session['ID_USER']; ?>">
 <input type="hidden" name="regional" id="regional" value="<?php echo $usuario_session['REGIONAL']; ?>">
         <div class="row" style="font-size:11px;">
           <div class="col-xs-12">
@@ -151,7 +151,7 @@
                   <thead><tr>
                     <th></th>
                     <!-- <th>#</th> -->
-                    <th>CLIENTE</th>
+                    <!-- <th>CLIENTE</th> -->
                     <th>CAJA</th>
                     <th>ITEM</th>
                     <th>DESC_1</th>
@@ -183,14 +183,14 @@
           <div class="col-lg-5 col-xs-6">
             <div class="form-group">
 
-              <label>Dirección de entrega</label>
+              <label>*Dirección de entrega</label>
               <input name="direccion" class="form-control" value="<?php echo $usuario_session['DIRECCION']; ?>"></input>
             </div>
           </div>
           <div class="col-lg-4 col-xs-6">
             <div class="form-group">
               <label>Observaciones</label>
-              <textarea name="observacion" class="form-control" rows="4" placeholder="Ingrese los detalles"></textarea>
+              <textarea name="observacion" class="form-control" rows="4"></textarea>
             </div>
           </div>
           <div class="col-lg-1 col-xs-6">
@@ -273,14 +273,21 @@
                 }
                 else{
                     if(result == 'vacio'){
-                        $.get("msj_incorrecto.php?msj="+"Seleccione al menos un ITEM e ingrese los detalles", function(result){
+                        $.get("msj_incorrecto.php?msj="+"Seleccione al menos un ITEM", function(result){
                             $("#resp").html(result);
                         });
                     }
                     else{
-                        $.get("msj_incorrecto.php?msj="+"No se pudo realizar la solicitud", function(result){
+                      if (result == 'vacio_dir') {
+                            $.get("msj_incorrecto.php?msj="+"Ingrese la dirección de entrega", function(result){
                             $("#resp").html(result);
                         });
+                      }
+                      else{
+                            $.get("msj_incorrecto.php?msj="+"No se pudo realizar la solicitud", function(result){
+                            $("#resp").html(result);
+                        });
+                      }
                     }
                 }
             }
@@ -331,7 +338,7 @@
         // +"<td><button type='button' class='btn btn-success' ><i class='fa fa-shopping-cart'></i></button></td>"
         +"<td><a href='javascript:void(0);' onclick='cargar_formulario("+inventarios.ID_INV+");'><i style='font-size:15px;' class='fa fa-shopping-cart text-green'></i></a></td>"
         // +"<td>"+inventarios.ID_INV+"</td>"
-        +"<td>"+inventarios.CLIENTE+"</td>"
+        // +"<td>"+inventarios.CLIENTE+"</td>"
         +"<td>"+inventarios.CAJA+"</td>"
         +"<td>"+inventarios.ITEM+"</td>"
         +"<td>"+inventarios.DESC_1+"</td>"
@@ -353,7 +360,7 @@
         // +"<td><button type='button' class='btn btn-success' ><i class='fa fa-shopping-cart'></i></button></td>"
         +"<td><a href='javascript:void(0);'><i style='font-size:15px;' class='fa fa-shopping-cart text-muted'></i></a></td>"
         // +"<td>"+inventarios.ID_INV+"</td>"
-        +"<td>"+inventarios.CLIENTE+"</td>"
+        // +"<td>"+inventarios.CLIENTE+"</td>"
         +"<td>"+inventarios.CAJA+"</td>"
         +"<td>"+inventarios.ITEM+"</td>"
         +"<td>"+inventarios.DESC_1+"</td>"

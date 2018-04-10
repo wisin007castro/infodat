@@ -6,7 +6,7 @@ require_once 'conexionClass.php';
 	$c = $conexion->cliente("1");
 	$u = $conexion->usuario("6");
 
-	var_dump($c[0]['CLIENTE']);
+	// var_dump($c[0]['CLIENTE']);
 
 	// $cliente = $c['CLIENTE'];
 	// $usuario = $u['NOMBRE']." ".$u['APELLIDO'];
@@ -24,4 +24,24 @@ require_once 'conexionClass.php';
 	// if(!$result = mysqli_query($con, $sql)) die();
 	// }
 
+	// include('buscadorClass.php');
+	// $Json = new Json;
+	// $inventarios = $Json->deptos(2);
+	// foreach ($inventarios as $key => $value) {
+	// 	echo $value['DEPARTAMENTO'];
+	// }
+
+	$perl = "DICTAMEN DE AUDITORES INDEPENDIENTES || AUDITORIA EXTERNA DEL 1? AL 31 DE DIC. 2013 || INFOACTIVA S.R.L. ";
+	echo $perl."<br>" ;
+	// $perl = substr($perl, 0, 60);
+	$descripcion = "";
+	while (strlen($perl) >= 40) {
+
+		$descripcion = $descripcion."+".substr($perl, 0, 39);
+		$perl = substr($perl, 39);
+
+	}
+
+echo $descripcion." ".$perl;
+	
  ?>

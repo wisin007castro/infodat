@@ -18,7 +18,7 @@ $finalizada = 0;
 
 if($devoluciones >  0){
     foreach ($devoluciones as $dev) {
-        if ($dev['REGIONAL'] == $usuario_session['REGIONAL']) {
+        if ($dev['ID_USER'] == $usuario_session['ID_USER'] && $dev['REGIONAL'] == $usuario_session['REGIONAL']) {
             if($dev["ESTADO"] == "POR PROCESAR"){
                 $por_proces++;
             }
@@ -56,13 +56,13 @@ if($devoluciones >  0){
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
-                        <h3 class="box-title">Lista de devoluciones</h3>
+                        <h3 class="box-title">Lista de solicitudes de devoluciones</h3>
                     </div>
                     <div class="box-body table-responsive no-padding scrollable">
                         <table class="table table-bordered" id="tbEstadoSol">
                             <thead><tr>
                                 <th></th>
-                                <th>#</th>
+                                <th>Nro. Solicitud</th>
                                 <th>Solicitado por</th>
                                 <th>Dirección de recojo</th>
                                 <th>Fecha Solicitud</th>
@@ -74,7 +74,7 @@ if($devoluciones >  0){
                             </thead>
                             <tbody>
                             <?php foreach ($devoluciones as $dev) { ?>
-                                <?php if ($dev['REGIONAL'] == $usuario_session['REGIONAL']): ?>
+                                <?php if ($dev['ID_USER'] == $usuario_session['ID_USER'] && $dev['REGIONAL'] == $usuario_session['REGIONAL']): ?>
                                     <tr>
                                     <td><a href='javascript:void(0);' onclick='cargar_formulario("<?php echo $dev["ID_DEV"]; ?>");'><i style='font-size:14px;' class='fa fa-expand text-blue'></i></a></td>
                                     <td><?php echo $dev["ID_DEV"]; ?></td>
@@ -143,7 +143,7 @@ if($devoluciones >  0){
                     <div class="box-body table-responsive no-padding scrollable">
                         <table class="table table-bordered" id="seleccionados">
                             <thead><tr>
-                                <th>#</th>
+                                <th>NRO. SOLICITUD</th>
                                 <th>CAJA</th>
                                 <th>ITEM</th>
                                 <th>DESC_1</th>
