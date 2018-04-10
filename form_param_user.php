@@ -156,6 +156,29 @@
 <script type="text/javascript">
   $(document).ready(function(){
 
+        $('#acceso2').click(function(){
+          $(".asignacion").hide(); 
+        });
+
+        $('#acceso1').click(function(){
+            
+          // console.log($('#modulos').val());
+        $(".asignacion").hide();
+
+          if ($('#modulos').val() != '0' && $('#acceso1').is(':checked')) {
+            if ($('#modulos').val() == 'solicitud_consultas') {
+              $("#div_deptos").show();
+            }
+            else{
+
+              $("#div_users").show();
+            }
+          }
+          else{
+            $(".asignacion").hide();
+          }
+        
+        });
 
         //Ocultar/Mostrar lista segun los modulos selecionados
         $(".asignacion").hide();
