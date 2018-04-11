@@ -193,8 +193,8 @@ $(document).on('click','.update-sol',function(){
         entrega = "0";
     }
 
-console.log(id);
-    console.log(entrega);
+// console.log(id);
+//     console.log(entrega);
     $.ajax({
         type:'POST',
         url:"controllers/modSolController.php", // sending the request to the same page we're on right now

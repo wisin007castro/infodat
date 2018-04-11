@@ -263,7 +263,7 @@
         var url = "controllers/consultaController.php";
         $.ajax({                        
            type: "POST",                 
-           url: url,                     
+           url: url,                  
            data: $("#formulario").serialize(), 
            success: function(result){
                 if (result == 'success') {

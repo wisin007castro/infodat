@@ -1,6 +1,5 @@
 <?php
 
-
 require_once '../conexionClass.php';
 $conexion = new MiConexion();
 
