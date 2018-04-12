@@ -6,7 +6,7 @@ $conexion = new MiConexion();
 
 $con = $conexion->conectarBD();
 
-$id_cliente = $_POST['ID_CLIENTE'];
+$id_cliente = $_POST['cliente'];
 $id_user = $_POST['id_user'];
 $modulos = $_POST['modulos'];//Tipo
 $acceso = $_POST['acceso'];
@@ -20,17 +20,23 @@ $usuarios = $conexion->usuarios_reg($id_cliente, $regional);
 $cont = 0;
 
 if ($modulos != '0') {
-    if ($asignaciones > 1) {
+    if ($asignaciones > 1 && $acceso == 'SI') {
         foreach ($asignaciones as $value)
         {
-            $cont++;
+            $user_access = mysql_query($con, "SELECT * FROM parametros 
+            WHERE ID_USER = '".$id_user."' 
+            AND TIPO = '".$modulos."' 
+            AND ASIGNACION = '".$asignaciones."' 
+            ");
+            if (mysql_num_rows($user_access) > 0) {
+                
+            }
         }
         echo 'Se haran '.$cont.' inserciones';
     }
     else{
         echo 'una insercion';
     }
-    echo 'una insercion';
 }
 
 // if(is_array($asignaciones) || is_object($asignaciones)) // Array
