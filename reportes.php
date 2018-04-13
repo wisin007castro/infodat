@@ -322,11 +322,8 @@
       var bcaja = $("#bNoCaja").val();
       var cliente = $("#cliente").val();
       var usuario = $("#usuario").val();
-      // var bfecha = $("#reservation").val();//id por defecto de la fecha
-      // console.log(bfecha);
-      // console.log($("#bdesc_1").val());
 
-      var bcaja = $("#bNoCaja").val();      // console.log($("#sel_anio").val());
+      var bcaja = $("#bNoCaja").val(); 
       $.getJSON("obtieneConsulta.php",{id:"", desc_1:bdesc_1, desc_2:bdesc_2, desc_3:bdesc_3, caja:bcaja, mes:sel_mes, anio:sel_anio, control:"0", cli:cliente, user:usuario},function(objetosretorna){
         $("#error").html("");
         var TamanoArray = objetosretorna.length;

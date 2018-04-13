@@ -61,7 +61,7 @@ class Json
         	$conexion = new conectorDB;
 			$this->json = $conexion->EjecutarSentencia($consulta);
 			return $this->json;
-    }
+	}
 
 	public function BuscaUsuarios($filtro){
 		if($filtro <> ""){
@@ -76,9 +76,12 @@ class Json
 	public function deptos($id_usuario)
     {
     	$conexion = new conectorDB;
-        $sql = "SELECT DISTINCT DEPARTAMENTO FROM (
-                    SELECT * FROM accesos WHERE ID_USER = $id_usuario AND HABILITADO = 'SI'
-                ) a ";
+        // $sql = "SELECT DISTINCT DEPARTAMENTO FROM (
+        //             SELECT * FROM accesos WHERE ID_USER = $id_usuario AND HABILITADO = 'SI'
+		// 		) a ";
+		$sql = "SELECT DISTINCT ASIGNACION FROM (
+			SELECT * FROM parametros WHERE ID_USER = $id_usuario AND HABILITADO = 'SI'
+		) a ";
         			$this->json = $conexion->EjecutarSentencia($sql);
 		return $this->json;
     }
@@ -90,14 +93,13 @@ class Json
 		$deptos = $this->deptos($id_usuario);
 
 		if($filtro <> ""){
-
 			//Los espacios son importantes
 			foreach ($deptos as $key => $value) {
-				if($value['DEPARTAMENTO'] != 'TODAS'){
+				if($value['ASIGNACION'] != 'TODOS'){
 					$consulta = "SELECT * FROM inventarios AS inv
 						JOIN clientes AS c ON inv.CLIENTE = C.ID_CLIENTE
 						 ".$filtro." 
-						 AND DEPARTAMENTO = '".$value['DEPARTAMENTO']."' LIMIT 100";
+						 AND DEPARTAMENTO = '".$value['ASIGNACION']."' LIMIT 100";
 						 $resultado = array_merge($resultado, $conexion->EjecutarSentencia($consulta));
 				}
 				else{
@@ -115,17 +117,17 @@ class Json
 	public function BuscaAcceso($filtro){
 		if($filtro <> ""){
 			$consulta = "SELECT * FROM(
-SELECT u.ID_USER, u.ID_CLIENTE, NOMBRE, APELLIDO, (SELECT IF(1>3,'Devolucion','Solicitud')) AS TIPO, s.FECHA_SOLICITUD AS FECHA, inv.CAJA FROM usuarios AS u 
-        JOIN solicitud AS s ON u.ID_USER = s.ID_USER
-        JOIN items AS i ON s.ID_SOLICITUD = i.ID_SOLICITUD
-        JOIN inventarios as inv ON i.ID_INV = inv.ID_INV
-UNION ALL
-SELECT u.ID_USER, u.ID_CLIENTE, NOMBRE, APELLIDO, (SELECT IF(3>1,'Devolucion','Solicitud')) AS TIPO, d.FECHA_SOLICITUD AS FECHA, inv.CAJA AS FECHA_DEVOLUCION FROM usuarios AS u 
-        JOIN devoluciones as d ON u.ID_USER = d.ID_USER
-        JOIN dev_item as di ON d.ID_DEV = di.ID_DEV
-        JOIN inventarios as inv ON di.ID_INV = inv.ID_INV
-) a 
-".$filtro." ";
+		SELECT u.ID_USER, u.ID_CLIENTE, NOMBRE, APELLIDO, (SELECT IF(1>3,'Devolucion','Solicitud')) AS TIPO, s.FECHA_SOLICITUD AS FECHA, inv.CAJA FROM usuarios AS u 
+				JOIN solicitud AS s ON u.ID_USER = s.ID_USER
+				JOIN items AS i ON s.ID_SOLICITUD = i.ID_SOLICITUD
+				JOIN inventarios as inv ON i.ID_INV = inv.ID_INV
+		UNION ALL
+		SELECT u.ID_USER, u.ID_CLIENTE, NOMBRE, APELLIDO, (SELECT IF(3>1,'Devolucion','Solicitud')) AS TIPO, d.FECHA_SOLICITUD AS FECHA, inv.CAJA AS FECHA_DEVOLUCION FROM usuarios AS u 
+				JOIN devoluciones as d ON u.ID_USER = d.ID_USER
+				JOIN dev_item as di ON d.ID_DEV = di.ID_DEV
+				JOIN inventarios as inv ON di.ID_INV = inv.ID_INV
+		) a 
+		".$filtro." ";
 
 			//echo $consulta;
 			$conexion = new conectorDB;
@@ -133,6 +135,16 @@ SELECT u.ID_USER, u.ID_CLIENTE, NOMBRE, APELLIDO, (SELECT IF(3>1,'Devolucion','S
 			return $this->json;
 		}
 	}
+
+	public function BuscaParametro($filtro)
+    {
+    	$conexion = new conectorDB;
+        $sql = "SELECT u.ID_USER, u.NOMBRE, u.APELLIDO, p.TIPO, p.ACCESO, p.ASIGNACION, CONCAT(ua.NOMBRE, ' ',ua.APELLIDO) AS NASIGNACION, p.HABILITADO  
+		FROM parametros AS p JOIN usuarios AS u ON p.ID_USER = u.ID_USER
+		LEFT JOIN usuarios AS ua ON p.ASIGNACION = ua.ID_USER $filtro ";
+        	$this->json = $conexion->EjecutarSentencia($sql);
+		return $this->json;
+    }
 
 
 }/// TERMINA CLASE USUARIOS ///

@@ -40,18 +40,20 @@
     <section class="content">
       <div class="box box-primary">
         <div class="box-header with-border">
-          <h3 class="box-title">Formulario de accesos</h3>
+          <h3 class="box-title">Formulario de Parametrización de accesos</h3>
         </div> 
 
         <form method="POST" id="form_datos_usuario">
         <input type="hidden" name="cliente" id="cliente" value="<?php echo $usuario_session['ID_CLIENTE']; ?>">
         <input type="hidden" name="regional" id="regional" value="<?php echo $usuario_session['REGIONAL']; ?>">
+
           <div class="box-body">
             <div class="row">
               <div class="col-lg-3">
                 <div class="form-group">
                   <label>Usuario</label>
-                  <select class="form-control" name="id_user" >
+                  <select id="id_user" class="form-control" name="id_user" >
+                    <option value="0">--- SELECCIONE UN USUARIO ---</option>
                     <?php foreach ($usuarios as $us) {  ?>
                     <option value="<?php echo $us['ID_USER'] ?>"><?php echo $us['NOMBRE']." ".$us['APELLIDO']?></option>
                     <?php } ?>
@@ -62,7 +64,7 @@
                 <div class="form-group">
                   <label>Tipo</label>
                   <select id="modulos" class="form-control" name="modulos">
-                    <option value="0"> --- Seleccione un modulo --- </option>
+                    <option value="0"> --- SELECCIONE UN MODULO --- </option>
                   <?php foreach ($modulos as $key => $value): ?>
                     <option value="<?php echo $value ?>"><?php echo $value ?></option>
                   <?php endforeach ?>
@@ -122,6 +124,11 @@
                 </div>
 
                 <div id="div_ninguno"  class="form-group asignacion">
+                <label>Departamento</label>
+                  <div class="">
+                    <label>
+                      <input name="asignacion[]" id="checkTodo" value="TODOS" type="checkbox">TODOS</label>
+                  </div>
                   <div class="">
                     <label>
                       <input name="asignacion[]" id="ninguno" value="NINGUNO" type="checkbox" checked >Ninguno</label>
@@ -140,6 +147,47 @@
       </div>
     </section>
 
+<section class="content">
+        <div class="row" style="font-size:11px;">
+            <div class="col-xs-12">
+                <div class="box box-default">
+                    <div class="box-header">
+                        <h3 class="box-title">Usuarios Parametrizados</h3>
+                    </div>
+                    <div class="box-body table-responsive no-padding scrollable">
+                        <table class="table table-bordered" id="tb_busc_acceso">
+                            <thead><tr>
+                                <th>ID Usuario</th>
+                                <th>Nombre</th>
+                                <th>Modulo</th>
+                                <th>Acceso</th>
+                                <th>Asiganción</th>
+                                <th>Habilitado</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                        
+                    </div>
+                    <div class="box-footer" align="right">
+                      <!-- <form action="excel.php" method="post" target="_blank" id="frmExport">
+                      <a class="btn btn-app botonExcel">
+                        <i class="fa fa-file-excel-o"></i> Exportar
+                      </a>
+                      <input type="hidden" id="datos_a_enviar" name="datos_a_enviar" />
+                      </form> -->
+                    </div>
+                </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+
+
   </div>
   <!-- /.content-wrapper -->
 
@@ -150,6 +198,59 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
+
+    $("#id_user").change(function(){
+      cargaParametrizados();
+    });
+
+    function cargaParametrizados(){
+      $("#tb_busc_acceso tbody").html("");
+        // $("#error").html("<div class='modal1'><div class='center1'> <center> <img src='img/gif-load.gif'> Buscando Informacion...</center></div></div>");
+      var sel_user = $("#id_user").val();
+      var sel_modulo = $("#modulos").val();
+
+      // console.log($("#anio").val());
+      $.getJSON("consultaParam.php",{id_user:sel_user, modulo:sel_modulo},function(objetosretorna){
+        $("#error").html("");
+        var TamanoArray = objetosretorna.length;
+        $.each(objetosretorna, function(i,accesos){
+          
+          ASIGNACION = accesos.NASIGNACION+accesos.ASIGNACION;;
+          ASIGNACION = ASIGNACION.replace("null", "");
+          ASIGNACION = ASIGNACION.replace(/\d/g, "");
+
+          if (accesos.HABILITADO == 'SI') {
+            var nuevaFila =
+            "<tr>"
+            +"<td>"+accesos.ID_USER+"</td>"
+            +"<td>"+accesos.NOMBRE+" "+accesos.APELLIDO+"</td>"
+            +"<td>"+accesos.TIPO+"</td>"
+            +"<td>"+accesos.ACCESO+"</td>"
+            +"<td>"+ASIGNACION+"</td>"
+            +"<td><i class='fa fa-check text-green'></i> "+accesos.HABILITADO+"</td>"
+            +"</tr>";
+          }
+          else{
+            var nuevaFila =
+            "<tr>"
+            +"<td>"+accesos.ID_USER+"</td>"
+            +"<td>"+accesos.NOMBRE+" "+accesos.APELLIDO+"</td>"
+            +"<td>"+accesos.TIPO+"</td>"
+            +"<td>"+accesos.ACCESO+"</td>"
+            +"<td>"+ASIGNACION+"</td>"
+            +"<td><i class='fa fa-remove text-muted'></i> "+accesos.HABILITADO+"</td>"
+            +"</tr>";
+          }
+          $(nuevaFila).appendTo("#tb_busc_acceso tbody");
+        });
+        if(TamanoArray==0){
+          var nuevaFila =
+          "<tr><td colspan=6>Sin parametros registrados</td>"
+          +"</tr>";
+          $(nuevaFila).appendTo("#tb_busc_acceso tbody");
+        }
+      });
+    };
 
         $('#acceso2').click(function(){//Radio button NO
           $(".checkbox input[type=checkbox]").prop('checked', false);
@@ -168,6 +269,7 @@
         $(".checkbox input[type=checkbox]").prop('checked', false);
         $("#checkTodoDeptos").prop('checked', false);
         $("#checkTodoUsers").prop('checked', false);
+        $("#checkTodo").prop('checked', false);
         $("#ningunoDeptos").prop('checked', false);
         $("#ningunoUsers").prop('checked', false);
         $("#ninguno").prop('checked', false);
@@ -180,20 +282,26 @@
               $("#ningunoDeptos").prop('checked', true);
             }
             else{
-              $("#div_users").show();
-              $("#ningunoUsers").prop('checked', true);
+              if($('#modulos').val() == 'emision_reportes'){
+                $("#div_ninguno").show();
+                $("#ninguno").prop('checked', true);
+              }
+              else{
+                $("#div_users").show();
+                $("#ningunoUsers").prop('checked', true);
+              }
             }
           }
           else{
             $(".asignacion").hide();
             $("#ninguno").prop('checked', true);
           }
-        
         });
 
         //Ocultar/Mostrar lista segun los modulos selecionados
         $(".asignacion").hide();
         $("#modulos").change(function(){
+          cargaParametrizados();
           // console.log($('#modulos').val());
           //limpiando los check al cambiar de seleccion o acceso
         $(".checkbox input[type=checkbox]").prop('checked', false);
@@ -211,8 +319,14 @@
               $("#ningunoDeptos").prop('checked', true);
             }
             else{
-              $("#div_users").show();
-              $("#ningunoUsers").prop('checked', true);
+              if($('#modulos').val() == 'emision_reportes'){
+                $("#div_ninguno").show();
+                $("#ninguno").prop('checked', true);
+              }
+              else{
+                $("#div_users").show();
+                $("#ningunoUsers").prop('checked', true);
+              }
             }
           }
           else{
@@ -235,6 +349,13 @@
           }
         });
 
+        $("#ninguno").change(function () {
+          if ($(this).is(':checked')) {
+              $(".checkbox input[type=checkbox]").prop('checked', false); 
+              $("#checkTodo").prop('checked', false);
+          }
+        });
+
         $("#checkTodoDeptos").change(function () {
           if ($(this).is(':checked')) {
               $(".checkbox input[type=checkbox]").prop('checked', false); 
@@ -246,6 +367,13 @@
           if ($(this).is(':checked')) {
               $(".checkbox input[type=checkbox]").prop('checked', false);
               $("#ningunoUsers").prop('checked', false);
+          }
+        });
+
+        $("#checkTodo").change(function () {
+          if ($(this).is(':checked')) {
+              $(".checkbox input[type=checkbox]").prop('checked', false);
+              $("#ninguno").prop('checked', false);
           }
         });
 
@@ -267,6 +395,7 @@
            data: $("#form_datos_usuario").serialize(), 
            success: function(data){
             //  alert(data);
+            cargaParametrizados();
              return data;
                 // if (result == 'success') {
                 //     $.get("msj_correcto.php?msj=Usuario agregado correctamente", function(result){
