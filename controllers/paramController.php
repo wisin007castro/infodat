@@ -16,63 +16,110 @@ $asignaciones = $_POST['asignacion'];//Departamentos (Array o string)
 
 $regional = $_POST['regional'];
 $usuarios = $conexion->usuarios_reg($id_cliente, $regional);
+$deptos_access = $conexion->dptos_access($id_cliente);
 
 $cont = 0;
 
 if ($modulos != '0') {
-    if ($asignaciones > 1 && $acceso == 'SI') {
-        foreach ($asignaciones as $value)
-        {
-            $user_access = mysql_query($con, "SELECT * FROM parametros 
-            WHERE ID_USER = '".$id_user."' 
-            AND TIPO = '".$modulos."' 
-            AND ASIGNACION = '".$asignaciones."' 
-            ");
-            if (mysql_num_rows($user_access) > 0) {
-                
-            }
-        }
-        echo 'Se haran '.$cont.' inserciones';
+	if ($acceso == 'NO') {
+
+		$sql0 =  "SELECT * FROM parametros 
+		WHERE ID_USER = '".$id_user."' AND TIPO = '".$modulos."' 
+		";
+		if(!$user_access = mysqli_query($con, $sql0)) die();
+
+		if (mysqli_num_rows($user_access) > 0) {
+			$sql = "UPDATE parametros SET ACCESO = '".$acceso."', HABILITADO = '".$acceso."' WHERE ID_USER = '".$id_user."' AND TIPO = '".$modulos."' ";
+			if(!$resultado = mysqli_query($con, $sql)) die();
+
+			if($resultado){echo "success";}
+		}
+		else{
+			$sql = "INSERT INTO parametros(ID_CLIENTE, ID_USER, TIPO, ACCESO, ASIGNACION, HABILITADO) VALUES ('".$id_cliente."', '".$id_user."', '".$modulos."',
+			'".$acceso ."', '".$asignaciones[0]."','NO')";
+			if(!$resultado = mysqli_query($con, $sql)) die();
+		}
+	}
+	elseif($acceso == 'SI'){
+    if($asignaciones != 'NINGUNO'){//
+    	foreach ($asignaciones as $asign)
+    	{
+    		if($asign == 'TODOS'){
+    			$sql0 = "DELETE FROM parametros WHERE ID_USER = '".$id_user."' AND TIPO = '".$modulos."' ";
+    			if(!$resultado = mysqli_query($con, $sql0)) die();
+
+    			$sql = "INSERT INTO parametros(ID_CLIENTE, ID_USER, TIPO, ACCESO, ASIGNACION, HABILITADO) VALUES ('".$id_cliente."', '".$id_user."', '".$modulos."',
+    			'".$acceso ."', '".$asign."','SI')";
+    			if(!$resultado = mysqli_query($con, $sql)) die();
+    		}
+    		else{
+          if($modulos == 'solicitud_consultas'){//por Departamentos
+          	foreach ($deptos_access as $deptos) {
+          		if ($deptos['DEPARTAMENTO'] == $asign) {
+          			$sql0 =  "SELECT * FROM parametros 
+          			WHERE ID_USER = '".$id_user."' AND TIPO = '".$modulos."' 
+          			AND ASIGNACION = '".$asign."' 
+          			";
+          			if(!$user_access = mysqli_query($con, $sql0)) die();
+
+          			if (mysqli_num_rows($user_access) > 0) {
+          				$sql = "UPDATE parametros SET ACCESO = '".$acceso."', HABILITADO = 'SI' WHERE ID_USER = '".$id_user."' AND TIPO = '".$modulos."' AND ASIGNACION = '".$asign."'  " ;
+          				if(!$resultado = mysqli_query($con, $sql)) die();
+
+          			}
+          			else{
+          				$sql0 = "DELETE FROM parametros WHERE ID_USER = '".$id_user."' AND TIPO = '".$modulos."' AND ASIGNACION = 'TODOS' ";
+    							if(!$resultado = mysqli_query($con, $sql0)) die();
+
+									$sql = "INSERT INTO parametros(ID_CLIENTE, ID_USER, TIPO, ACCESO, ASIGNACION, HABILITADO) VALUES ('".$id_cliente."', '".$id_user."', '".$modulos."', '".$acceso ."', '".$asign."','SI')";
+									if(!$resultado = mysqli_query($con, $sql)) die();
+          			}
+          		}
+          	}
+						$departamentos= array();
+          	foreach ($deptos_access as $value) {
+          		$departamentos[] = $value['DEPARTAMENTO'];
+          	}
+
+          	$deshabilitados = array_diff($departamentos, $asignaciones);//Deshabilitados
+          	foreach ($deshabilitados as $deptos) {
+        		  $sql0 =  "SELECT * FROM parametros 
+        			WHERE ID_USER = '".$id_user."' AND TIPO = '".$modulos."' 
+        			AND ASIGNACION = '".$deptos."' 
+        			";
+        			echo "si es diferente--";
+        			echo var_dump($sql0);
+        			echo "--si es diferente";
+        			if(!$user_access = mysqli_query($con, $sql0)) die();
+
+        			if (mysqli_num_rows($user_access) > 0) {
+        				$sql = "UPDATE parametros SET ACCESO = '".$acceso."', HABILITADO = 'NO' WHERE ID_USER = '".$id_user."' AND TIPO = '".$modulos."' AND ASIGNACION = '".$deptos."' " ;
+        				          			echo "si es diferente--";
+        			echo var_dump($sql0);
+        			echo var_dump($sql);
+        			echo "--si es diferente";
+        				if(!$resultado = mysqli_query($con, $sql)) die();
+
+        				if($resultado){echo "success";}
+        			}
+          	}
+
+          }
+          else{
+
+          }
+      	}
+    	}
     }
-    else{
-        echo 'una insercion';
-    }
+	  else{
+	  	echo 'sin_seleccion';
+	  }
+  }
+}
+else{
+echo 'vacio';//seleccione modulos
 }
 
-// if(is_array($asignaciones) || is_object($asignaciones)) // Array
-// {
-//     foreach ($asignaciones as $value)
-//     {
-//         // $user_access = mysql_query($con, "SELECT * FROM parametros 
-//         // WHERE ID_USER = '".$id_user."' 
-//         // AND TIPO = '".$modulos."' 
-//         // AND ASIGNACION = '".$asignacion."' 
-//         // ");
-//         // if (mysql_num_rows($user_access) > 0) {
-            
-//         // }
-
-
-//     }
-//     echo 'Se haran '.$cont.' inserciones';
-// }
-// else{
-//     if($modulos == 'solicitud_consultas'){
-
-//     }
-//     // if($asignaciones == 'ninguno' && $acceso == 'NO' && $modulos != '0'){
-        
-//     //     // $sql = "INSERT INTO parametros(ID_CLIENTE, ID_USER, TIPO, ACCESO, DEPARTAMENTO, HABILITADO) VALUES ('value-2','value-3','value-4','value-5','value-6','value-7')";
-//     // }
-//     // else{
-//     //     if ($modulos != '0') {
-//     //         echo 'deberia seleccionar de la lista';
-//     //     }
-//     //     else{
-//     //         echo 'Seleccione un modulo';
-//     //     }
-//     // }
-// }
 
 
 ?>

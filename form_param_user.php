@@ -10,7 +10,7 @@
 
   $tipousuarios = $conexion->tipoUsuarios();
 
-  $deptos_access = $conexion->dptos_access($usuario_session['ID_CLIENTE']); 
+  $deptos_access = $conexion->dptos_access($usuario_session['ID_CLIENTE']);
   // var_dump($deptos_access);
   $MisStrings = new MiStrings();
   $modulos = $MisStrings->modulos();
@@ -99,7 +99,7 @@
                   <?php endforeach ?>
                   <div class="">
                     <label>
-                      <input name="asignacion[]" id="ningunoDeptos" value="ninguno" type="checkbox">Ninguno</label>
+                      <input name="asignacion[]" id="ningunoDeptos" value="NINGUNO" type="checkbox">Ninguno</label>
                   </div>
                 </div>
 
@@ -117,14 +117,14 @@
                   <?php endforeach ?>
                   <div class="">
                     <label>
-                      <input name="asignacion[]" id="ningunoUsers" value="ninguno" type="checkbox">Ninguno</label>
+                      <input name="asignacion[]" id="ningunoUsers" value="NINGUNO" type="checkbox">Ninguno</label>
                   </div>
                 </div>
 
                 <div id="div_ninguno"  class="form-group asignacion">
                   <div class="">
                     <label>
-                      <input name="asignacion[]" id="ninguno" value="ninguno" type="checkbox" checked >Ninguno</label>
+                      <input name="asignacion[]" id="ninguno" value="NINGUNO" type="checkbox" checked >Ninguno</label>
                   </div>
                 </div>
 

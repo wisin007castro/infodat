@@ -115,6 +115,7 @@ class MiConexion{
         $sql = "SELECT ID_USER, c.CLIENTE, NOMBRE, APELLIDO, CARGO, DIRECCION, TELEFONO, INTERNO, CELULAR, CORREO, u.HABILITADO, TIPO, REGIONAL 
                   FROM usuarios AS u JOIN clientes AS c ON c.ID_CLIENTE = u.ID_CLIENTE 
                   WHERE u.ID_CLIENTE = $cliente
+                  AND u.HABILITADO = 'SI'
                   ORDER BY ID_USER ASC";
         return $this->getArraySQL($sql);
     }
@@ -124,6 +125,7 @@ class MiConexion{
         $sql = "SELECT ID_USER, c.CLIENTE, NOMBRE, APELLIDO, CARGO, DIRECCION, TELEFONO, INTERNO, CELULAR, CORREO, u.HABILITADO, TIPO, REGIONAL 
                   FROM usuarios AS u JOIN clientes AS c ON c.ID_CLIENTE = u.ID_CLIENTE 
                   WHERE u.ID_CLIENTE = $cliente
+                  AND u.HABILITADO = 'SI'
                   AND u.REGIONAL = '".$reg."'
                   ORDER BY ID_USER ASC";
         return $this->getArraySQL($sql);
