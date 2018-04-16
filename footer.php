@@ -76,8 +76,8 @@
     //Money Euro
     $('[data-mask]').inputmask()
 
-    //Date range picker
-    $('#reservation').daterangepicker()
+    //Date range picker #Formato Customizado para la Base de Datos#
+    $('#reservation').daterangepicker({locale: {format: 'YYYY-MM-DD'}})
     //Date range picker with time picker
     $('#reservationtime').daterangepicker({ timePicker: true, timePickerIncrement: 30, format: 'DD/MM/YYYY h:mm A' })
     //Date range as a button

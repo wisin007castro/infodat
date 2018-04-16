@@ -218,7 +218,6 @@ $(document).on('click','.update-sol',function(){
 
     function form(id_sol) {
         window.open('pdf/formClass.php?id_sol='+id_sol+'&procesado_por='+usuario);
-
     }
  
     

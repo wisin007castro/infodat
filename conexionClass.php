@@ -195,11 +195,18 @@ class MiConexion{
         $sql = "SELECT s.ID_SOLICITUD, s.ID_USER, u.NOMBRE, u.APELLIDO, s.TIPO_CONSULTA, s.DIRECCION_ENTREGA, s.FECHA_SOLICITUD, 
                       s.HORA_SOLICITUD, s.PROCESADO_POR, s.FECHA_ENTREGA, s.HORA_ENTREGA, s.ENTREGADO_POR, s.ESTADO, s.REGIONAL
                 FROM solicitud AS s JOIN usuarios AS u ON s.ID_USER = u.ID_USER 
-
-                 ORDER BY s.ESTADO DESC, s.ID_SOLICITUD  DESC";
+                ORDER BY s.ESTADO DESC, s.ID_SOLICITUD  DESC";
         return $this->getArraySQL($sql);
     }
 
+    public function rep_ped($id_cliente, $f_inicio, $f_fin){
+        $sql = "SELECT * FROM solicitud AS s JOIN usuarios AS u ON s.ID_USER = u.ID_USER
+        JOIN items AS i ON i.ID_SOLICITUD = s.ID_SOLICITUD
+        JOIN inventarios AS inv ON inv.ID_INV = i.ID_INV
+        WHERE s.ID_CLIENTE = $id_cliente
+        AND s.FECHA_ENTREGA BETWEEN '".$f_inicio." 00:00:00' AND '".$f_fin." 23:59:59' ";
+        return $this->getArraySQL($sql);
+    }
     // public function devoluciones(){
     //     $sql = "SELECT inv.ID_INV, d.ID_DEV, u.NOMBRE, u.APELLIDO, d.DIRECCION, d.FECHA_SOLICITUD, d.FECHA_PROGRAMADA, d.PROCESADO_POR, d.RECOGIDO_POR, d.ESTADO 
     //             FROM devoluciones AS d JOIN usuarios AS u ON d.ID_USER = u.ID_USER
