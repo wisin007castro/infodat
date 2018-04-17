@@ -23,12 +23,12 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Reporte de Usuarios
+      Reporte de Consultas - Devoluciones
         <!-- <small>Control panel</small> -->
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Reporte de Usuarios</li>
+        <li class="active">Reporte de Consultas - Devoluciones</li>
       </ol>
     </section>
 
@@ -41,7 +41,7 @@
       <div class="row">
         <div class="col-lg-4 col-xs-6">
           <div class="form-group">
-
+              
           </div>
         </div>
 
@@ -92,7 +92,7 @@
 
       // console.log($("#anio").val());
       // function form(id_cliente, fechas) {
-      window.open('pdf/consulta_devolucion.php?id_user='+id_user+'&fechas='+fechas);
+      window.open('pdf/rep_consulta.php?id_user='+id_user+'&fechas='+fechas);
       // }
 
       });

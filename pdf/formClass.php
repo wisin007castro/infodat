@@ -59,8 +59,7 @@
 <div class="box-body table-responsive no-padding">
 	<table class="table table-bordered" style="font-size:10px;">
     <thead><tr>
-        <!-- <th></th> -->
-        <!-- <th></th> -->
+
         <th>Nro</th>
         <th>LUGAR</th>
 
