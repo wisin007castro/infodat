@@ -14,7 +14,7 @@ $f_fin = substr($date_range, -10);
 
 //Tiempo
 $meses = $mString->meses();
-date_default_timezone_set('America/La_Paz'); //definiendo zona horaria
+date_default_timezone_set('America/La_Paz');//definiendo zona horaria
 $script_tz = date_default_timezone_get();
 
 $tiempo = getdate();
@@ -37,6 +37,7 @@ $i_ord_dptos = array_count_values($deptos_todo);//Conteo de valores
 $deptos = array_reverse ($i_ord_dptos);
 
 $sum_tot_sol = 0;
+$sum_tot_doc = 0;
 
 //
 // $tot_sol = array_count_values(array_column($pedidos, 'ID_SOLICITUD'));
@@ -103,6 +104,7 @@ $sum_tot_sol = 0;
 
 <?php 
     $num_sol = array();
+    $sum_doc = 0;
 ?>
 
 <h5><b><?php echo $keyDep; ?></b></h5>
@@ -123,7 +125,8 @@ $sum_tot_sol = 0;
     	<?php foreach ($pedidos as $key => $value): ?>
             <?php if ($value['DEPARTAMENTO'] == $keyDep): ?>
 
-                <?php 
+                <?php
+                    $sum_doc = $sum_doc + $value['CANTIDAD'];
                     $num_sol[$key] = $value['ID_SOLICITUD'];
                 ?>
 
@@ -153,6 +156,7 @@ $sum_tot_sol = 0;
 	</table>
 </div>
 <?php 
+    $sum_tot_doc = $sum_tot_doc + $sum_doc;
     $sol = count(array_count_values($num_sol));
     $sum_tot_sol = $sum_tot_sol + $sol;
 ?>
@@ -162,7 +166,9 @@ $sum_tot_sol = 0;
             <td align="center">
             <h6><b><?php echo "Subtotal Formularios: ".$sol; ?></b></h6>
             </td>
-            <td align="center"><h6><b><?php echo "Subtotal Consultas: ".$dp; ?></b></h6>
+            <td align="center">
+                <!-- <h6><b><?php //echo "Subtotal Consultas: ".$dp; ?></b></h6> -->
+                <h6><b><?php echo "Subtotal Consultas: ".$sum_doc; ?></b></h6>
             </td>
         </tr>
     </table>
@@ -177,7 +183,8 @@ $sum_tot_sol = 0;
                 <span class="bg-gray info-box-text"><?php echo "Total General Formularios: ".$sum_tot_sol; ?></span>
             </td>
             <td align="center">
-                <span class="bg-gray info-box-text"><?php echo "Total General Consultas: ".array_sum($deptos); ?></span>
+                <!-- <span class="bg-gray info-box-text"><?php //echo "Total General Consultas: ".array_sum($deptos); ?></span> -->
+                <span class="bg-gray info-box-text"><?php echo "Total General Consultas: ".$sum_tot_doc; ?></span>
             </td>
         </tr>
     </table>
@@ -199,7 +206,7 @@ $sum_tot_sol = 0;
 // echo var_dump($pedidos);
 
 require_once '../dompdf/autoload.inc.php';
-use Dompdf\Dompdf;
+// use Dompdf\Dompdf;
 
 $dompdf = new DOMPDF();
 $dompdf->loadHtml(ob_get_clean());
