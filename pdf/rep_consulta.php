@@ -5,10 +5,19 @@ require_once '../conexionClass.php';
 require_once '../stringsClass.php';
 $conexion = new MiConexion();
 $mString = new MiStrings();
+$pdfs = false;
+if(isset($_POST['id_user']) && isset($_POST['fechas'])){
+    $id_user = $_POST['id_user'];
+    $date_range = $_POST['fechas'];
+    $id_cliente = $_POST['id_cliente'];
+}else{
+    $id_user = $_GET['id_user'];
+    $date_range = $_GET['fechas'];
+    $id_cliente = $_GET['id_cliente'];
+    $pdfs = true;
+}
 
-$id_user = $_GET['id_user'];
 $usuario = $conexion->usuario($id_user);
-$date_range = $_GET['fechas'];
 $f_inicio = substr($date_range, 0, 10);
 $f_fin = substr($date_range, -10);
 
@@ -21,13 +30,19 @@ $tiempo = getdate();
 $fecha = $tiempo['year']."-".$tiempo['mon']."-".$tiempo['mday'];
 $hora = $tiempo['hours'].":".$tiempo['minutes'];
 
-$cliente = $conexion->cliente($usuario[0]['ID_CLIENTE']);
+if ($usuario[0]['TIPO'] != 'IA_ADMIN') {
+    if ($usuario[0]['ID_CLIENTE'] == $id_cliente) {
+        $cliente = $conexion->cliente($id_cliente);
+    }
+}else{
+    $cliente = $conexion->cliente($id_cliente);
+}
 
-if ($usuario[0]['TIPO'] == 'IA_ADMIN' || $usuario[0]['TIPO'] == 'ADMIN') {
-    $pedidos = $conexion->pedidos_admin();
+if ($id_cliente == 'TODOS') {
+    // $pedidos = $conexion->pedidos_admin();
 }
 else{
-    $pedidos = $conexion->rep_ped($usuario[0]['ID_CLIENTE'], $f_inicio, $f_fin);
+    $pedidos = $conexion->rep_ped($cliente[0]['ID_CLIENTE'], $f_inicio, $f_fin);
 }
 
 $deptos_todo = array_column($pedidos, 'DEPARTAMENTO');//todos los departamentos
@@ -46,6 +61,9 @@ $sum_tot_doc = 0;
 //     echo $key;
 //     echo $value."<br>";
 // }
+
+//BEGIN IF
+if($pdfs){
 
 ?>
 <!DOCTYPE html>
@@ -73,32 +91,38 @@ $sum_tot_doc = 0;
         </td>
 
         <td width="50%" align="center"><h4>Informe de Stock y Consultas de Documentación</h4>
-            <h4><b><?php echo $cliente[0]['CLIENTE']; ?></b></h4>
+            <h4><?php echo "Usuario: ".$usuario[0]['NOMBRE']." ".$usuario[0]['APELLIDO']; ?></h4>
         </td>
         <td width="25%" style="font-size:12px;" align="center">
             <b><br><?php echo $tiempo['mday']." de ".$meses[$tiempo['mon']]." de ".$tiempo['year']; ?></b>
+            <b><br><?php echo $hora; ?></b>
         </td>
     </tr>
     </table>
-    
+
 </div>
 <div id="pie">
 <p align="center" class="page">Pag. </p>
 <p><b>Sistema de Consultas INFODAT v3.0 Copyright © 2018 Infoactiva. Todos los derechos reservados.</b></p>
 <!-- <p style="page-break-before: always;"></p> -->
 </div>
-<div id="content">
-<table class="table">
+
+<?php //END IF
+} 
+?>
+
+<div id="con_rep">
+<!-- <table class="table">
     <tr>
         <td align="center">
-        <h6><?php echo "Usuario: ".$usuario[0]['NOMBRE']." ".$usuario[0]['APELLIDO']; ?></h6>
+        <?php //echo "Usuario: ".$usuario[0]['NOMBRE']." ".$usuario[0]['APELLIDO']; ?>
         </td>
-        <td align="center"> <?php echo "Hora de consulta: ".$hora; ?>
+        <td align="center"> <?php //echo "Hora de consulta: ".$hora; ?>
         </td>
     </tr>
-</table>
-<h5><b></b></h5>
-
+</table> -->
+<hr>
+<h4><b><?php echo $cliente[0]['CLIENTE']; ?></b></h4>
 <h5 align="center"><b>Consultas ingresadas por Departamento </b></h5>
 <?php foreach ($deptos as $keyDep => $dp): ?>
 
@@ -107,11 +131,13 @@ $sum_tot_doc = 0;
     $sum_doc = 0;
 ?>
 
-<h5><b><?php echo $keyDep; ?></b></h5>
+<div class="box-header" style="background-color: #b0cfe2">
+    <h3 class="box-title"><b><?php echo $keyDep; ?></b></h3>
+</div>
 <div class="box-body no-padding">
 	<table class="table table-bordered" style="font-size:10px;">
     <thead><tr>
-        <th width="12%">No. Solicitud</th>
+        <th width="12%">No. Formulario</th>
         <th width="20%">Solicitante</th>
         <th width="10%">Fecha Entrega</th>
         <th width="5%">Cantidad</th>
@@ -168,7 +194,7 @@ $sum_tot_doc = 0;
             </td>
             <td align="center">
                 <!-- <h6><b><?php //echo "Subtotal Consultas: ".$dp; ?></b></h6> -->
-                <h6><b><?php echo "Subtotal Consultas: ".$sum_doc; ?></b></h6>
+                <h6><b><?php echo "Subtotal documentos consultados: ".$sum_doc; ?></b></h6>
             </td>
         </tr>
     </table>
@@ -190,7 +216,7 @@ $sum_tot_doc = 0;
     </table>
 </div>
 
-
+<hr>
 </div>
 
 
@@ -198,26 +224,22 @@ $sum_tot_doc = 0;
 
 <?php 
 
-
-// echo $id_user."<br>";
-// echo var_dump($usuario)."<br>";
-// echo "FECHA: ".$f_inicio."<br>";
-// echo "FECHA: ".$f_fin."<br>";
-// echo var_dump($pedidos);
-
 require_once '../dompdf/autoload.inc.php';
-// use Dompdf\Dompdf;
+use Dompdf\Dompdf;
 
-$dompdf = new DOMPDF();
-$dompdf->loadHtml(ob_get_clean());
-// $dompdf->set_paper('A4', 'landscape');
-// ini_set("memory_limit","32M");
-$dompdf->render();
-$pdf = $dompdf->output();
+if($pdfs){
 
-$dompdf->stream(
-    "Reporte_Solicitud_-".$f_inicio."-".$f_fin.".pdf", array('Attachment' => false)
-);
+    $dompdf = new DOMPDF();
+    $dompdf->loadHtml(ob_get_clean());
+    // $dompdf->set_paper('A4', 'landscape');
+    // ini_set("memory_limit","32M");
+    $dompdf->render();
+    $pdf = $dompdf->output();
+
+    $dompdf->stream(
+        "Reporte_Solicitud_-".$f_inicio."-".$f_fin.".pdf", array('Attachment' => true)
+    );
+}
 ?>
 
 </body>

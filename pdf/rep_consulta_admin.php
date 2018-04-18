@@ -5,46 +5,59 @@ require_once '../conexionClass.php';
 require_once '../stringsClass.php';
 $conexion = new MiConexion();
 $mString = new MiStrings();
+$pdfs = false;
+if(isset($_POST['id_user']) && isset($_POST['fechas'])){
+    $id_user = $_POST['id_user'];
+    $date_range = $_POST['fechas'];
+    $id_cliente = $_POST['id_cliente'];
+}else{
+    $id_user = $_GET['id_user'];
+    $date_range = $_GET['fechas'];
+    $id_cliente = $_GET['id_cliente'];
+    $pdfs = true;
+}
 
-$id_user = $_GET['id_user'];
 $usuario = $conexion->usuario($id_user);
-$date_range = $_GET['fechas'];
 $f_inicio = substr($date_range, 0, 10);
 $f_fin = substr($date_range, -10);
 
 //Tiempo
 $meses = $mString->meses();
-date_default_timezone_set('America/La_Paz'); //definiendo zona horaria
+date_default_timezone_set('America/La_Paz');//definiendo zona horaria
 $script_tz = date_default_timezone_get();
 
 $tiempo = getdate();
 $fecha = $tiempo['year']."-".$tiempo['mon']."-".$tiempo['mday'];
 $hora = $tiempo['hours'].":".$tiempo['minutes'];
 
-$cliente = $conexion->cliente($usuario[0]['ID_CLIENTE']);
 
-if ($usuario[0]['TIPO'] == 'IA_ADMIN' || $usuario[0]['TIPO'] == 'ADMIN') {
-    $pedidos = $conexion->pedidos_admin();
+
+if ($id_cliente == 'TODOS') {
+    $pedidos = $conexion->rep_ped_admin($f_inicio, $f_fin);
 }
 else{
-    $pedidos = $conexion->rep_ped($usuario[0]['ID_CLIENTE'], $f_inicio, $f_fin);
+    // $pedidos = $conexion->rep_ped($cliente[0]['ID_CLIENTE'], $f_inicio, $f_fin);
 }
 
-$deptos_todo = array_column($pedidos, 'DEPARTAMENTO');//todos los departamentos
-//$deptos = array_unique($deptos_todo);valores unicos(de una columna)
+// echo var_dump($pedidos);
 
-$i_ord_dptos = array_count_values($deptos_todo);//Conteo de valores
-$deptos = array_reverse ($i_ord_dptos);
+$clientes_todo = array_column($pedidos, 'CLIENTE');//todos los clientes
+
+$deptos = array_unique($clientes_todo);//Conteo de valores
 
 $sum_tot_sol = 0;
+$sum_tot_doc = 0;
 
 //
 // $tot_sol = array_count_values(array_column($pedidos, 'ID_SOLICITUD'));
 
-// foreach ($tot_sol as $key => $value) {
+// foreach ($deptos as $key => $value) {
 //     echo $key;
 //     echo $value."<br>";
 // }
+
+//BEGIN IF
+if($pdfs){
 
 ?>
 <!DOCTYPE html>
@@ -55,13 +68,13 @@ $sum_tot_sol = 0;
     <title>Reporte Consultas - Devoluciones</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
-    <!-- <link rel="stylesheet" href="../dist/css/AdminLTE.min.css">
-    <link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css"> -->
+    <link rel="stylesheet" href="../dist/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css">
     <style>
         @page { margin: 120px 50px; }
         #cabecera { position: fixed; left: 0px; top: -120px; right: 0px; height: 100px; background-color: lightblue; text-align: center; }
         #pie { position: fixed; left: 0px; bottom: -120px; right: 0px; height: 60px; background-color: lightblue; }
-        #pie .page:after { content: counter(page, upper-roman); }
+        #pie .page:after { content: counter(page); }
     </style>
 </head>
 <body>
@@ -72,70 +85,76 @@ $sum_tot_sol = 0;
         </td>
 
         <td width="50%" align="center"><h4>Informe de Stock y Consultas de Documentación</h4>
-            <h4><b><?php echo $cliente[0]['CLIENTE']; ?></b></h4>
+            <h4><?php echo "Usuario: ".$usuario[0]['NOMBRE']." ".$usuario[0]['APELLIDO']; ?></h4>
         </td>
         <td width="25%" style="font-size:12px;" align="center">
             <b><br><?php echo $tiempo['mday']." de ".$meses[$tiempo['mon']]." de ".$tiempo['year']; ?></b>
+            <b><br><?php echo $hora; ?></b>
         </td>
     </tr>
     </table>
-    
+
 </div>
 <div id="pie">
 <p align="center" class="page">Pag. </p>
-<p>Sistema de Consultas INFODAT v3.0 Copyright © 2018 Infoactiva. Todos los derechos reservados.</p>
+<p><b>Sistema de Consultas INFODAT v3.0 Copyright © 2018 Infoactiva. Todos los derechos reservados.</b></p>
 <!-- <p style="page-break-before: always;"></p> -->
 </div>
-<div id="content">
 
-<h5 align="center"><b>Consultas ingresadas por Departamento </b></h5>
-<?php foreach ($deptos as $keyDep => $dp) : ?>
-
-<?php 
-    $num_sol = array();
+<?php //END IF
+} 
 ?>
 
-<h5><b><?php echo $keyDep; ?></b></h5>
+<div id="con_rep">
+
+<hr>
+<h4><b><?php echo $cliente[0]['CLIENTE']; ?></b></h4>
+<h5 align="center"><b>CONSULTAS INGRESADAS POR CLIENTE </b></h5>
+<?php foreach ($deptos as $keyDep => $dp): ?>
+
+<?php
+    $nombre_cliente = $conexion->cliente($dp);
+    $num_sol = array();
+    $sum_doc = 0;
+?>
+
+<div class="box-header" style="background-color: #b0cfe2">
+    <b><?php echo $nombre_cliente[0]['CLIENTE']; ?></b>
+</div>
 <div class="box-body no-padding">
 	<table class="table table-bordered" style="font-size:10px;">
     <thead><tr>
-        <th width="12%">No. Solicitud</th>
-        <th width="20%">Solicitante</th>
+        <th width="5%">Formulario</th>
+        <th width="10%">Departamento</th>
+        <th width="15%">Solicitante</th>
+        <th width="10%">Fecha Solicitud</th>
         <th width="10%">Fecha Entrega</th>
-        <th width="5%">Cantidad</th>
-        <th width="5%">Envio</th>
-        <th width="10%">No. Caja</th>
-        <th width="38%">Descripción</th>
+        <th width="10%">Cantidad/Envio</th>
+        <th width="10%">Cajas File</th>
+        <th width="15%">Entregado por</th>
+        <th width="10%">Prioridad</th>
     
     </tr>
     </thead>
     <tbody>
     	<?php foreach ($pedidos as $key => $value): ?>
-            <?php if ($value['DEPARTAMENTO'] == $keyDep): ?>
+            <?php if ($value['CLIENTE'] == $dp): ?>
 
-                <?php 
+                <?php
+                    $sum_doc = $sum_doc + $value['CANTIDAD'];
                     $num_sol[$key] = $value['ID_SOLICITUD'];
                 ?>
 
             <tr>
     			<td><?php echo $value['ID_SOLICITUD']; ?> </td>
+                <td><?php echo $value['DEPARTAMENTO']; ?> </td>
                 <td><?php echo $value['NOMBRE']." ".$value['APELLIDO']; ?> </td>
+                <td><?php echo $value['FECHA_SOLICITUD']; ?> </td>
                 <td><?php echo $value['FECHA_ENTREGA']; ?> </td>
-                <td><?php echo $value['CANTIDAD']; ?> </td>
-                <td><?php echo $value['UNIDAD']; ?> </td>
-                <td><?php echo $value['CAJA']; ?> </td>
-                <td>
-                    <?php //CORTE DE CARACTERES DE DESCRIPCION 
-                    $desc = $value['DESC_1']." ".$value['DESC_2']." ".$value['DESC_3'];
-                    $descripcion = "";
-                        while (strlen($desc) >= 30) {
-                        $descripcion = substr($desc, 0, 29);
-                        $desc = substr($desc, 29);
-                        echo $descripcion."-<br>";
-                        }
-                    echo $desc;
-                    ?>
-                </td>
+                <td><?php echo $value['CANTIDAD']." ".$value['UNIDAD']; ?> </td>
+                <td><?php echo $value['CAJAS']; ?> </td>
+                <td><?php echo $value['ENTREGADO_POR']; ?> </td>
+                <td><?php echo $value['TIPO_CONSULTA']; ?> </td>
     		</tr>
             <?php endif ?>
     	<?php endforeach ?>
@@ -143,20 +162,22 @@ $sum_tot_sol = 0;
 	</table>
 </div>
 <?php 
+    $sum_tot_doc = $sum_tot_doc + $sum_doc;
     $sol = count(array_count_values($num_sol));
     $sum_tot_sol = $sum_tot_sol + $sol;
 ?>
-<div class="row">
+<!-- <div class="row">
     <table class="table">
         <tr>
             <td align="center">
-            <h6><b><?php echo "Subtotal Formularios: ".$sol; ?></b></h6>
+            <h6><b><?php //echo "Subtotal Formularios: ".$sol; ?></b></h6>
             </td>
-            <td align="center"><h6><b><?php echo "Subtotal Consultas: ".$dp; ?></b></h6>
+            <td align="center">
+                <h6><b><?php //echo "Subtotal Consultas: ".$sum_doc; ?></b></h6>
             </td>
         </tr>
     </table>
-</div>
+</div> -->
 <?php endforeach ?>
 
 
@@ -164,15 +185,17 @@ $sum_tot_sol = 0;
     <table class="table">
         <tr>
             <td align="center">
-            <h6><b><?php echo "Total General Formularios: ".$sum_tot_sol; ?></b></h6>
+                <span class="bg-gray info-box-text"><?php echo "Total General Formularios: ".$sum_tot_sol; ?></span>
             </td>
-            <td align="center"><h6><b><?php echo "Total General Consultas: ".array_sum($deptos); ?></b></h6>
+            <td align="center">
+                <!-- <span class="bg-gray info-box-text"><?php //echo "Total General Consultas: ".array_sum($deptos); ?></span> -->
+                <span class="bg-gray info-box-text"><?php echo "Total General Consultas: ".$sum_tot_doc; ?></span>
             </td>
         </tr>
     </table>
 </div>
 
-
+<hr>
 </div>
 
 
@@ -180,26 +203,22 @@ $sum_tot_sol = 0;
 
 <?php 
 
-
-// echo $id_user."<br>";
-// echo var_dump($usuario)."<br>";
-// echo "FECHA: ".$f_inicio."<br>";
-// echo "FECHA: ".$f_fin."<br>";
-// echo var_dump($pedidos);
-
 require_once '../dompdf/autoload.inc.php';
 use Dompdf\Dompdf;
 
-$dompdf = new DOMPDF();
-$dompdf->loadHtml(ob_get_clean());
-// $dompdf->set_paper('A4', 'landscape');
-// ini_set("memory_limit","32M");
-$dompdf->render();
-$pdf = $dompdf->output();
+if($pdfs){
 
-$dompdf->stream(
-    "Reporte_Solicitud_-".$f_inicio."-".$f_fin.".pdf", array('Attachment' => false)
-);
+    $dompdf = new DOMPDF();
+    $dompdf->loadHtml(ob_get_clean());
+    // $dompdf->set_paper('A4', 'landscape');
+    // ini_set("memory_limit","32M");
+    $dompdf->render();
+    $pdf = $dompdf->output();
+
+    $dompdf->stream(
+        "Reporte_Solicitud_All-".$f_inicio."-".$f_fin.".pdf", array('Attachment' => true)
+    );
+}
 ?>
 
 </body>

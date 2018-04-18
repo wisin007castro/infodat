@@ -209,12 +209,13 @@ class MiConexion{
         return $this->getArraySQL($sql);
     }
 
-    public function rep_ped_admin($id_cliente, $f_inicio, $f_fin){
-        $sql = "SELECT * FROM solicitud AS s JOIN usuarios AS u ON s.ID_USER = u.ID_USER
+    public function rep_ped_admin($f_inicio, $f_fin){
+        $sql = "SELECT *, GROUP_CONCAT(CAJA ORDER BY  CAJA ASC SEPARATOR ', ') AS CAJAS FROM solicitud AS s JOIN usuarios AS u ON s.ID_USER = u.ID_USER
         JOIN items AS i ON i.ID_SOLICITUD = s.ID_SOLICITUD
         JOIN inventarios AS inv ON inv.ID_INV = i.ID_INV
         WHERE s.ESTADO = 'ATENDIDA/ENTREGADA'
-        AND s.FECHA_ENTREGA BETWEEN '".$f_inicio." 00:00:00' AND '".$f_fin." 23:59:59' ";
+        AND s.FECHA_ENTREGA BETWEEN '".$f_inicio." 00:00:00' AND '".$f_fin." 23:59:59' 
+        GROUP BY s.ID_SOLICITUD, inv.DEPARTAMENTO ";
         return $this->getArraySQL($sql);
     }
     // public function devoluciones(){
