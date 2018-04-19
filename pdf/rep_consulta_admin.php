@@ -48,6 +48,8 @@ $deptos = array_unique($clientes_todo);//Conteo de valores
 $sum_tot_sol = 0;
 $sum_tot_doc = 0;
 
+$tot_normales = 0;
+$tot_urgentes = 0;
 //
 // $tot_sol = array_count_values(array_column($pedidos, 'ID_SOLICITUD'));
 
@@ -108,7 +110,7 @@ if($pdfs){
 <div id="con_rep">
 
 <hr>
-<h4><b><?php echo $cliente[0]['CLIENTE']; ?></b></h4>
+<!-- <h4><b><?php //echo $cliente[0]['CLIENTE']; ?></b></h4> -->
 <h5 align="center"><b>CONSULTAS INGRESADAS POR CLIENTE </b></h5>
 <?php foreach ($deptos as $keyDep => $dp): ?>
 
@@ -116,6 +118,8 @@ if($pdfs){
     $nombre_cliente = $conexion->cliente($dp);
     $num_sol = array();
     $sum_doc = 0;
+    $sum_normales = 0;
+    $sum_urgentes = 0;
 ?>
 
 <div class="box-header" style="background-color: #b0cfe2">
@@ -126,7 +130,7 @@ if($pdfs){
     <thead><tr>
         <th width="5%">Formulario</th>
         <th width="10%">Departamento</th>
-        <th width="15%">Solicitante</th>
+        <th width="20%">Solicitante</th>
         <th width="10%">Fecha Solicitud</th>
         <th width="10%">Fecha Entrega</th>
         <th width="10%">Cantidad/Envio</th>
@@ -141,8 +145,15 @@ if($pdfs){
             <?php if ($value['CLIENTE'] == $dp): ?>
 
                 <?php
-                    $sum_doc = $sum_doc + $value['CANTIDAD'];
+                    $sum_doc = $sum_doc + $value['CANTIDADES'];
                     $num_sol[$key] = $value['ID_SOLICITUD'];
+
+                    if ($value['TIPO_CONSULTA'] == 'NORMAL') {
+                        $sum_normales++;
+                    }
+                    elseif ($value['TIPO_CONSULTA'] == 'URGENTE') {
+                        $sum_urgentes++;
+                    }
                 ?>
 
             <tr>
@@ -151,7 +162,7 @@ if($pdfs){
                 <td><?php echo $value['NOMBRE']." ".$value['APELLIDO']; ?> </td>
                 <td><?php echo $value['FECHA_SOLICITUD']; ?> </td>
                 <td><?php echo $value['FECHA_ENTREGA']; ?> </td>
-                <td><?php echo $value['CANTIDAD']." ".$value['UNIDAD']; ?> </td>
+                <td><?php echo $value['CANTIDADES']." ".$value['UNIDAD']; ?> </td>
                 <td><?php echo $value['CAJAS']; ?> </td>
                 <td><?php echo $value['ENTREGADO_POR']; ?> </td>
                 <td><?php echo $value['TIPO_CONSULTA']; ?> </td>
@@ -165,6 +176,9 @@ if($pdfs){
     $sum_tot_doc = $sum_tot_doc + $sum_doc;
     $sol = count(array_count_values($num_sol));
     $sum_tot_sol = $sum_tot_sol + $sol;
+
+    $tot_normales = $tot_normales + $sum_normales;
+    $tot_urgentes = $tot_urgentes + $sum_urgentes;
 ?>
 <!-- <div class="row">
     <table class="table">
@@ -185,11 +199,18 @@ if($pdfs){
     <table class="table">
         <tr>
             <td align="center">
-                <span class="bg-gray info-box-text"><?php echo "Total General Formularios: ".$sum_tot_sol; ?></span>
+                <span class="bg-gray info-box-text"><?php echo "Total Consultas: ".$sum_tot_sol; ?></span>
             </td>
             <td align="center">
                 <!-- <span class="bg-gray info-box-text"><?php //echo "Total General Consultas: ".array_sum($deptos); ?></span> -->
-                <span class="bg-gray info-box-text"><?php echo "Total General Consultas: ".$sum_tot_doc; ?></span>
+                <span style="background-color: #F3F992" class="info-box-text"><?php echo "Total Normales: ".$tot_normales; ?></span>
+            </td>
+            <td align="center">
+                <span style="background-color: #F3F992" class="info-box-text"><?php echo "Total Urgentes: ".$tot_urgentes; ?></span>
+            </td>
+            <td align="center">
+                <!-- <span class="bg-gray info-box-text"><?php //echo "Total General Consultas: ".array_sum($deptos); ?></span> -->
+                <span class="bg-gray info-box-text"><?php echo "Total Documentos: ".$sum_tot_doc; ?></span>
             </td>
         </tr>
     </table>
@@ -210,7 +231,7 @@ if($pdfs){
 
     $dompdf = new DOMPDF();
     $dompdf->loadHtml(ob_get_clean());
-    // $dompdf->set_paper('A4', 'landscape');
+    $dompdf->set_paper('A4', 'landscape');
     // ini_set("memory_limit","32M");
     $dompdf->render();
     $pdf = $dompdf->output();
