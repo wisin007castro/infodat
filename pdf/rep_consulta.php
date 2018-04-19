@@ -123,7 +123,7 @@ if($pdfs){
 </table> -->
 <hr>
 <h4><b><?php echo $cliente[0]['CLIENTE']; ?></b></h4>
-<h5 align="center"><b>Consultas ingresadas por Departamento </b></h5>
+<h5 align="center"><b>CONSULTAS INGRESADAS POR DEPARTAMENTO</b></h5>
 <?php foreach ($deptos as $keyDep => $dp): ?>
 
 <?php 
@@ -131,13 +131,13 @@ if($pdfs){
     $sum_doc = 0;
 ?>
 
-<div class="box-header" style="background-color: #b0cfe2">
-    <h3 class="box-title"><b><?php echo $keyDep; ?></b></h3>
+<div class="box-header" style="background-color: #ea8720d6">
+    <h4 class="box-title"><b><?php echo $keyDep; ?></b></h4>
 </div>
 <div class="box-body no-padding">
 	<table class="table table-bordered" style="font-size:10px;">
     <thead><tr>
-        <th width="12%">No. Formulario</th>
+        <th width="12%">Formulario</th>
         <th width="20%">Solicitante</th>
         <th width="10%">Fecha Entrega</th>
         <th width="5%">Cantidad</th>

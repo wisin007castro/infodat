@@ -4,7 +4,7 @@
   require_once 'stringsClass.php';
 
   $conexion = new MiConexion();
-  // $clientes = $conexion->clientes();
+  $clientes = $conexion->clientes();
   // $usuarios = $conexion->usuarios($usuario_session['ID_CLIENTE']);
   $usuarios = $conexion->usuarios_reg($usuario_session['ID_CLIENTE'], $usuario_session['REGIONAL']);
 
@@ -42,21 +42,52 @@
         <div class="box-header with-border">
           <h3 class="box-title">Formulario de Parametrización de accesos</h3>
         </div> 
-
+        <?php //echo $usuario_session['ID_CLIENTE']; ?>
         <form method="POST" id="form_datos_usuario">
-        <input type="hidden" name="cliente" id="cliente" value="<?php echo $usuario_session['ID_CLIENTE']; ?>">
+        <!-- <input type="hidden" name="cliente" id="cliente" value="<?php //echo $usuario_session['ID_CLIENTE']; ?>"> -->
         <input type="hidden" name="regional" id="regional" value="<?php echo $usuario_session['REGIONAL']; ?>">
 
           <div class="box-body">
             <div class="row">
               <div class="col-lg-3">
                 <div class="form-group">
+                  <label>Cliente</label>
+                  <?php if ($usuario_session['TIPO'] == 'IA_ADMIN') {
+                  ?>
+                  <select class="form-control" name="id_cliente" id="id_cliente">
+                  <option value="0">--- SELECCIONE UN CLIENTE ---</option>
+                    <?php foreach ($clientes as $cli) {
+                      if($usuario_session['ID_CLIENTE'] == $cli['ID_CLIENTE']){
+                      ?>
+                    <option selected="<?php echo $usuario_session['ID_CLIENTE'] ?>" value="<?php echo $cli['ID_CLIENTE'] ?>"><?php echo $cli['CLIENTE']?></option>
+                    <?php }
+                    else{ ?>
+                    <option value="<?php echo $cli['ID_CLIENTE'] ?>"><?php echo $cli['CLIENTE']?></option>
+                    <?php 
+                    }
+                  } ?>
+                  </select>
+                  <?php }
+                  else{ ?>
+                    <select class="form-control" name="id_cliente" id="id_cliente">
+                    <option value="0">--- SELECCIONE UN CLIENTE ---</option>
+                    <?php foreach ($clientes as $cli) {
+                      if($usuario_session['ID_CLIENTE'] == $cli['ID_CLIENTE']){
+                      ?>
+                    <option selected="<?php echo $usuario_session['ID_CLIENTE'] ?>" value="<?php echo $cli['ID_CLIENTE'] ?>"><?php echo $cli['CLIENTE']?></option>
+                    <?php 
+                    }
+                  } ?>
+                  </select>
+                  <?php } ?>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-3">
+                <div class="form-group con-json">
                   <label>Usuario</label>
                   <select id="id_user" class="form-control" name="id_user" >
-                    <option value="0">--- SELECCIONE UN USUARIO ---</option>
-                    <?php foreach ($usuarios as $us) {  ?>
-                    <option value="<?php echo $us['ID_USER'] ?>"><?php echo $us['NOMBRE']." ".$us['APELLIDO']?></option>
-                    <?php } ?>
                   </select>
                 </div>
               </div>
@@ -198,10 +229,29 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
+    // cargaUsuarios();//Datos de usuario de entrada
+    $("#id_cliente").change(function(){
+      cargaUsuarios();
+    });
 
     $("#id_user").change(function(){
       cargaParametrizados();
     });
+
+    function cargaUsuarios(){
+      // $(".con-json select").append('<option value="0">'" --- SELECCIONE UN MODULO --- "'</option>');
+      var sel_cliente = $("#id_cliente").val();
+
+      // console.log($("#anio").val());
+      $.getJSON("consultaUsuarios.php",{id_cliente:sel_cliente},function(objetosretorna){
+        $("#error").html("");
+        var TamanoArray = objetosretorna.length;
+        $.each(objetosretorna, function(i,value){
+          $(".con-json select").append('<option value="'+value.ID_USER+'">'+value.NOMBRE+" "+value.APELLIDO+'</option>');
+        });
+      });
+    };
+
 
     function cargaParametrizados(){
       $("#tb_busc_acceso tbody").html("");

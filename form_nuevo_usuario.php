@@ -42,35 +42,35 @@
           <div class="box-body">
             <div class="row">
               <div class="col-lg-4">
-              <div class="form-group">
-                <label>Cliente</label>
-                <?php if ($usuario_session['TIPO'] == 'IA_ADMIN') {
-                 ?>
-                <select class="form-control" name="id_cliente" >
-                  <?php foreach ($clientes as $cli) {
-                    if($usuario_session['ID_CLIENTE'] == $cli['ID_CLIENTE']){
-                    ?>
-                  <option selected="<?php echo $usuario_session['ID_CLIENTE'] ?>" value="<?php echo $cli['ID_CLIENTE'] ?>"><?php echo $cli['CLIENTE']?></option>
+                <div class="form-group">
+                  <label>Cliente</label>
+                  <?php if ($usuario_session['TIPO'] == 'IA_ADMIN') {
+                  ?>
+                  <select class="form-control" name="id_cliente" >
+                    <?php foreach ($clientes as $cli) {
+                      if($usuario_session['ID_CLIENTE'] == $cli['ID_CLIENTE']){
+                      ?>
+                    <option selected="<?php echo $usuario_session['ID_CLIENTE'] ?>" value="<?php echo $cli['ID_CLIENTE'] ?>"><?php echo $cli['CLIENTE']?></option>
+                    <?php }
+                    else{ ?>
+                    <option value="<?php echo $cli['ID_CLIENTE'] ?>"><?php echo $cli['CLIENTE']?></option>
+                    <?php 
+                    }
+                  } ?>
+                  </select>
                   <?php }
                   else{ ?>
-                  <option value="<?php echo $cli['ID_CLIENTE'] ?>"><?php echo $cli['CLIENTE']?></option>
-                  <?php 
-                  }
-                } ?>
-                </select>
-                <?php }
-                else{ ?>
-                  <select class="form-control" name="id_cliente" >
-                  <?php foreach ($clientes as $cli) {
-                    if($usuario_session['ID_CLIENTE'] == $cli['ID_CLIENTE']){
-                    ?>
-                  <option selected="<?php echo $usuario_session['ID_CLIENTE'] ?>" value="<?php echo $cli['ID_CLIENTE'] ?>"><?php echo $cli['CLIENTE']?></option>
-                  <?php 
-                  }
-                } ?>
-                </select>
-                <?php } ?>
-              </div>
+                    <select class="form-control" name="id_cliente" >
+                    <?php foreach ($clientes as $cli) {
+                      if($usuario_session['ID_CLIENTE'] == $cli['ID_CLIENTE']){
+                      ?>
+                    <option selected="<?php echo $usuario_session['ID_CLIENTE'] ?>" value="<?php echo $cli['ID_CLIENTE'] ?>"><?php echo $cli['CLIENTE']?></option>
+                    <?php 
+                    }
+                  } ?>
+                  </select>
+                  <?php } ?>
+                </div>
               </div>
               <div class="col-lg-4">
                 <div class="form-group">

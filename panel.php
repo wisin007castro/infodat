@@ -1,3 +1,16 @@
+<?php 
+include_once 'conexionClass.php';
+
+$con = new MiConexion();
+$modulos = $con->modulos(6);
+
+
+$modulos = array_column($modulos, 'TIPO');
+
+$modulos = array_unique($modulos);
+
+?>
+
   <!-- Left side column. contains the logo and sidebar -->
   <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
@@ -18,7 +31,8 @@
         <li class="header">Menú de Navegación</li>
 
         <?php 
-        if($usuario_session['TIPO'] == 'CONSULTA' || $usuario_session['TIPO'] == 'IA_CONSULTA' || $usuario_session['TIPO'] == 'VISOR'){
+
+        // if($usuario_session['TIPO'] == 'IA_CONSULTA' || $usuario_session['TIPO'] == 'VISOR'){
          ?>
 
         <li class="treeview">
@@ -30,9 +44,12 @@
             </span>
           </a>
           <ul class="treeview-menu">
+          
+            <?php if(in_array("solicitud_consultas", $modulos)): ?>
             <li><a href="reportes.php"><i class="fa fa-circle-o"></i> Consultas </a></li>
+            <?php elseif(in_array("solicitud_devoluciones", $modulos)): ?>   
             <li><a href="form_sol_dev.php"><i class="fa fa-circle-o"></i> Devoluciones </a></li>
-
+            <?php endif ?>
           </ul>
         </li>
           <li class="treeview">
@@ -50,7 +67,7 @@
               </ul>
           </li>
 
-          <?php } ?>
+          <?php //} ?>
 
         <?php 
         if($usuario_session['TIPO'] == 'IA_ADMIN' || $usuario_session['TIPO'] == 'ADMIN'){

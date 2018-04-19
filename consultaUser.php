@@ -9,4 +9,4 @@ $Json = new Json;
 $accesos = $Json->BuscaUser($filtro);
 echo  json_encode($accesos);
 
-?> 
+?>

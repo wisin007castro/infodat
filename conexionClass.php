@@ -127,7 +127,7 @@ class MiConexion{
                   WHERE u.ID_CLIENTE = $cliente
                   AND u.HABILITADO = 'SI'
                   AND u.REGIONAL = '".$reg."'
-                  ORDER BY ID_USER ASC";
+                  ORDER BY ID_USER ASC ";
         return $this->getArraySQL($sql);
     }
 
@@ -218,6 +218,25 @@ class MiConexion{
         GROUP BY s.ID_SOLICITUD, inv.DEPARTAMENTO, inv.UNIDAD ";
         return $this->getArraySQL($sql);
     }
+
+    public function rep_dev($id_cliente){
+        $sql = "SELECT * FROM solicitud AS s JOIN usuarios AS u ON s.ID_USER = u.ID_USER
+        JOIN items AS i ON i.ID_SOLICITUD = s.ID_SOLICITUD
+        JOIN inventarios AS inv ON inv.ID_INV = i.ID_INV
+        WHERE s.ID_CLIENTE = $id_cliente
+        AND inv.ESTADO = 'EN CONSULTA' ";
+        return $this->getArraySQL($sql);
+    }
+
+    public function rep_dev_admin(){
+        $sql = "SELECT *, SUM(inv.CANTIDAD) AS CANTIDADES, GROUP_CONCAT(CAJA ORDER BY  CAJA ASC SEPARATOR ', ') AS CAJAS FROM solicitud AS s JOIN usuarios AS u ON s.ID_USER = u.ID_USER
+        JOIN items AS i ON i.ID_SOLICITUD = s.ID_SOLICITUD
+        JOIN inventarios AS inv ON inv.ID_INV = i.ID_INV
+        WHERE inv.ESTADO = 'EN CONSULTA'
+        GROUP BY s.ID_SOLICITUD, inv.DEPARTAMENTO, inv.UNIDAD ";
+        return $this->getArraySQL($sql);
+    }
+
     // public function devoluciones(){
     //     $sql = "SELECT inv.ID_INV, d.ID_DEV, u.NOMBRE, u.APELLIDO, d.DIRECCION, d.FECHA_SOLICITUD, d.FECHA_PROGRAMADA, d.PROCESADO_POR, d.RECOGIDO_POR, d.ESTADO 
     //             FROM devoluciones AS d JOIN usuarios AS u ON d.ID_USER = u.ID_USER
@@ -249,6 +268,11 @@ class MiConexion{
                 WHERE s.ESTADO = 'ATENDIDA/ENTREGADA'
                 AND s.ID_CLIENTE = $cliente
                 ORDER BY s.ID_SOLICITUD DESC";
+        return $this-> getArraySQL($sql);
+    }
+
+    public function modulos($id_user){
+        $sql = "SELECT TIPO FROM parametros WHERE ID_USER = $id_user ";
         return $this-> getArraySQL($sql);
     }
 

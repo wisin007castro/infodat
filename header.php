@@ -187,5 +187,5 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 
 <?php 
   include "panel.php"; 
-  include "conexionClass.php";
+  // include "conexionClass.php";
 ?>

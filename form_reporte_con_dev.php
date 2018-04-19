@@ -17,14 +17,12 @@
 
  ?>
 
-
-  <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
+    
     <section class="content-header">
       <h1>
       Reporte de Consultas
-        <!-- <small>Control panel</small> -->
+        
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -32,13 +30,28 @@
       </ol>
     </section>
 
-    <!-- Main content -->
     <section class="content">
-      <!-- Small boxes (Stat box) -->
 
 <input type="hidden" name="usuario" id="usuario" value="<?php echo $usuario_session['ID_USER']; ?>">
 <input type="hidden" name="regional" id="regional" value="<?php echo $usuario_session['REGIONAL']; ?>">
       <div class="row">
+
+        <div class="col-lg-2">
+          <div class="form-group">
+            <label>Tipo de Reporte</label>
+            <div class="radio">
+              <label>
+                <input type="radio" name="tipo_reporte" id="radio_consulta" value="SI" checked="">
+                Consulta&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              </label>
+              <label>
+                <input type="radio" name="tipo_reporte" id="radio_pendiente" value="NO">
+                Pendiente
+              </label>
+            </div>
+          </div>
+        </div>
+
         <div class="col-lg-4 col-xs-6">
           <div class="form-group">
             <label>Cliente</label>
@@ -106,27 +119,27 @@
         <div class="col-lg-1 col-xs-6">
 
         </div>
-        <div style="font-size:18px;" id="reporte" class="col-lg-10 col-xs-6">
-
+        <div style="font-size:18px;" class="col-lg-10 col-xs-6">
+          <div  id="reporte">
+          </div>
+          <div align="right" class="footer">
+            <a id="btn_pdf" class="btn btn-app">
+              <i class="fa fa-save"></i> Guardar
+            </a>
+          </div>
         </div>
         <div class="col-lg-1 col-xs-6">
 
         </div>
       </div>
       <div class="row">
-        <div align="right">
-          <a id="btn_pdf" class="btn btn-app">
-            <i class="fa fa-save"></i> Guardar
-          </a>
-        </div>
+
       </div>
     </section>
 
   </div>
-  <!-- /.content-wrapper -->
 
 </div>
-<!-- ./wrapper -->
 
 <?php require_once 'footer.php' ?>
 
@@ -134,47 +147,106 @@
   $(document).ready(function(){
     $("#btn_pdf").hide();
 
+    $("#id_cliente").change(function(){
+      buscar();
+    });
+
+    $("#radio_consulta").click(function(event) {
+      $("#reservation").prop( "disabled", false );
+      limpiar();
+    });
+    $("#radio_pendiente").click(function(event) {
+      $("#reservation").prop( "disabled", true );
+      limpiar();
+    });
+
+    $("#reservation").change(function(){
+      buscar();
+    });
+
     $("#buscar").click(function(event) {
-        var id_cliente = $('#id_cliente').val();
-        var id_user = $("#usuario").val();
-        var fechas = $("#reservation").val();
-
-        if($('#id_cliente').val() == 'TODOS'){
-          $("#reporte").load("pdf/rep_consulta_admin.php",{'id_user':id_user, 'fechas':fechas, 'id_cliente':id_cliente}, function(response, status, xhr) {
-          if (status == "error") {
-            var msg = "Error!, algo ha sucedido: ";
-            $("#reporte").html(msg + xhr.status + " " + xhr.statusText);
-          }
-        });
-        }else{
-          $("#reporte").load("pdf/rep_consulta.php",{'id_user':id_user, 'fechas':fechas, 'id_cliente':id_cliente}, function(response, status, xhr) {
-          if (status == "error") {
-            var msg = "Error!, algo ha sucedido: ";
-            $("#reporte").html(msg + xhr.status + " " + xhr.statusText);
-          }
-        });
-        }
-
-        // $("#reporte").load('pdf/rep_consulta.php?id_user='+id_user+'&fechas='+fechas+' #con_rep');
-        $("#btn_pdf").show();//mostrando btn Generar
+      buscar();
     });
 
     $("#btn_pdf").click(function(){
       genReport();
     });
 
-      function genReport(){
-        var id_cliente = $('#id_cliente').val();
-        var id_user = $("#usuario").val();
-        var fechas = $("#reservation").val();
+      $("#limpiar").click(function(){
+        limpiar();
+      });
 
-        if ($('#id_cliente').val() == 'TODOS') {
-          window.open('pdf/rep_consulta_admin.php?id_user='+id_user+'&fechas='+fechas+'&id_cliente='+id_cliente);
-        }else{
-          window.open('pdf/rep_consulta.php?id_user='+id_user+'&fechas='+fechas+'&id_cliente='+id_cliente);
+    function limpiar(){
+      $("#reporte").html("");
+      $("#btn_pdf").hide();
+    }
+
+    function buscar(){
+      var id_cliente = $('#id_cliente').val();
+      var id_user = $("#usuario").val();
+      var fechas = $("#reservation").val();
+
+      if($('#id_cliente').val() == 'TODOS'){
+        if ($('#radio_consulta').is(':checked')) {
+          $("#reporte").load("pdf/rep_consulta_admin.php",{'id_user':id_user, 'fechas':fechas, 'id_cliente':id_cliente}, function(response, status, xhr) {
+            if (status == "error") {
+              var msg = "Error!, algo ha sucedido: ";
+              $("#reporte").html(msg + xhr.status + " " + xhr.statusText);
+            }
+          });
+        }
+        else{//reporte Pendientes TODOS vista html
+          $("#reporte").load("pdf/rep_pendiente_admin.php",{'id_user':id_user, 'fechas':fechas, 'id_cliente':id_cliente}, function(response, status, xhr) {
+            if (status == "error") {
+              var msg = "Error!, algo ha sucedido: ";
+              $("#reporte").html(msg + xhr.status + " " + xhr.statusText);
+            }
+          });
         }
 
+      }else{
+        if ($('#radio_consulta').is(':checked')) {
+          $("#reporte").load("pdf/rep_consulta.php",{'id_user':id_user, 'fechas':fechas, 'id_cliente':id_cliente}, function(response, status, xhr) {
+            if (status == "error") {
+              var msg = "Error!, algo ha sucedido: ";
+              $("#reporte").html(msg + xhr.status + " " + xhr.statusText);
+            }
+          });
+        }
+        else{//reporte Pendientes por CLIENTE vista html
+          $("#reporte").load("pdf/rep_pendiente.php",{'id_user':id_user, 'fechas':fechas, 'id_cliente':id_cliente}, function(response, status, xhr) {
+            if (status == "error") {
+              var msg = "Error!, algo ha sucedido: ";
+              $("#reporte").html(msg + xhr.status + " " + xhr.statusText);
+            }
+          });
+        }
       }
+      $("#btn_pdf").show();//mostrando btn Generar
+    }
+
+    function genReport(){
+      var id_cliente = $('#id_cliente').val();
+      var id_user = $("#usuario").val();
+      var fechas = $("#reservation").val();
+
+      if ($('#id_cliente').val() == 'TODOS') {
+        if ($('#radio_consulta').is(':checked')) {
+          window.open('pdf/rep_consulta_admin.php?id_user='+id_user+'&fechas='+fechas+'&id_cliente='+id_cliente);
+        }
+        else{//Reporte Pendientes TODOS vista PDF
+          window.open('pdf/rep_pendiente_admin.php?id_user='+id_user+'&fechas='+fechas+'&id_cliente='+id_cliente);
+        }
+      }else{
+        if ($('#radio_consulta').is(':checked')) {
+          window.open('pdf/rep_consulta.php?id_user='+id_user+'&fechas='+fechas+'&id_cliente='+id_cliente);
+        }
+        else{//Reporte Pendientes por CLIENTE vista PDF
+          window.open('pdf/rep_pendiente.php?id_user='+id_user+'&fechas='+fechas+'&id_cliente='+id_cliente);
+        }
+      }
+
+    }
  });
 
 

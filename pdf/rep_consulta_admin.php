@@ -122,7 +122,7 @@ if($pdfs){
     $sum_urgentes = 0;
 ?>
 
-<div class="box-header" style="background-color: #b0cfe2">
+<div class="box-header" style="background-color: #ea8720d6">
     <b><?php echo $nombre_cliente[0]['CLIENTE']; ?></b>
 </div>
 <div class="box-body no-padding">
@@ -180,18 +180,7 @@ if($pdfs){
     $tot_normales = $tot_normales + $sum_normales;
     $tot_urgentes = $tot_urgentes + $sum_urgentes;
 ?>
-<!-- <div class="row">
-    <table class="table">
-        <tr>
-            <td align="center">
-            <h6><b><?php //echo "Subtotal Formularios: ".$sol; ?></b></h6>
-            </td>
-            <td align="center">
-                <h6><b><?php //echo "Subtotal Consultas: ".$sum_doc; ?></b></h6>
-            </td>
-        </tr>
-    </table>
-</div> -->
+
 <?php endforeach ?>
 
 
@@ -219,9 +208,6 @@ if($pdfs){
 <hr>
 </div>
 
-
-
-
 <?php 
 
 require_once '../dompdf/autoload.inc.php';
@@ -232,7 +218,7 @@ if($pdfs){
     $dompdf = new DOMPDF();
     $dompdf->loadHtml(ob_get_clean());
     $dompdf->set_paper('A4', 'landscape');
-    // ini_set("memory_limit","32M");
+    
     $dompdf->render();
     $pdf = $dompdf->output();
 
