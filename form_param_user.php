@@ -54,8 +54,8 @@
                   <label>Cliente</label>
                   <?php if ($usuario_session['TIPO'] == 'IA_ADMIN') {
                   ?>
-                  <select class="form-control" name="id_cliente" id="id_cliente">
-                  <option value="0">--- SELECCIONE UN CLIENTE ---</option>
+                  <select class="form-control" name="cliente" id="id_cliente">
+                  <!-- <option value="0">--- SELECCIONE UN CLIENTE ---</option> -->
                     <?php foreach ($clientes as $cli) {
                       if($usuario_session['ID_CLIENTE'] == $cli['ID_CLIENTE']){
                       ?>
@@ -69,8 +69,8 @@
                   </select>
                   <?php }
                   else{ ?>
-                    <select class="form-control" name="id_cliente" id="id_cliente">
-                    <option value="0">--- SELECCIONE UN CLIENTE ---</option>
+                    <select class="form-control" name="cliente" id="id_cliente">
+                    <!-- <option value="0">--- SELECCIONE UN CLIENTE ---</option> -->
                     <?php foreach ($clientes as $cli) {
                       if($usuario_session['ID_CLIENTE'] == $cli['ID_CLIENTE']){
                       ?>
@@ -229,7 +229,8 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-    // cargaUsuarios();//Datos de usuario de entrada
+    cargaUsuarios();//Datos de usuario de entrada
+    
     $("#id_cliente").change(function(){
       cargaUsuarios();
     });
@@ -239,17 +240,19 @@
     });
 
     function cargaUsuarios(){
-      // $(".con-json select").append('<option value="0">'" --- SELECCIONE UN MODULO --- "'</option>');
+      $(".con-json select").html("");
       var sel_cliente = $("#id_cliente").val();
 
       // console.log($("#anio").val());
       $.getJSON("consultaUsuarios.php",{id_cliente:sel_cliente},function(objetosretorna){
         $("#error").html("");
         var TamanoArray = objetosretorna.length;
+        $(".con-json select").append('<option value="0"> --- SELECCIONE UN USUARIO --- </option>');
         $.each(objetosretorna, function(i,value){
           $(".con-json select").append('<option value="'+value.ID_USER+'">'+value.NOMBRE+" "+value.APELLIDO+'</option>');
         });
       });
+      
     };
 
 

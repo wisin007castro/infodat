@@ -3,9 +3,9 @@
 			var $link;
 			var $result;
 		function connect($config) {
-			$this->link = mysql_connect($config['hostname'], $config['username'], $config['password']);
+			$this->link = mysqli_connect($config['hostname'], $config['username'], $config['password'], $config['database']);
 			if($this->link) {
-				mysql_query("SET NAMES 'utf-8'");
+				mysqli_query($this->link, "SET NAMES 'utf-8'");
 				return true;
 			}
 			$this->show_error(mysql_error($this->link), "connect()");
@@ -19,20 +19,20 @@
 			$this->show_error("Not connect the database before", "selectdb($database)");
 			return false;
 		}
-		function query($sql) {
-			$this->query = mysql_query($sql);
+		function query($con, $sql) {
+			$this->query = mysqli_query($con, $sql);
 			return $this->query;
 		}
 		function fetch() {
 			try {
-				$result = mysql_fetch_object($this->query);
+				$result = mysqli_fetch_object($this->query);
 			 	return $result;
 			} catch (Exception $e) {
 				return 0;
 			}
 		}
 		function num_rows() {
-			return mysql_num_rows($this->query); 
+			return $this->fetch()->num_rows; 
 		}
 		function show_error($errmsg, $func) {
 			echo "<b><font color=red>" . $func . "</font></b> : " . $errmsg . "<BR>\n";

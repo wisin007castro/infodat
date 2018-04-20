@@ -2,7 +2,7 @@
 include_once 'conexionClass.php';
 
 $con = new MiConexion();
-$modulos = $con->modulos(6);
+$modulos = $con->modulos($usuario_session['ID_USER']);
 
 
 $modulos = array_column($modulos, 'TIPO');
@@ -45,9 +45,10 @@ $modulos = array_unique($modulos);
           </a>
           <ul class="treeview-menu">
           
-            <?php if(in_array("solicitud_consultas", $modulos)): ?>
+            <?php if(in_array("solicitud_consultas", $modulos) || $usuario_session['TIPO'] == 'IA_ADMIN'): ?>
             <li><a href="reportes.php"><i class="fa fa-circle-o"></i> Consultas </a></li>
-            <?php elseif(in_array("solicitud_devoluciones", $modulos)): ?>   
+            <?php endif ?>
+            <?php if(in_array("solicitud_devoluciones", $modulos) || $usuario_session['TIPO'] == 'IA_ADMIN'): ?>   
             <li><a href="form_sol_dev.php"><i class="fa fa-circle-o"></i> Devoluciones </a></li>
             <?php endif ?>
           </ul>
@@ -61,16 +62,19 @@ $modulos = array_unique($modulos);
             </span>
               </a>
               <ul class="treeview-menu">
+                  <?php if(in_array("estado_consultas", $modulos) || $usuario_session['TIPO'] == 'IA_ADMIN'): ?>
                   <li><a href="estado_pedidos.php"><i class="fa fa-circle-o"></i> Consultas</a></li>
+                  <?php endif ?>
+                  <?php if(in_array("estado_devoluciones", $modulos) || $usuario_session['TIPO'] == 'IA_ADMIN'): ?>
                   <li><a href="estado_devoluciones.php"><i class="fa fa-circle-o"></i> Devoluciones</a></li>
-                  <!-- <li><a id="boton" href="#"><i class="fa fa-circle-o"></i> Busqueda</a></li> -->
+                  <?php endif ?>
               </ul>
           </li>
 
           <?php //} ?>
 
         <?php 
-        if($usuario_session['TIPO'] == 'IA_ADMIN' || $usuario_session['TIPO'] == 'ADMIN'){
+        // if($usuario_session['TIPO'] == 'IA_ADMIN' || $usuario_session['TIPO'] == 'ADMIN'){
          ?>
 
         <li class="treeview">
@@ -82,8 +86,9 @@ $modulos = array_unique($modulos);
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="form_rep_acceso.php"><i class="fa fa-circle-o"></i> Reporte de Acceso</a></li>
-            <li><a href="form_listado_usuario.php"><i class="fa fa-circle-o"></i> Reporte de usuario</a></li>
+            <?php if(in_array("emision_reportes", $modulos)  || $usuario_session['TIPO'] == 'IA_ADMIN'): ?>
+            <li><a href="form_reporte_con_dev.php"><i class="fa fa-circle-o"></i> Reporte de Acceso</a></li>
+            <?php endif ?>
           </ul>
         </li>
 
@@ -96,15 +101,19 @@ $modulos = array_unique($modulos);
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="form_nuevo_usuario.php"><i class="fa fa-circle-o"></i> Agregar Usuarios </a></li>
+          <?php if(in_array("gestion_usuarios", $modulos) || $usuario_session['TIPO'] == 'IA_ADMIN'): ?>
+            <li><a href="form_buscar_usuario.php"><i class="fa fa-circle-o"></i> Gestión de Usuarios </a></li>
+            <?php endif ?>
+            <?php if(in_array("parametricas", $modulos) || $usuario_session['TIPO'] == 'IA_ADMIN'): ?>
             <li><a href="form_param_user.php"><i class="fa fa-circle-o"></i> Parametrización </a></li>
+            <?php endif ?>
 <!--            <li><a href="form_edit_usuario.php"><i class="fa fa-circle-o"></i> Editar Usuarios</a></li>-->
 <!--             <li><a href="form_buscar_usuario.php"><i class="fa fa-circle-o"></i> Administración de Usuarios</a></li> -->
 
           </ul>
         </li>
         <?php 
-          }
+          // }
          ?>
 
         <?php 

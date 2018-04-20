@@ -408,7 +408,7 @@
 
         +"<td><input type='hidden' name=id-"+inventarios.ID_INV+" value="+inventarios.ID_INV+"><a href='javascript:void(0);' onclick='deleteRow(this)'><i style='font-size:14px;' class='fa fa-trash text-red'></i></a></td>"
         // +"<td>"+inventarios.ID_INV+"</td>"
-        +"<td>"+inventarios.CLIENTE+"</td>"
+        // +"<td>"+inventarios.CLIENTE+"</td>"
         +"<td>"+inventarios.CAJA+"</td>"
         +"<td>"+inventarios.ITEM+"</td>"
         +"<td>"+inventarios.DESC_1+"</td>"

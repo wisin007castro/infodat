@@ -1,5 +1,6 @@
+<?php 
 
-<?php require_once 'header.php' ?>
+require_once 'header.php' ?>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper" id="capa">
@@ -14,4 +15,4 @@
 
 </div>
 <!-- ./wrapper -->
- <?php require_once 'footer.php' ?>
+<?php require_once 'footer.php' ?>

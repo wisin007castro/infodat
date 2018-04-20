@@ -25,8 +25,6 @@ if(isset($_POST['id']) && isset($_POST['entrega']) && isset($_POST['usuario'])){
 
 
 $entregado_por = "";
-
-
 $procesado_por = "";
 
 

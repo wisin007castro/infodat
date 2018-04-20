@@ -7,7 +7,7 @@
         $filtro = " WHERE (NOMBRE like '%".$nombre."%' or APELLIDO like '%".$nombre."%' or CARGO like '%".$nombre."%') AND ID_CLIENTE = '".$cliente."' " ;       
     }
     else{
-        $filtro = "";
+        $filtro = "WHERE ID_CLIENTE = '".$cliente."' ";
     }
 	$Json     = new Json;
 	$usuarios = $Json->BuscaUsuarios($filtro);

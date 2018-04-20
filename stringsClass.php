@@ -31,7 +31,7 @@ Class MiStrings{
 			"estado_consultas",
 			"estado_devoluciones",
 			"emision_reportes",
-			"registro_usuarios",
+			"gestion_usuarios",
 			"parametricas"
 			);
 	}

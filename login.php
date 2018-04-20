@@ -1,6 +1,9 @@
 <?php 
  include "include/class.mysqldb.php";
  include "include/config.inc.php";
+ include("conexionClass.php");
+ $con = new MiConexion();
+ $conexion = $con->conectarBD();
  unset($_SESSION['EmpUser']);
  if(isset($_REQUEST['user'])){
      $user = $_REQUEST['user'];
@@ -8,35 +11,30 @@
      $pass = md5($_REQUEST['pass']);//con hash
      $conn = new mysqldb();
      // $sql="SELECT * FROM usuarios WHERE USER = '".$user."' AND PASS='".$pass."' ";
-     $sql = sprintf("SELECT * FROM usuarios 
-      WHERE USER='%s' AND PASS='%s'",
-      mysql_real_escape_string($user),
-      mysql_real_escape_string($pass));
+     $sql = "SELECT * FROM usuarios 
+      WHERE USER='".$user."' AND PASS='".$pass."' "
+      // mysql_real_escape_string($user),
+      // mysql_real_escape_string($pass)
+      
+    ;
 
-     $query = $conn ->query($sql);
-     if (!$query) {
-    $mensaje  = 'Consulta no válida: ' . mysql_error() . "\n";
-    $mensaje .= 'Consulta completa: ' . $consulta;
-    die($mensaje);
-    }
-    else{$data = $conn->fetch($query);}
-     
-     
-     if($conn->num_rows()==0){
+    //  $query = $conn->query($conexion, $sql);
+    $query = $con->getArraySQL($sql);
+    //  echo var_dump($query);
+
+     if(!$query){
          echo "<script language='javascript'>alert('Nombre de Usuario o Password incorrecto..!')</script>";
      }else{
 
-      if ($data->HABILITADO == 'SI') {
+      if ($query[0]['HABILITADO'] == 'SI') {
 
-       $sql2="SELECT * FROM clientes WHERE ID_CLIENTE = '".$data->ID_CLIENTE."' ";
-       $query2 = $conn ->query($sql2);
-       $data2 = $conn->fetch($query2);
-
-         if ($data2->HABILITADO == 'SI') {
+       $sql2=$con->cliente($query[0]['ID_CLIENTE']);
+      //  echo var_dump($query);
+         if ($sql2[0]['HABILITADO'] == 'SI') {
             $_SESSION['loggedin'] = true;
-            $_SESSION['EmpUser']=$data->USER;
-            $_SESSION['EmpId']=$data->ID_USER;
-            $_SESSION['EmpID']=$data->ID_USER;
+            $_SESSION['EmpUser']=$query[0]['USER'];
+            $_SESSION['EmpId']=$query[0]['ID_USER'];
+            $_SESSION['EmpID']=$query[0]['ID_USER'];
             $_SESSION['start'] = time();
             $_SESSION['expire'] = $_SESSION['start'] + (5);
 
@@ -93,12 +91,12 @@
                     <h1>Login</h1>
                   <div class="form-group">
                     <label for="exampleInputEmail1">User</label>
-                    <input type="text" class="form-control" value="" placeholder=""  name="user"/>
+                    <input type="text" class="form-control" value="" placeholder=""  name="user" required/>
                     
                   </div>
                   <div class="form-group">
                     <label for="exampleInputPassword1">Password</label>
-                    <input type="password" class="form-control" placeholder="" name="pass"/>
+                    <input type="password" class="form-control" placeholder="" name="pass" required/>
                     
                   </div>
                   <br>

@@ -7,7 +7,7 @@ require_once 'stringsClass.php';
 $conexion = new MiConexion();
 $anios = $conexion->anios();
 $devoluciones = $conexion->devoluciones($usuario_session['ID_CLIENTE']);
-// var_dump($anios);
+// var_dump($devoluciones);
 
 $mistrings = new MiStrings();
 $meses = $mistrings->meses();
@@ -16,7 +16,7 @@ $por_proces = 0;
 $programada = 0;
 $finalizada = 0;
 
-if($devoluciones >  0){
+if($devoluciones > 0){
     foreach ($devoluciones as $dev) {
         if ($dev['ID_USER'] == $usuario_session['ID_USER'] && $dev['REGIONAL'] == $usuario_session['REGIONAL']) {
             if($dev["ESTADO"] == "POR PROCESAR"){
@@ -75,6 +75,7 @@ if($devoluciones >  0){
                             <tbody>
                             <?php foreach ($devoluciones as $dev) { ?>
                                 <?php if ($dev['ID_USER'] == $usuario_session['ID_USER'] && $dev['REGIONAL'] == $usuario_session['REGIONAL']): ?>
+                                    
                                     <tr>
                                     <td><a href='javascript:void(0);' onclick='cargar_formulario("<?php echo $dev["ID_DEV"]; ?>");'><i style='font-size:14px;' class='fa fa-expand text-blue'></i></a></td>
                                     <td><?php echo $dev["ID_DEV"]; ?></td>

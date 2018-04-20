@@ -8,8 +8,8 @@
 	# connect the database server
 	$link = new mysqldb();
 	$link->connect($_config['database']);
-	$link->selectdb($_config['database']['database']);
-	$link->query("SET NAMES 'utf8'");
+	// $link->selectdb($_config['database']['database']);
+	// $link->query("SET NAMES 'utf8'");
 	
 	@session_start();
 ?>

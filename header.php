@@ -1,14 +1,16 @@
 <?php
-    session_start();
-
+session_start();
+ob_start();
 if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
-    include("include/class.mysqldb.php");
-    include("include/config.inc.php");
-    $usuario = mysql_query("SELECT * FROM usuarios AS u 
+
+    include("conexionClass.php");
+    $con = new MiConexion();
+    $conexion = $con->conectarBD();
+    $usuario = mysqli_query($conexion, "SELECT * FROM usuarios AS u 
                             JOIN clientes AS c ON u.ID_CLIENTE = c.ID_CLIENTE
                             WHERE ID_USER='".$_SESSION['EmpID']."' 
                           ");
-    $usuario_session = mysql_fetch_array($usuario);
+    $usuario_session = mysqli_fetch_array($usuario);
 
 } else {
 

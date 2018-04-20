@@ -185,17 +185,7 @@
                   </select>
                 </div>
               </div>
-              <div class="col-lg-3">
-                <div class="form-group">
-                  <label>Regional</label>
-                  <select class="form-control" name="deptos">
-                      <?php foreach ($deptos_access as $key => $value): ?>
-                        <option value="<?php echo $value['DEPARTAMENTO'] ?>"><?php echo $value['DEPARTAMENTO']?></option>
-                      <?php endforeach ?>
 
-                  </select>
-                </div>
-              </div>
             </div>
           </div>
 

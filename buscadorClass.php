@@ -97,14 +97,14 @@ class Json
 			foreach ($deptos as $key => $value) {
 				if($value['ASIGNACION'] != 'TODOS'){
 					$consulta = "SELECT * FROM inventarios AS inv
-						JOIN clientes AS c ON inv.CLIENTE = C.ID_CLIENTE
+						JOIN clientes AS c ON inv.CLIENTE = c.ID_CLIENTE
 						 ".$filtro." 
 						 AND DEPARTAMENTO = '".$value['ASIGNACION']."' LIMIT 100";
 						 $resultado = array_merge($resultado, $conexion->EjecutarSentencia($consulta));
 				}
 				else{
 					$consulta = "SELECT * FROM inventarios AS inv
-						JOIN clientes AS c ON inv.CLIENTE = C.ID_CLIENTE
+						JOIN clientes AS c ON inv.CLIENTE = c.ID_CLIENTE
 						 ".$filtro." LIMIT 100";
 					$resultado = $conexion->EjecutarSentencia($consulta);
 				}

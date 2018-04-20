@@ -105,20 +105,23 @@
 
 <?php require_once 'footer.php' ?>
 
-<script type="text/javascript">
-
 
 <script type="text/javascript">
   $(document).ready(function(){
     // Limpiamos el cuerpo tbody
+    buscar();
+
     $("#limpiar").click(function(){
-      $("#bNoCaja").val("");
+
       $("#bdesc_1").val("");
-      $("#bdesc_2").val("");
-      $("#tb_busc_usuario tbody").html("");
+      buscar();
     });
 
     $("#buscar").click(function(){
+      buscar();
+    });
+
+    function buscar(){
       $("#tb_busc_usuario tbody").html("");
         // $("#error").html("<div class='modal1'><div class='center1'> <center> <img src='img/gif-load.gif'> Buscando Informacion...</center></div></div>");
       var bdesc_1 = $("#bdesc_1").val();
@@ -155,7 +158,7 @@
           $(nuevaFila).appendTo("#tb_busc_usuario tbody");
         }
       });
-    });
+    }
 
     // $("#agregar").click(function(){
 
