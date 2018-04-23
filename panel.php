@@ -34,7 +34,9 @@ $modulos = array_unique($modulos);
 
         // if($usuario_session['TIPO'] == 'IA_CONSULTA' || $usuario_session['TIPO'] == 'VISOR'){
          ?>
-
+        <?php if(in_array("solicitud_consultas", $modulos)
+         || in_array("solicitud_devoluciones", $modulos)
+         || $usuario_session['TIPO'] == 'IA_ADMIN'):?>
         <li class="treeview">
           <a href="#">
             <i class="fa fa-search"></i>
@@ -53,14 +55,20 @@ $modulos = array_unique($modulos);
             <?php endif ?>
           </ul>
         </li>
+        <?php endif ?>
+        <?php if(in_array("estado_consultas", $modulos)
+         || in_array("estado_devoluciones", $modulos)
+         || $usuario_session['TIPO'] == 'IA_ADMIN'):?>
           <li class="treeview">
               <a href="#">
+              
                   <i class="fa fa-search"></i>
                   <span>Estado</span>
                   <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                  </span>
               </a>
+              
               <ul class="treeview-menu">
                   <?php if(in_array("estado_consultas", $modulos) || $usuario_session['TIPO'] == 'IA_ADMIN'): ?>
                   <li><a href="estado_pedidos.php"><i class="fa fa-circle-o"></i> Consultas</a></li>
@@ -70,13 +78,8 @@ $modulos = array_unique($modulos);
                   <?php endif ?>
               </ul>
           </li>
-
-          <?php //} ?>
-
-        <?php 
-        // if($usuario_session['TIPO'] == 'IA_ADMIN' || $usuario_session['TIPO'] == 'ADMIN'){
-         ?>
-
+        <?php endif ?>
+        <?php if(in_array("emision_reportes", $modulos) || $usuario_session['TIPO'] == 'IA_ADMIN'):?>
         <li class="treeview">
           <a href="#">
             <i class="fa fa-files-o"></i>
@@ -91,7 +94,8 @@ $modulos = array_unique($modulos);
             <?php endif ?>
           </ul>
         </li>
-
+        <?php endif ?>
+        <?php if(in_array("gestion_usuarios", $modulos) || in_array("parametricas", $modulos)):?>
         <li class="treeview">
           <a href="#">
             <i class="fa fa-pencil-square-o"></i>
@@ -112,6 +116,7 @@ $modulos = array_unique($modulos);
 
           </ul>
         </li>
+        <?php endif ?>
         <?php 
           // }
          ?>
@@ -129,8 +134,9 @@ $modulos = array_unique($modulos);
             </span>
           </a>
           <ul class="treeview-menu">
-             
+
               <li><a href="form_ped_admin.php"><i class="fa fa-circle-o"></i> Solicitudes</a></li>
+
               <li><a href="form_dev_admin.php"><i class="fa fa-circle-o"></i> Devoluciones</a></li>
 
           </ul>

@@ -9,8 +9,6 @@
   $usuarios = $conexion->usuarios($usuario_session['ID_CLIENTE']);
   $repAccess = $conexion->repAccesso($usuario_session['ID_CLIENTE']);
   $clientes = $conexion->clientes();
-  $anios = $conexion->anios();
-  // var_dump($anios);
 
   $mistrings = new MiStrings();
   $meses = $mistrings->meses();

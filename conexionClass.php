@@ -183,7 +183,16 @@ class MiConexion{
         $sql = "SELECT c.CLIENTE, u.NOMBRE, u.APELLIDO, u.CARGO, u.TELEFONO, u.INTERNO, u.CELULAR, s.DIRECCION_ENTREGA, s.TIPO_CONSULTA, s.ID_SOLICITUD, inv.CAJA, inv.ITEM, inv.DESC_1, inv.DESC_2, inv.DESC_3, inv.DESC_4, inv.CANTIDAD, inv.UNIDAD, inv.DIA_I, inv.MES_I, inv.ANO_I, inv.DIA_F, inv.MES_F, inv.ANO_F, inv.DEPARTAMENTO, inv.ESTADO, s.OBSERVACION, s.PROCESADO_POR, s.REGIONAL, s.FECHA_SOLICITUD, s.HORA_SOLICITUD
         FROM solicitud AS s JOIN usuarios AS u ON s.ID_USER = u.ID_USER JOIN clientes as c ON s.ID_CLIENTE = c.ID_CLIENTE JOIN items AS item ON s.ID_SOLICITUD = item.ID_SOLICITUD JOIN inventarios AS inv ON inv.ID_INV = item.ID_INV WHERE s.ID_SOLICITUD = $id_sol";
         return $this->getArraySQL($sql);
+    }
 
+    public function id_devoluciones($id_sol){
+        $sql = "SELECT c.CLIENTE, u.NOMBRE, u.APELLIDO, u.CARGO, u.TELEFONO, u.INTERNO, 
+                u.CELULAR, d.DIRECCION, d.ID_DEV, inv.CAJA, inv.ITEM, inv.DESC_1, inv.DESC_2,
+                inv.DESC_3, inv.DESC_4, inv.CANTIDAD, inv.UNIDAD, inv.DIA_I, inv.MES_I, 
+                inv.ANO_I, inv.DIA_F, inv.MES_F, inv.ANO_F, inv.DEPARTAMENTO, inv.ESTADO, 
+                d.OBSERVACION, d.PROCESADO_POR, d.REGIONAL, d.FECHA_SOLICITUD, d.FECHA_PROGRAMADA
+        FROM devoluciones AS d JOIN usuarios AS u ON d.ID_USER = u.ID_USER JOIN clientes as c ON d.ID_CLIENTE = c.ID_CLIENTE JOIN dev_item AS item ON d.ID_DEV = item.ID_DEV JOIN inventarios AS inv ON inv.ID_INV = item.ID_INV WHERE d.ID_DEV = $id_sol";
+        return $this->getArraySQL($sql);
     }
 
     public function pedidos($id_cliente){

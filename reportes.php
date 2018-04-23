@@ -46,9 +46,9 @@
           <div class="form-group tree-fields">
             <label>Descripción:</label>
             <div class="input-group">
-              <input type="text" class="form-control" id="bdesc_1" name="" placeholder="Descripción 1">
-              <input type="text" class="form-control" id="bdesc_2" name="" placeholder="Descripción 2">
-              <input type="text" class="form-control" id="bdesc_3" name="" placeholder="Descripción 3">
+              <input style='text-transform:uppercase' type="text" class="form-control" id="bdesc_1" name="" placeholder="Descripción 1">
+              <input style='text-transform:uppercase' type="text" class="form-control" id="bdesc_2" name="" placeholder="Descripción 2">
+              <input style='text-transform:uppercase' type="text" class="form-control" id="bdesc_3" name="" placeholder="Descripción 3">
             </div>
           </div>
         </div>
@@ -181,13 +181,13 @@
             <div class="form-group">
 
               <label>*Dirección de entrega</label>
-              <input name="direccion" class="form-control" value="<?php echo $usuario_session['DIRECCION']; ?>"></input>
+              <input style='text-transform:uppercase' name="direccion" class="form-control" value="<?php echo $usuario_session['DIRECCION']; ?>"></input>
             </div>
           </div>
           <div class="col-lg-4 col-xs-6">
             <div class="form-group">
               <label>Observaciones</label>
-              <textarea name="observacion" class="form-control" rows="4"></textarea>
+              <textarea style='text-transform:uppercase' name="observacion" class="form-control" rows="4"></textarea>
             </div>
           </div>
           <div class="col-lg-1 col-xs-6">
@@ -205,7 +205,12 @@
                   Urgente
                 </label>
               </div>
-
+              <div class="radio">
+                <label>
+                  <input type="radio" name="optionsRadios" id="internet" value="INTERNET">
+                  Internet
+                </label>
+              </div>
             </div>
           </div>
 
@@ -240,14 +245,16 @@
   $(function(){
 
     $('#urgente').click(function(){
-        // alert('changed');
-        $("#msj_urgente").text("* Las solicitudes de tipo 'Urgente' tienen un costo adicional... ");
+      // alert('changed');
+      $("#msj_urgente").text("* Las solicitudes de tipo 'Urgente' tienen un costo adicional... ");
     });
     $('#normal').click(function(){
-        // alert('changed');
-        $("#msj_urgente").text('');
-    });          
-        
+      // alert('changed');
+       $("#msj_urgente").text('');
+    });
+    $('#internet').click(function(){
+      $("#msj_urgente").text('');
+    });
 
 });
 
@@ -307,6 +314,9 @@ $(document).ready(function(){
   $("#bNoCaja, #bdesc_1, #bdesc_2, #bdesc_3").keyup(function(event) {
     if (event.keyCode === 13) {//key 'Enter'
         $("#buscar").click();
+    }
+    if (event.keyCode === 27) {//key 'ESC'
+        $("#limpiar").click();
     }
   });
   

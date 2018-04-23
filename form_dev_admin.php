@@ -5,10 +5,9 @@ require_once 'conexionClass.php';
 require_once 'stringsClass.php';
 
 $conexion = new MiConexion();
-$anios = $conexion->anios();
+
 $devoluciones = $conexion->devoluciones_admin();
 $usuarios = $conexion->usuarios_almacen();//cliente
-// var_dump($anios);
 
 $mistrings = new MiStrings();
 $meses = $mistrings->meses();
@@ -175,18 +174,24 @@ $(document).on('click','.update-dev',function(){
         url:"controllers/modDevController.php", // sending the request to the same page we're on right now
         data:{'id':id, 'usuario':usuario, 'fecha':fecha, 'recogido':recogido, ID_USER:usuario},
            success: function(result){
-                if (result == 'success') {
-                    $.get("msj_correcto.php?msj="+result, function(result){
-                    $("#resp").html(result);
+                if (result == 'fecha') {
+                    $.get("msj_incorrecto.php?msj="+"Programe la fecha", function(result){
+                            $("#resp").html(result);
                     });
                 }
                 else{
-                    if(result == 'fecha'){
-                        $.get("msj_incorrecto.php?msj="+"Programe la fecha", function(result){
-                            $("#resp").html(result);
+                    if(result == 'POR PROCESAR'){
+                        $.get("msj_correcto.php?msj= Solicitud actualizada a PROGRAMADA", function(result){
+                        $("#resp").html(result);
+                        });
+                        form(id);
+                    }
+                    if(result == 'PROGRAMADA'){
+                        $.get("msj_correcto.php?msj= Solicitud actualizada a FINALIZADA", function(result){
+                        $("#resp").html(result);
                         });
                     }
-                    else{
+                    if(result == 'error'){
                         $.get("msj_incorrecto.php?msj="+"No se pudo actualizar la solicitud de devolución", function(result){
                             $("#resp").html(result);
                         });
@@ -195,7 +200,10 @@ $(document).on('click','.update-dev',function(){
             }
         }
     )
-})
+});
+    function form(id_sol) {
+        window.open('pdf/form-102.php?id_sol='+id_sol+'&procesado_por='+usuario);
+    }
 
 </script>
 

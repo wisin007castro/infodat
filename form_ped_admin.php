@@ -118,8 +118,8 @@ $estados = $mistrings->estadoSol();
                                             }
                                             elseif($pedido["ESTADO"] == "EN PROCESO DE BUSQUEDA"){
                                             ?>
-                                            <button type="button" class="btn btn-block btn-warning btn-sm update-sol" data-id="<?php echo $pedido["ID_SOLICITUD"]; ?>">DESPACHADA</button>
-<!--                                             <button type="button" class="btn btn-block btn-warning" data-toggle="modal" data-target="#modal-default">DESPACHADA -->
+                                            <!-- <button type="button" class="btn btn-block btn-warning btn-sm update-sol" data-id="<?php //echo $pedido["ID_SOLICITUD"]; ?>">DESPACHADA</button> -->
+                                            <button type="button" class="btn btn-block btn-warning" data-toggle="modal" onClick="modal('<?php echo $pedido['ID_SOLICITUD']?>')">DESPACHADA
                                             </button>
                                             <?php
                                             }
@@ -155,7 +155,7 @@ $estados = $mistrings->estadoSol();
         <!-- /.row -->
 
         <div class="modal fade" id="modal-default">
-          <div class="modal-dialog">
+          <div class="modal-dialog" style="width:70%;">
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -163,11 +163,54 @@ $estados = $mistrings->estadoSol();
                 <h4 class="modal-title">Lista de items a entregar</h4>
               </div>
               <div class="modal-body">
-                <p>One fine body&hellip;</p>
+                <div >
+                    <input type="hidden" id="entrega">
+                </div>
+
+                <section class="content">
+                <div class="row" style="font-size:11px;">
+                    <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header">
+                        <h3 class="box-title">Lista de archivos encontrados</h3>
+                        </div>
+                        <div class="box-body table-responsive no-padding">
+                        <div class="scrollable">
+                            <table class="table table-bordered" id="tablajson">
+                            <thead><tr>
+                                <th></th>
+                                <!-- <th>#</th> -->
+                                <!-- <th>CLIENTE</th> -->
+                                <th>CAJA</th>
+                                <th>ITEM</th>
+                                <th>DESCRIPCION 1</th>
+                                <th>DESCRIPCION 2</th>
+                                <th>DESCRIPCION 3</th>
+                                <th>DESCRIPCION 4</th>
+                                <th>CANT</th>
+                                <th>UNIDAD</th>
+                                <th>FECHA INICIO</th>
+                                <th>FECHA FIN</th>
+                                <th>DEPARTAMENTO</th>
+                                <th>ESTADO</th>
+                                <!-- <th>REGIONAL</th> -->
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                            </table>
+                        </div>
+                        </div>
+                    </div>
+                    <!-- /.box -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+                </section>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-block btn-warning btn-sm update-sol" data-id="<?php echo $pedido["ID_SOLICITUD"]; ?>">DESPACHADA</button>
+                <button type="button" class="btn btn-warning" onclick="GuardaEntrega()">DESPACHADA</button>
               </div>
             </div>
             <!-- /.modal-content -->
@@ -185,12 +228,29 @@ $estados = $mistrings->estadoSol();
 
 <script type="text/javascript">
 
-var id, entrega, usuario;
+
 $(document).on('click','.update-sol',function(){
     id = $(this).attr('data-id');
+    GuardaEstado(id);
+});
+
+    function form(id_sol) {
+        window.open('pdf/form-101.php?id_sol='+id_sol+'&procesado_por='+usuario);
+    }
+
+    function modal(valor) {
+    // var valor = valor;
+
+    $("#entrega").val(valor);
+    $('#modal-default').modal('show');
+
+    }
+
+    function GuardaEstado(id_sol){
+    id = id_sol;
     usuario = $("#usuario").val(); //PROCESADO POR
     entrega = $("#entrega-"+id).val();// ENTREGADO POR
-    console.log(estado);
+
     if (!entrega) {
         entrega = "0";
     }
@@ -200,33 +260,54 @@ $(document).on('click','.update-sol',function(){
         url:"controllers/modSolController.php",
         data:{'id':id, 'usuario':usuario, 'entrega':entrega},
            success: function(result){
-                if (result == 'success') {
-                    $.get("msj_correcto.php?msj="+"Solicitud actualizada correctamente", function(result){
+                if (result == 'POR PROCESAR') {
+                    $.get("msj_correcto.php?msj="+"Solicitud actualizada a EN PROCESO DE BUSQUEDA", function(result){
                     $("#resp").html(result);
                     });
-                    if(estado == 'POR PROCESAR'){
-                        form(id);
-                    }
+                    form(id);
                 }
-                else{
-                    $.get("msj_incorrecto.php?msj="+"No se pudo realizar la actualización de la modificación", function(result){
+                if (result == 'EN PROCESO DE BUSQUEDA') {
+                    $.get("msj_correcto.php?msj="+"Solicitud actualizada a DESPACHADA", function(result){
+                    $("#resp").html(result);
+                    });
+                }
+                if(result == 'error'){
+                    $.get("msj_incorrecto.php?msj="+"No se pudo actualizar la solicitud", function(result){
                         $("#resp").html(result);
                     });
                 }
             }
         }
-    )
-});
+    )};
 
-    function form(id_sol) {
-        window.open('pdf/formClass.php?id_sol='+id_sol+'&procesado_por='+usuario);
+    function GuardaEntrega(){//CON CONFIRMACION DESPACHADO
+    id = $("#entrega").val();
+    usuario = $("#usuario").val(); //PROCESADO POR
+    entrega = $("#entrega-"+id).val();// ENTREGADO POR
+    console.log(id);
+    if (!entrega) {
+        entrega = "0";
     }
- 
-    
- 
-    // window.onload=function(){
-        
-    // }
+
+    $.ajax({
+        type:'POST',
+        url:"controllers/modSolController.php",
+        data:{'id':id, 'usuario':usuario, 'entrega':entrega},
+           success: function(result){
+                if (result == 'DESPACHADA') {
+                    $.get("msj_correcto.php?msj="+"Solicitud actualizada a ATENDIDA/ENTREGADA", function(result){
+                    $("#resp").html(result);
+                    $('#modal-default').modal('hidde');
+                    });
+                }
+                if(result == 'error'){
+                    $.get("msj_incorrecto.php?msj="+"No se pudo actualizar la solicitud", function(result){
+                        $("#resp").html(result);
+                    });
+                }
+            }
+        }
+    )};
 
 </script>
 
