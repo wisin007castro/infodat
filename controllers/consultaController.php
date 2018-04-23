@@ -1,5 +1,4 @@
 <?php
-
 require_once '../conexionClass.php';
 $conexion = new MiConexion();
 
@@ -29,8 +28,7 @@ if($c > 0){
 	$sql = "INSERT INTO solicitud (ID_CLIENTE, ID_USER, TIPO_CONSULTA, DIRECCION_ENTREGA, OBSERVACION, FECHA_SOLICITUD, HORA_SOLICITUD, ESTADO, REGIONAL) 
 		VALUES ('".$_POST['cliente']."','".$_POST['usuario']."','".$_POST['optionsRadios']."','".$_POST['direccion']."', '".$_POST['observacion']."', '".$fecha."','".$hora."', 'POR PROCESAR','".$_POST['regional']."')";
 
-	if(!$result = mysqli_query($con, $sql)) die();
-
+	if(!$result = mysqli_query($con, $sql)) die();//Guardando la solicitud
 
 	if ($result) {
 

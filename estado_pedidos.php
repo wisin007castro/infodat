@@ -5,7 +5,7 @@ require_once 'conexionClass.php';
 require_once 'stringsClass.php';
 
 $conexion = new MiConexion();
-$anios = $conexion->anios();
+
 $pedidos = $conexion->pedidos($usuario_session['ID_CLIENTE']);
 // var_dump($usuario_session);
 // echo "------".$usuario_session['ID_CLIENTE'];
@@ -183,15 +183,15 @@ if($pedidos > 0){
                                 <th>Nro. SOLICITUD</th>
                                 <th>CAJA</th>
                                 <th>ITEM</th>
-                                <th>DESC_1</th>
-                                <th>DESC_2</th>
-                                <th>DESC_3</th>
-                                <th>DESC_4</th>
+                                <th>DESCRIPCION 1</th>
+                                <th>DESCRIPCION 2</th>
+                                <th>DESCRIPCION 3</th>
+                                <th>DESCRIPCION 4</th>
                                 <th>CANT</th>
                                 <th>UNIDAD</th>
                                 <th>FECHA INICIAL</th>
                                 <th>FECHA FINAL</th>
-                                <th>DPTO</th>
+                                <th>DEPARTAMENTO</th>
                                 <th>ESTADO</th>
                             </tr>
                             </thead>

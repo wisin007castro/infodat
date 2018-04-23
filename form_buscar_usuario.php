@@ -4,9 +4,6 @@
   require_once 'stringsClass.php';
   
   $conexion = new MiConexion();
-  $anios = $conexion->anios();
-  // var_dump($anios);
-
   $mistrings = new MiStrings();
   $meses = $mistrings->meses();
  ?>
@@ -48,7 +45,7 @@
           <div class="form-group">
           </br>
           </br>
-          <a href="form_nuevo_usuario.php" class="btn btn-app">
+          <a href="form_nuevo_usuario.php" class="btn btn-app" type="button">
             <i class="fa fa-user-plus"></i> Nuevo
           </a>
           </div>

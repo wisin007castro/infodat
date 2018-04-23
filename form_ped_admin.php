@@ -5,7 +5,7 @@ require_once 'conexionClass.php';
 require_once 'stringsClass.php';
 
 $conexion = new MiConexion();
-$anios = $conexion->anios();
+
 $pedidos = $conexion->pedidos_admin();
 $usuarios = $conexion->usuarios_almacen();//cliente
 // var_dump($usuarios);
@@ -77,8 +77,9 @@ $estados = $mistrings->estadoSol();
                                         <td><?php echo $pedido["PROCESADO_POR"]; ?></td>
                                         <td><?php echo $pedido["FECHA_ENTREGA"]; ?></td>
                                         <td><?php echo $pedido["HORA_ENTREGA"]; ?></td>
-                                        <td><!-- ENTREGADO POR -->
+                                        <td>
 
+                                        <!-- ENTREGADO POR -->
                                         <?php 
                                         if ($pedido["ESTADO"] != "EN PROCESO DE BUSQUEDA") {
                                             foreach ($usuarios as $user) {
@@ -111,6 +112,7 @@ $estados = $mistrings->estadoSol();
                                         <td><?php echo $pedido["ESTADO"]; ?></td>
                                         <td>
                                             <?php if($pedido["ESTADO"] == "POR PROCESAR"){ ?>
+
                                             <button type="button" class="btn btn-block btn-primary btn-sm update-sol" data-id="<?php echo $pedido["ID_SOLICITUD"]; ?>">EN PROCESO DE BUSQUEDA</button>
                                             <?php
                                             }
@@ -188,23 +190,23 @@ $(document).on('click','.update-sol',function(){
     id = $(this).attr('data-id');
     usuario = $("#usuario").val(); //PROCESADO POR
     entrega = $("#entrega-"+id).val();// ENTREGADO POR
-
+    console.log(estado);
     if (!entrega) {
         entrega = "0";
     }
 
-// console.log(id);
-//     console.log(entrega);
     $.ajax({
         type:'POST',
-        url:"controllers/modSolController.php", // sending the request to the same page we're on right now
+        url:"controllers/modSolController.php",
         data:{'id':id, 'usuario':usuario, 'entrega':entrega},
            success: function(result){
                 if (result == 'success') {
                     $.get("msj_correcto.php?msj="+"Solicitud actualizada correctamente", function(result){
                     $("#resp").html(result);
                     });
-                    form(id);
+                    if(estado == 'POR PROCESAR'){
+                        form(id);
+                    }
                 }
                 else{
                     $.get("msj_incorrecto.php?msj="+"No se pudo realizar la actualización de la modificación", function(result){

@@ -4,7 +4,7 @@
   require_once 'stringsClass.php';
   // var_dump($usuario);
   $conexion = new MiConexion();
-  $anios = $conexion->anios();
+  
   $solicitudes = $conexion->solicitudes($usuario_session['ID_CLIENTE']);
   // var_dump($solicitudes);
   $mistrings = new MiStrings();
@@ -41,10 +41,20 @@
                   <th></th>
                   <th>Nro. SOLICITUD</th>
                   <th>CAJA</th>
-                  <th>SOLICITADO POR</th>
+<!--                   <th>SOLICITADO POR</th>
                   <th>FECHA SOLICITUD</th>
-                  <th>DIRECCION DE ENTREGA</th>
-                  <th>ESTADO</th>
+                  <th>DIRECCION DE ENTREGA</th> -->
+                  <!-- <th>ESTADO</th> -->
+                    <th>ITEM</th>
+                    <th>DESCRIPCION 1</th>
+                    <th>DESCRIPCION 2</th>
+                    <th>DESCRIPCION 3</th>
+                    <th>DESCRIPCION 4</th>
+                    <th>CANTIDAD/UNIDAD</th>
+                    <th>FECHA INICIO</th>
+                    <th>FECHA FIN</th>
+                    <th>DEPARTAMENTO</th>
+                    <th>ESTADO</th>
                 </tr>
               </thead>
               <tbody>
@@ -63,9 +73,15 @@
                     </td>
                     <td><?php echo $sol["ID_SOLICITUD"]; ?></td>
                     <td><?php echo $sol["CAJA"]; ?></td>
-                    <td><?php echo $sol["NOMBRE"]." ".$sol["APELLIDO"]; ?></td>
-                    <td><?php echo $sol["FECHA_SOLICITUD"]; ?></td>
-                    <td><?php echo $sol["DIRECCION_ENTREGA"]; ?></td>
+                    <td><?php echo $sol["ITEM"]; ?></td>
+                    <td><?php echo $sol["DESC_1"]; ?></td>
+                    <td><?php echo $sol["DESC_2"]; ?></td>
+                    <td><?php echo $sol["DESC_3"]; ?></td>
+                    <td><?php echo $sol["DESC_4"]; ?></td>
+                    <td><?php echo $sol["CANTIDAD"]." ".$sol["UNIDAD"]; ?></td>
+                    <td><?php echo $sol["DIA_I"]."/".$sol["MES_I"]."/".$sol["ANO_I"]; ?></td>
+                    <td><?php echo $sol["DIA_F"]."/".$sol["MES_F"]."/".$sol["ANO_F"]; ?></td>
+                    <td><?php echo $sol["DEPARTAMENTO"]; ?></td>
                     <td><?php echo $sol["ESTADO_INV"]; ?></td>
                   </tr>  
               <?php }
@@ -105,15 +121,15 @@
                     <th>CLIENTE</th> -->
                     <th>CAJA</th>
                     <th>ITEM</th>
-                    <th>DESC_1</th>
-                    <th>DESC_2</th>
-                    <th>DESC_3</th>
-                    <th>DESC_4</th>
-                    <th>CANT</th>
+                    <th>DESCRIPCION 1</th>
+                    <th>DESCRIPCION 2</th>
+                    <th>DESCRIPCION 3</th>
+                    <th>DESCRIPCION 4</th>
+                    <th>CANTIDAD</th>
                     <th>UNIDAD</th>
-                    <th>FECHA_I</th>
-                    <th>FECHA_F</th>
-                    <th>DPTO</th>
+                    <th>FECHA ICIO</th>
+                    <th>FECHA FIN</th>
+                    <th>DEPARTAMENTO</th>
                     <th>ESTADO</th>
                     <!-- <th>REGIONAL</th> -->
                   </tr>
