@@ -191,7 +191,25 @@ class MiConexion{
                 inv.DESC_3, inv.DESC_4, inv.CANTIDAD, inv.UNIDAD, inv.DIA_I, inv.MES_I, 
                 inv.ANO_I, inv.DIA_F, inv.MES_F, inv.ANO_F, inv.DEPARTAMENTO, inv.ESTADO, 
                 d.OBSERVACION, d.PROCESADO_POR, d.REGIONAL, d.FECHA_SOLICITUD, d.FECHA_PROGRAMADA
-        FROM devoluciones AS d JOIN usuarios AS u ON d.ID_USER = u.ID_USER JOIN clientes as c ON d.ID_CLIENTE = c.ID_CLIENTE JOIN dev_item AS item ON d.ID_DEV = item.ID_DEV JOIN inventarios AS inv ON inv.ID_INV = item.ID_INV WHERE d.ID_DEV = $id_sol";
+        FROM devoluciones AS d JOIN usuarios AS u ON d.ID_USER = u.ID_USER 
+        JOIN clientes as c ON d.ID_CLIENTE = c.ID_CLIENTE 
+        JOIN dev_item AS item ON d.ID_DEV = item.ID_DEV 
+        JOIN inventarios AS inv ON inv.ID_INV = item.ID_INV WHERE d.ID_DEV = $id_sol";
+        return $this->getArraySQL($sql);
+    }
+
+    public function id_ped_devol($id_dev){
+        $sql = "SELECT item.ID_DEVITEM, d.ID_DEV, s.ID_SOLICITUD, d.ID_CLIENTE, c.CLIENTE, inv.DEPARTAMENTO, 
+        d.ID_USER, CONCAT(u.NOMBRE, ' ', u.APELLIDO) AS NOMBRE, d.FECHA_SOLICITUD, d.FECHA_PROGRAMADA,
+        inv.CAJA, inv.ITEM, inv.DESC_1, inv.DESC_2, inv.DESC_3, inv.DESC_4, inv.CANTIDAD, inv.UNIDAD, 
+        inv.DIA_I, inv.MES_I, inv.ANO_I, inv.DIA_F, inv.MES_F, inv.ANO_F,d.OBSERVACION
+        FROM devoluciones AS d JOIN usuarios AS u ON d.ID_USER = u.ID_USER 
+        JOIN clientes as c ON d.ID_CLIENTE = c.ID_CLIENTE 
+        JOIN dev_item AS item ON d.ID_DEV = item.ID_DEV 
+        JOIN inventarios AS inv ON inv.ID_INV = item.ID_INV
+        JOIN items AS i ON i.ID_INV = item.ID_INV
+        JOIN solicitud AS s ON s.ID_SOLICITUD = i.ID_SOLICITUD
+        WHERE d.ID_DEV = $id_dev ";
         return $this->getArraySQL($sql);
     }
 

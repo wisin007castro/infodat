@@ -4,9 +4,10 @@
 	$conexion = new MiConexion();
 
 	$id_sol = $_GET['id_sol'];
-	$procesado_por = $conexion->usuario($_GET['procesado_por']);
+	// $procesado_por = $conexion->usuario($_GET['procesado_por']);
 
-	$pedidos = $conexion->id_pedidos($id_sol);
+    $pedidos = $conexion->id_pedidos($id_sol);
+
 	// var_dump($pedidos);
 	date_default_timezone_set('America/La_Paz'); //definiendo zona horaria
 	$script_tz = date_default_timezone_get();
@@ -20,7 +21,6 @@
 
 	
 	<!-- // $html = file_get_contents('../form_101.php'); -->
-
 <!-- $html = " -->
 <!DOCTYPE html>
 <html>
@@ -28,40 +28,47 @@
 	<meta charset="utf-8">
   <title></title>
   <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css">
 </head>
 <body>
 
 <table class="table">
   <tr>
-    <td style="font-size:18px;"><b>No. Consulta: </b>
-    	<?php echo $pedidos[0]['ID_SOLICITUD']; ?></td>
-    <td align="center"><h4>FORMULARIO 101</h4>
-  		<h4>SOLICITUD DE CONSULTAS</h4></td>
-    <td align="right"><img src="../dist/img/logoactiva.png" style="width:180px;height:80px;">
-    </td>
+    <td width="25%" align="center"><img src="../dist/img/logoactiva.png" style="width:150px;height:50px;">
+        </td>
+        <td width="50%" align="center"><h5>FORMULARIO 104</h5>
+  		<h5>ENTREGA CAJAS / DOCUMENTOS</h5>
+        </td>
+        <td width="25%" style="font-size:16px;" align="center">
+            Número: <?php echo $pedidos[0]['ID_SOLICITUD']." / ".$tiempo['year']; ?>
+            <small><br><?php echo $tiempo['mday']."/".$tiempo['mon']."/".$tiempo['year']; ?></small>
+             - <small><?php echo $hora; ?></small>
+        </td>
   </tr>
 </table>
-  
-  <b>FECHA DE SOLICITUD: </b><?php echo $pedidos[0]['FECHA_SOLICITUD']; ?>&nbsp;&nbsp;&nbsp;
-  <b>HORA DE SOLICITUD: </b><?php echo $pedidos[0]['HORA_SOLICITUD']; ?> 
-  <hr>
+<hr>
 <h5><b>DATOS DEL CLIENTE: </b></h5>
 <ul>
-  <li><b>CLIENTE: </b><?php echo $pedidos[0]['CLIENTE']; ?> <br></li>
-    <li><b>SOLICITADO POR: </b><?php echo $pedidos[0]['NOMBRE']." ".$pedidos[0]['APELLIDO']; ?><br></li>
-    <li><b>TELEFONO: </b><?php echo $pedidos[0]['TELEFONO']; ?>  <b>INTERNO: </b></b><?php echo $pedidos[0]['INTERNO']; ?>  <b>CELULAR: </b></b><?php echo $pedidos[0]['CELULAR']; ?>  <br></li>
-    <li><b>DIRECCION DE ENTREGA:</b></b><?php echo $pedidos[0]['DIRECCION_ENTREGA']; ?> <br></li>
-    <li><b>TIPO DE SOLICITUD:</b></b><?php echo $pedidos[0]['TIPO_CONSULTA']; ?>  <br></li>
-</ul>
+  <li>NOMBRE DE LA EMPRESA: <?php echo $pedidos[0]['CLIENTE']; ?> <br></li>
+  <li>DEPARTAMENTO: <?php echo $pedidos[0]['DEPARTAMENTO']; ?> <br></li>
+  <li>NOMBRE DEL SOLICITANTE: <?php echo $pedidos[0]['NOMBRE']." ".$pedidos[0]['APELLIDO']; ?><br></li>
+  <li>FECHA DE SOLICITUD: <?php echo $pedidos[0]['FECHA_SOLICITUD']; ?>&nbsp;&nbsp;&nbsp;
+  HORA DE SOLICITUD: <?php echo $pedidos[0]['HORA_SOLICITUD']; ?> </li>
+  <li> FECHA DE ENTREGA: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  HORA DE ENTREGA:  <br></li>
 
-  <hr>
+</ul>
+<hr>
+
 <h5><b>DOCUMENTOS SOLICITADOS EN CONSULTA: </b></h5>
 <div class="box-body table-responsive no-padding">
 	<table class="table table-bordered" style="font-size:10px;">
     <thead><tr>
 
-        <th>Nro</th>
-        <th>LUGAR</th>
+        <!-- <th>Nro</th>
+        <th>LUGAR</th> -->
         <th>CAJA</th>
         <th>ITEM</th>
         <th>DESCRIPCION</th>
@@ -74,8 +81,8 @@
     	<?php foreach ($pedidos as $key => $value): ?>
     		<tr>
     			
-    			<td><?php echo $key+1; ?> </td>
-    			<td>010100101</td>
+    			<!-- <td><?php// echo $key+1; ?> </td>
+    			<td>010100101</td> -->
     			<td><?php echo $value['CAJA']; ?> </td>
     			<td><?php echo $value['ITEM']; ?> </td>
 				<td>
@@ -115,24 +122,33 @@
 </div>
 
 <hr>
-<h5><b>OBSERVACIONES: </b></h5><?php echo $pedidos[0]['OBSERVACION']; ?>
 
-<br>
-<center><h4>Uso Exclusivo INFOACTIVA SRL</h4></center>
-<b>RECEPCIONADO POR: </b></h4><?php echo $procesado_por[0]['NOMBRE']." ".$procesado_por[0]['APELLIDO']; ?>
+<h5><b>Prioridad: </b><?php echo $pedidos[0]['TIPO_CONSULTA']; ?></h5>
+<h5><b>Observaciones: </b><?php echo $pedidos[0]['OBSERVACION']; ?></h5>
 <hr>
+
 <table class="table table-bordered" style="font-size:11px;">
   <tr>
-    <td><b>CENTRAL DE CONSULTAS: </b><?php echo $pedidos[0]['REGIONAL']; ?></td>
-    <td><b>FECHA: </b><?php echo $fecha; ?></td>
-    <td><b>HORA: </b><?php echo $hora; ?></td>
+    <td>
+        <b><center>CLIENTE</center></b>
+        Recibido por:<br>
+        Cedula de Identidad:<br>
+        <br><center>FIRMA</center>
+        <small><center>Autorización desprecintado</center></small>
+    
+    </td>
+    <td>
+        <b><center>INFOACTIVA S.R.L.</center></b>
+        Entregado por:<br>
+        Cedula de Identidad:<br>
+        <br><center>FIRMA</center><br>
+    </td>
   </tr>
 </table>
 
 </body>
 </html>
 
-<!-- "; -->
 <?php 
 	require_once '../dompdf/autoload.inc.php';
 	use Dompdf\Dompdf;
@@ -145,8 +161,7 @@
 	$pdf = $dompdf->output();
 
 	$dompdf->stream(
-		"form_101-".$id_sol.".pdf", array('Attachment' => true)
+		"form_104-".$id_sol.".pdf", array('Attachment' => false)
 	);
 
  ?>
-

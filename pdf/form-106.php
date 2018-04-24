@@ -4,23 +4,30 @@
 	$conexion = new MiConexion();
 
 	$id_sol = $_GET['id_sol'];
-	$procesado_por = $conexion->usuario($_GET['procesado_por']);
+	// $procesado_por = $conexion->usuario($_GET['procesado_por']);
 
-	$pedidos = $conexion->id_pedidos($id_sol);
-	// var_dump($pedidos);
+	$pedidos = $conexion->id_ped_devol($id_sol);
+    // var_dump($pedidos);
+    
+    $solicitudes_todo = array_column($pedidos, 'ID_SOLICITUD');//todos los clientes
+    // echo var_dump($clientes_todo);
+    $sol_consultas = array_unique($solicitudes_todo);//Conteo de valores
+    // echo var_dump($deptos);
 	date_default_timezone_set('America/La_Paz'); //definiendo zona horaria
 	$script_tz = date_default_timezone_get();
 
 	$tiempo = getdate();
 	$fecha = $tiempo['year']."-".$tiempo['mon']."-".$tiempo['mday'];
-	$hora = $tiempo['hours'].":".$tiempo['minutes'];
+    $hora = $tiempo['hours'].":".$tiempo['minutes'];
+    
+    foreach ($sol_consultas as $key => $sc) {
+        # code...
 
  ?>
 
 
 	
-	<!-- // $html = file_get_contents('../form_101.php'); -->
-
+<!-- // $html = file_get_contents('../form_101.php'); -->
 <!-- $html = " -->
 <!DOCTYPE html>
 <html>
@@ -33,35 +40,39 @@
 
 <table class="table">
   <tr>
-    <td style="font-size:18px;"><b>No. Consulta: </b>
-    	<?php echo $pedidos[0]['ID_SOLICITUD']; ?></td>
-    <td align="center"><h4>FORMULARIO 101</h4>
-  		<h4>SOLICITUD DE CONSULTAS</h4></td>
-    <td align="right"><img src="../dist/img/logoactiva.png" style="width:180px;height:80px;">
-    </td>
+    <td width="25%" align="center"><img src="../dist/img/logoactiva.png" style="width:150px;height:50px;">
+        </td>
+        <td width="50%" align="center"><h5>FORMULARIO 106</h5>
+  		<h5>DEVOLUCION DE CAJAS / DOCUMENTOS</h5>
+        </td>
+        <td width="25%" style="font-size:16px;" align="center">
+            Número: <?php echo $pedidos[0]['ID_SOLICITUD']." / ".$tiempo['year']; ?>
+            <small><br><?php echo $tiempo['mday']."/".$tiempo['mon']."/".$tiempo['year']; ?></small>
+             - <small><?php echo $hora; ?></small>
+        </td>
   </tr>
 </table>
   
-  <b>FECHA DE SOLICITUD: </b><?php echo $pedidos[0]['FECHA_SOLICITUD']; ?>&nbsp;&nbsp;&nbsp;
-  <b>HORA DE SOLICITUD: </b><?php echo $pedidos[0]['HORA_SOLICITUD']; ?> 
-  <hr>
+<hr>
 <h5><b>DATOS DEL CLIENTE: </b></h5>
 <ul>
-  <li><b>CLIENTE: </b><?php echo $pedidos[0]['CLIENTE']; ?> <br></li>
-    <li><b>SOLICITADO POR: </b><?php echo $pedidos[0]['NOMBRE']." ".$pedidos[0]['APELLIDO']; ?><br></li>
-    <li><b>TELEFONO: </b><?php echo $pedidos[0]['TELEFONO']; ?>  <b>INTERNO: </b></b><?php echo $pedidos[0]['INTERNO']; ?>  <b>CELULAR: </b></b><?php echo $pedidos[0]['CELULAR']; ?>  <br></li>
-    <li><b>DIRECCION DE ENTREGA:</b></b><?php echo $pedidos[0]['DIRECCION_ENTREGA']; ?> <br></li>
-    <li><b>TIPO DE SOLICITUD:</b></b><?php echo $pedidos[0]['TIPO_CONSULTA']; ?>  <br></li>
-</ul>
+  <li>NOMBRE DE LA EMPRESA: <?php echo $pedidos[0]['CLIENTE']; ?> <br></li>
+  <li>DEPARTAMENTO: <?php echo $pedidos[0]['DEPARTAMENTO']; ?> <br></li>
+  <li>NOMBRE DEL SOLICITANTE: <?php echo $pedidos[0]['NOMBRE']; ?><br></li>
+  <li>FECHA DE SOLICITUD: <?php echo $pedidos[0]['FECHA_SOLICITUD']; ?>&nbsp;&nbsp;&nbsp;
+  HORA DE SOLICITUD: <?php echo $pedidos[0]['HORA_SOLICITUD']; ?> </li>
+  <li> FECHA DE ENTREGA: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  HORA DE ENTREGA:  <br></li>
 
-  <hr>
-<h5><b>DOCUMENTOS SOLICITADOS EN CONSULTA: </b></h5>
+</ul>
+<hr>
+<h5><b>DOCUMENTOS A DEVOLVER: </b></h5>
 <div class="box-body table-responsive no-padding">
 	<table class="table table-bordered" style="font-size:10px;">
     <thead><tr>
-
-        <th>Nro</th>
-        <th>LUGAR</th>
+        <!-- <th>Nro</th>
+        <th>LUGAR</th> -->
         <th>CAJA</th>
         <th>ITEM</th>
         <th>DESCRIPCION</th>
@@ -73,9 +84,8 @@
     <tbody>
     	<?php foreach ($pedidos as $key => $value): ?>
     		<tr>
-    			
-    			<td><?php echo $key+1; ?> </td>
-    			<td>010100101</td>
+    			<!-- <td><?php// echo $key+1; ?> </td>
+    			<td>010100101</td> -->
     			<td><?php echo $value['CAJA']; ?> </td>
     			<td><?php echo $value['ITEM']; ?> </td>
 				<td>
@@ -91,7 +101,7 @@
 				?>
 				</td>
 
-    			<td><?php echo $value['UNIDAD']." ".$value['CANTIDAD']; ?> </td>
+    			<td><?php echo $value['CANTIDAD']." ".$value['UNIDAD']; ?> </td>
     			<td>
     				<?php 
     					if ($value['DIA_I'] != "") {
@@ -135,7 +145,7 @@
 <!-- "; -->
 <?php 
 	require_once '../dompdf/autoload.inc.php';
-	use Dompdf\Dompdf;
+	// use Dompdf\Dompdf;
 
 	$dompdf = new DOMPDF();
 	$dompdf->loadHtml(ob_get_clean());

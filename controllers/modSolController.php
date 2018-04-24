@@ -26,7 +26,7 @@ if(isset($_POST['id']) && isset($_POST['entrega']) && isset($_POST['usuario'])){
 
 $entregado_por = "";
 $procesado_por = "";
-
+$count_items = 0;
 
 foreach ($pedidos as $ped) {
 	if ($ped['ID_SOLICITUD'] == $id) {
@@ -54,8 +54,15 @@ foreach ($pedidos as $ped) {
 				$entregado_por = $usuario1[0]['NOMBRE']." ".$usuario1[0]['APELLIDO'];
 				$sql = "UPDATE solicitud SET PROCESADO_POR = '".$procesado_por."', ENTREGADO_POR='".$entregado_por."', ESTADO='".$estado."' WHERE ID_SOLICITUD = '".$id."' ";
 				foreach ($items as $item) {
-					$sql_inv = "UPDATE inventarios SET ESTADO = '".$estado."' WHERE ID_INV = '".$item['ID_INV']."' ";
-					if(!$resultado = mysqli_query($con, $sql_inv)) die();
+					foreach ($_POST as $key => $value) {
+						if (substr($key, 0, 3) == "id-") {
+							if ($value == $item['ID_INV']) {
+								$sql_inv = "UPDATE inventarios SET ESTADO = '".$estado."' WHERE ID_INV = '".$item['ID_INV']."' ";
+								if(!$resultado = mysqli_query($con, $sql_inv)) die();
+								if($resultado){$count_items++;}
+							}
+						}
+					}
 				}
 	
 	$solicitante = $conexion->usuario($ped['ID_USER']);
@@ -108,12 +115,16 @@ foreach ($pedidos as $ped) {
 	
 			// mail($destinatario,$asunto,$cuerpo,$headers);
 				//echo $destinatario." ".$asunto." ".$cuerpo." ".$headers;
-				if(!$resultado = mysqli_query($con, $sql)) die();
-				if ($resultado) {
-					echo "DESPACHADA";
-				}
-				else{
-					echo "error";
+				$sql_des = "UPDATE inventarios SET ESTADO = 'DESESTIMADO' WHERE ESTADO != 'DESPACHADA' ";
+				if(!$resultado = mysqli_query($con, $sql_des)) die();
+
+				if($count_items > 0){
+					if(!$resultado = mysqli_query($con, $sql)) die();
+					if ($resultado) {
+						echo "EN PROCESO DE BUSQUEDA";
+					}
+				}else{
+					echo "sin_items";
 				}
 			}
 			else{
@@ -130,7 +141,8 @@ foreach ($pedidos as $ped) {
 			PROCESADO_POR = '".$procesado_por."', FECHA_ENTREGA='".$fecha."', HORA_ENTREGA='".$hora."', ENTREGADO_POR='".$entregado_por."', ESTADO='".$estado."' WHERE ID_SOLICITUD = '".$id."' ";
 
 			foreach ($items as $item) {
-				$sql_inv = "UPDATE inventarios SET ESTADO = 'EN CONSULTA' WHERE ID_INV = '".$item['ID_INV']."' ";
+				$sql_inv = "UPDATE inventarios SET ESTADO = 'EN CONSULTA' 
+				WHERE ID_INV = '".$item['ID_INV']."' AND ESTADO !='DESESTIMADO' ";
 				if(!$resultado = mysqli_query($con, $sql_inv)) die();
 			}
 			if(!$resultado = mysqli_query($con, $sql)) die();
