@@ -178,6 +178,7 @@ $(document).on('click','.update-dev',function(){
                     $.get("msj_incorrecto.php?msj="+"Programe la fecha", function(result){
                             $("#resp").html(result);
                     });
+                    refrescar();
                 }
                 else{
                     if(result == 'POR PROCESAR'){
@@ -185,16 +186,19 @@ $(document).on('click','.update-dev',function(){
                         $("#resp").html(result);
                         });
                         form(id);
+                        refrescar();
                     }
                     if(result == 'PROGRAMADA'){
                         $.get("msj_correcto.php?msj= Solicitud actualizada a FINALIZADA", function(result){
                         $("#resp").html(result);
                         });
+                        refrescar();
                     }
                     if(result == 'error'){
                         $.get("msj_incorrecto.php?msj="+"No se pudo actualizar la solicitud de devolución", function(result){
                             $("#resp").html(result);
                         });
+                        refrescar();
                     }
                 }
             }
@@ -203,6 +207,14 @@ $(document).on('click','.update-dev',function(){
 });
     function form(id_sol) {
         window.open('pdf/form-102.php?id_sol='+id_sol+'&procesado_por='+usuario);
+        window.open('pdf/form-106.php?id_sol='+id_sol);
+    }
+
+    function refrescar(){
+    
+        timout=setTimeout(function(){
+            location.reload();
+        },3000,"JavaScript");//3 segundos
     }
 
 </script>

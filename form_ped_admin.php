@@ -381,16 +381,17 @@ $estados = $mistrings->estadoSol();
 
     function refrescar(){
     
-    timout=setTimeout(function(){
-        location.reload();
-    },5000,"JavaScript");//3 segundos
-  }
-  function refresh_fast(){
+        timout=setTimeout(function(){
+            location.reload();
+        },5000,"JavaScript");//3 segundos
+    }
     
-    timout=setTimeout(function(){
-        location.reload();
-    },2000,"JavaScript");//3 segundos
-  }
+    function refresh_fast(){
+        
+        timout=setTimeout(function(){
+            location.reload();
+        },2000,"JavaScript");//3 segundos
+    }
 
 </script>
 

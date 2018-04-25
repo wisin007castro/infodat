@@ -139,7 +139,7 @@
     </td>
     <td>
         <b><center>INFOACTIVA S.R.L.</center></b>
-        Entregado por:<br>
+        Entregado por: <?php echo $pedidos[0]['ENTREGADO_POR'];?><br>
         Cedula de Identidad:<br>
         <br><center>FIRMA</center><br>
     </td>

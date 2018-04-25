@@ -130,7 +130,7 @@
 <!-- "; -->
 <?php 
 	require_once '../dompdf/autoload.inc.php';
-	// use Dompdf\Dompdf;
+	use Dompdf\Dompdf;
 
 	$dompdf = new DOMPDF();
 	$dompdf->loadHtml(ob_get_clean());
@@ -140,7 +140,7 @@
 	$pdf = $dompdf->output();
 
 	$dompdf->stream(
-		"form_101-".$id_sol.".pdf", array('Attachment' => true)
+		"form_102-".$id_sol.".pdf", array('Attachment' => false)
 	);
 
  ?>
