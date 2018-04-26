@@ -57,6 +57,17 @@ padding: 8px;
 margin-bottom: 10px;
 }
 
+.warning{
+
+  background-color: rgb(246, 246, 208);
+  border: 1px dashed rgb(246, 250, 32);
+  border-radius: 10px 10px 10px 10px;
+  -moz-border-radius: 10px 10px 10px 10px;
+  -webkit-border-radius: 10px 10px 10px 10px;
+  padding: 8px;
+  margin-bottom: 10px;
+  }
+
 .scrollable{
     height: 230px;
     overflow-y: scroll;

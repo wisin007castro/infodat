@@ -48,10 +48,13 @@ $estados = $mistrings->estadoSol();
                     <div class="box-body table-responsive no-padding">
                         <div class="scrollable-big">
                             <table class="table" id="tbEstadoSol">
-                                <thead><tr>
+                                <thead>
+                                <?php if(count($pedidos) > 0){ ?>
+                                <tr>
                                     <!-- <th></th> -->
                                     <th>#</th>
                                     <th>Solicitado por</th>
+                                    <th>Tipo de Envio</th>
                                     <th>Tipo de Consulta</th>
                                     <th>Dirección de entrega</th>
                                     <th>Fecha Solicitud</th>
@@ -64,6 +67,19 @@ $estados = $mistrings->estadoSol();
                                     <th>Estado Siguiente</th>
                                     <th></th>
                                 </tr>
+                                <?php }else{ ?>
+                                    <div class="col-xs-12">
+                                    <div class='warning' style="text-align: center">
+                                        <span class="label label-warning"> Sin Solicitudes </span><br/>
+                                        <label class="text-muted">
+                                            No se encontraron registros                                          
+                                        </label> 
+                                    </div>
+                                    </div> 
+                                <?php 
+                                }
+                                
+                                ?>
                                 </thead>
                                 <tbody>
                                 <?php foreach ($pedidos as $pedido) { ?>
@@ -71,6 +87,7 @@ $estados = $mistrings->estadoSol();
                                     <tr>
                                         <td><?php echo $pedido["ID_SOLICITUD"]; ?></td>
                                         <td><?php echo $pedido["NOMBRE"]." ".$pedido["APELLIDO"]; ?></td>
+                                        <td><?php echo $pedido["TIPO_ENVIO"]; ?></td>
                                         <td><?php echo $pedido["TIPO_CONSULTA"]; ?></td>
                                         <td><?php echo $pedido["DIRECCION_ENTREGA"]; ?></td>
                                         <td><?php echo $pedido["FECHA_SOLICITUD"]; ?></td>
@@ -332,7 +349,7 @@ $estados = $mistrings->estadoSol();
                 if (result == 'DESPACHADA') {
                     $.get("msj_correcto.php?msj="+"Solicitud actualizada a ATENDIDA/ENTREGADA", function(result){
                     $("#resp").html(result);
-                    // $('#modal-default').modal('hidde');
+                    refresh_fast();
                     });
                 }
                 if(result == 'error'){

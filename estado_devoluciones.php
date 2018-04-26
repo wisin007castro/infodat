@@ -5,7 +5,7 @@ require_once 'conexionClass.php';
 require_once 'stringsClass.php';
 
 $conexion = new MiConexion();
-$anios = $conexion->anios();
+// $anios = $conexion->anios();
 $devoluciones = $conexion->devoluciones($usuario_session['ID_CLIENTE']);
 // var_dump($devoluciones);
 

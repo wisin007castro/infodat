@@ -115,8 +115,11 @@ foreach ($pedidos as $ped) {
 	
 			// mail($destinatario,$asunto,$cuerpo,$headers);
 				//echo $destinatario." ".$asunto." ".$cuerpo." ".$headers;
-				$sql_des = "UPDATE inventarios SET ESTADO = 'DESESTIMADO' WHERE ESTADO != 'DESPACHADA' ";
-				if(!$resultado = mysqli_query($con, $sql_des)) die();
+				foreach ($items as $item) {
+					$sql_des = "UPDATE inventarios SET ESTADO = 'DESESTIMADO' WHERE ESTADO != 'DESPACHADA' AND ID_INV = '".$item['ID_INV']."' ";
+					if(!$resultado = mysqli_query($con, $sql_des)) die();
+				}
+
 
 				if($count_items > 0){
 					if(!$resultado = mysqli_query($con, $sql)) die();

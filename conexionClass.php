@@ -218,7 +218,7 @@ class MiConexion{
     }
 
     public function pedidos($id_cliente){
-        $sql = "SELECT s.ID_SOLICITUD, s.ID_USER, u.NOMBRE, u.APELLIDO, s.TIPO_CONSULTA, s.DIRECCION_ENTREGA, s.FECHA_SOLICITUD, s.HORA_SOLICITUD, s.PROCESADO_POR, s.FECHA_ENTREGA, s.HORA_ENTREGA, s.ENTREGADO_POR, s.ESTADO, s.REGIONAL
+        $sql = "SELECT s.ID_SOLICITUD, s.ID_USER, u.NOMBRE, u.APELLIDO, s.TIPO_ENVIO, s.TIPO_CONSULTA, s.DIRECCION_ENTREGA, s.FECHA_SOLICITUD, s.HORA_SOLICITUD, s.PROCESADO_POR, s.FECHA_ENTREGA, s.HORA_ENTREGA, s.ENTREGADO_POR, s.ESTADO, s.REGIONAL
                 FROM solicitud AS s JOIN usuarios AS u ON s.ID_USER = u.ID_USER 
                 WHERE s.ID_CLIENTE = $id_cliente
                 ORDER BY s.ID_SOLICITUD DESC";
@@ -226,7 +226,7 @@ class MiConexion{
     }
 
     public function pedidos_admin(){
-        $sql = "SELECT s.ID_SOLICITUD, s.ID_USER, u.NOMBRE, u.APELLIDO, s.TIPO_CONSULTA, s.DIRECCION_ENTREGA, s.FECHA_SOLICITUD, 
+        $sql = "SELECT s.ID_SOLICITUD, s.ID_USER, u.NOMBRE, u.APELLIDO, s.TIPO_ENVIO, s.TIPO_CONSULTA, s.DIRECCION_ENTREGA, s.FECHA_SOLICITUD, 
                       s.HORA_SOLICITUD, s.PROCESADO_POR, s.FECHA_ENTREGA, s.HORA_ENTREGA, s.ENTREGADO_POR, s.ESTADO, s.REGIONAL
                 FROM solicitud AS s JOIN usuarios AS u ON s.ID_USER = u.ID_USER 
                 ORDER BY s.ESTADO DESC, s.ID_SOLICITUD  DESC";
@@ -306,7 +306,13 @@ class MiConexion{
     }
 
     public function modulos($id_user){
-        $sql = "SELECT TIPO FROM parametros WHERE ID_USER = $id_user ";
+        $sql = "SELECT * FROM parametros WHERE ID_USER = $id_user AND ACCESO = 'SI' ";
+        return $this-> getArraySQL($sql);
+    }
+
+    public function asignacion($id_user, $modulo){
+        $sql = "SELECT * FROM parametros WHERE ID_USER = $id_user 
+                AND ACCESO = 'SI' AND TIPO = '".$modulo."' AND HABILITADO = 'SI' ";
         return $this-> getArraySQL($sql);
     }
 

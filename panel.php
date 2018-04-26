@@ -5,9 +5,9 @@ $con = new MiConexion();
 $modulos = $con->modulos($usuario_session['ID_USER']);
 
 
-$modulos = array_column($modulos, 'TIPO');
+$modulos = array_column($modulos, 'TIPO');//SOLO LA COLUMNA TIPO
 
-$modulos = array_unique($modulos);
+$modulos = array_unique($modulos);//EQUIVALENTE A UN DISTINCT
 
 ?>
 
@@ -95,7 +95,7 @@ $modulos = array_unique($modulos);
           </ul>
         </li>
         <?php endif ?>
-        <?php if(in_array("gestion_usuarios", $modulos) || in_array("parametricas", $modulos)):?>
+        <?php if(in_array("gestion_usuarios", $modulos) || in_array("parametricas", $modulos) || $usuario_session['TIPO'] == 'IA_ADMIN'):?>
         <li class="treeview">
           <a href="#">
             <i class="fa fa-pencil-square-o"></i>

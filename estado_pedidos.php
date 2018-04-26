@@ -79,6 +79,7 @@ if($pedidos > 0){
                                 <th></th>
                                 <th>Nro. Solicitud</th>
                                 <th>Solicitado por</th>
+                                <th>Tipo de Envío</th>
                                 <th>Tipo de Consulta</th>
                                 <th>Dirección de entrega</th>
                                 <th>Fecha/Hora Solicitud</th>
@@ -95,6 +96,7 @@ if($pedidos > 0){
                                     <td><a href='javascript:void(0);' onclick='cargar_formulario("<?php echo $pedido["ID_SOLICITUD"]; ?>");'><i style='font-size:14px;' class='fa fa-expand text-blue'></i></a></td>
                                     <td><?php echo $pedido["ID_SOLICITUD"]; ?></td>
                                     <td><?php echo $pedido["NOMBRE"]." ".$pedido["APELLIDO"]; ?></td>
+                                    <td><?php echo $pedido["TIPO_ENVIO"]; ?></td>
                                     <td><?php echo $pedido["TIPO_CONSULTA"]; ?></td>
                                     <td><?php echo $pedido["DIRECCION_ENTREGA"]; ?></td>
                                     <td><?php echo $pedido["FECHA_SOLICITUD"]." ".$pedido["HORA_SOLICITUD"]; ?></td>

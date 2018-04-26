@@ -110,7 +110,7 @@
                     <th>DESCRIPCION 2</th>
                     <th>DESCRIPCION 3</th>
                     <th>DESCRIPCION 4</th>
-                    <th>CANT</th>
+                    <th>CANTIDAD</th>
                     <th>UNIDAD</th>
                     <th>FECHA INICIO</th>
                     <th>FECHA FIN</th>
@@ -156,7 +156,7 @@
                     <th>DESCRIPCION 2</th>
                     <th>DESCRIPCION 3</th>
                     <th>DESCRIPCION 4</th>
-                    <th>CANT</th>
+                    <th>CANTIDAD</th>
                     <th>UNIDAD</th>
                     <th>FECHA INICIO</th>
                     <th>FECHA FIN</th>
@@ -174,7 +174,7 @@
         </div>
       <!-- /.row -->
 
-      <?php if ($usuario_session['TIPO'] == 'CONSULTA') { ?>
+      <?php //if ($usuario_session['TIPO'] == 'CONSULTA') { ?>
       <div class="row"><b><span class="text-yellow pull-right" id="msj_urgente"></span></b></div>
         <div class="row">
           <div class="col-lg-5 col-xs-6">
@@ -187,7 +187,7 @@
           <div class="col-lg-4 col-xs-6">
             <div class="form-group">
               <label>Observaciones</label>
-              <textarea style='text-transform:uppercase' name="observacion" class="form-control" rows="4"></textarea>
+              <textarea style='text-transform:uppercase' name="observacion" class="form-control" rows="3"></textarea>
             </div>
           </div>
           <div class="col-lg-1 col-xs-6">
@@ -195,20 +195,32 @@
             <div class="form-group">
               <div class="radio">
                 <label>
-                  <input type="radio" name="optionsRadios" id="normal" value="NORMAL" checked="">
+                  <input type="radio" name="tipo_envio" id="fisico" value="FISICO">
+                  Fisico
+                </label>
+              </div>
+              <div class="radio">
+                <label>
+                  <input type="radio" name="tipo_envio" id="internet" value="INTERNET">
+                  Internet
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-1 col-xs-6">
+            <br>
+            <div class="form-group">
+              <div class="radio">
+                <label>
+                  <input type="radio" name="tipo_consulta" id="normal" value="NORMAL" checked="">
                   Normal
                 </label>
               </div>
               <div class="radio">
                 <label>
-                  <input type="radio" name="optionsRadios" id="urgente" value="URGENTE">
+                  <input type="radio" name="tipo_consulta" id="urgente" value="URGENTE">
                   Urgente
-                </label>
-              </div>
-              <div class="radio">
-                <label>
-                  <input type="radio" name="optionsRadios" id="internet" value="INTERNET">
-                  Internet
                 </label>
               </div>
             </div>
@@ -225,7 +237,7 @@
           </div>
         </div>
         
-        <?php } ?>
+        <?php //} ?>
 
       </form>
       <!-- /.row -->

@@ -25,8 +25,8 @@ foreach ($_POST as $key => $value) {
 if($c > 0){
 
 	if($_POST['direccion'] != ""){
-	$sql = "INSERT INTO solicitud (ID_CLIENTE, ID_USER, TIPO_CONSULTA, DIRECCION_ENTREGA, OBSERVACION, FECHA_SOLICITUD, HORA_SOLICITUD, ESTADO, REGIONAL) 
-		VALUES ('".$_POST['cliente']."','".$_POST['usuario']."','".$_POST['optionsRadios']."','".$_POST['direccion']."', '".$_POST['observacion']."', '".$fecha."','".$hora."', 'POR PROCESAR','".$_POST['regional']."')";
+	$sql = "INSERT INTO solicitud (ID_CLIENTE, ID_USER, TIPO_ENVIO, TIPO_CONSULTA, DIRECCION_ENTREGA, OBSERVACION, FECHA_SOLICITUD, HORA_SOLICITUD, ESTADO, REGIONAL) 
+		VALUES ('".$_POST['cliente']."','".$_POST['usuario']."','".$_POST['tipo_envio']."','".$_POST['tipo_consulta']."','".$_POST['direccion']."', '".$_POST['observacion']."', '".$fecha."','".$hora."', 'POR PROCESAR','".$_POST['regional']."')";
 
 	if(!$result = mysqli_query($con, $sql)) die();//Guardando la solicitud
 

@@ -6,6 +6,10 @@
   $conexion = new MiConexion();
   
   $solicitudes = $conexion->solicitudes($usuario_session['ID_CLIENTE']);
+  $asignacion = $conexion->asignacion($usuario_session['ID_USER'], 'solicitud_devoluciones');
+
+  $asignacion = array_column($asignacion, 'ASIGNACION');//seleccionando una columna
+  
   // var_dump($solicitudes);
   $mistrings = new MiStrings();
   $meses = $mistrings->meses();
@@ -14,6 +18,12 @@
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
+
+  <?php   
+    // foreach($asignacion as $as){
+  // var_dump($asignacion);
+    // }
+  ?>
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
@@ -58,12 +68,13 @@
                 </tr>
               </thead>
               <tbody>
-              <?php foreach ($solicitudes as $sol) {  
-                if($sol['ID_USER'] == $usuario_session['ID_USER'] ){
+              <?php 
+              // foreach($asignacion as $mod){
+               foreach ($solicitudes as $sol) {  
+                if(in_array('TODOS', $asignacion)){//todos los usuarios
                 ?>
                   <tr>
                     <td>
-
                       <?php if ($sol['ESTADO_INV'] == 'EN CONSULTA'): ?>
                         <a href='javascript:void(0);' onclick='cargar_formulario("<?php echo $sol["ID_INV"]; ?>");'><i style='font-size:14px;' class='fa fa-cart-arrow-down text-green'></i></a>
                       <?php else: ?>
@@ -85,7 +96,35 @@
                     <td><?php echo $sol["ESTADO_INV"]; ?></td>
                   </tr>  
               <?php }
-                  } ?>
+              if($sol['ESTADO_INV'] == 'EN CONSULTA' AND ($sol['ID_USER'] == $usuario_session['ID_USER'] || in_array('ASIGNACION', $asignacion)) ){?>
+                  <tr>
+                    <td>
+
+                      <?php// if ($sol['ESTADO_INV'] == 'EN CONSULTA'): ?>
+                        <a href='javascript:void(0);' onclick='cargar_formulario("<?php echo $sol["ID_INV"]; ?>");'><i style='font-size:14px;' class='fa fa-cart-arrow-down text-green'></i></a>
+                      <?php //else: ?>
+                        <!-- <a href='javascript:void(0);'><i style='font-size:14px;' class='fa fa-cart-arrow-down text-muted'></i></a> -->
+                      <?php// endif ?>
+
+                    </td>
+                    <td><?php echo $sol["ID_SOLICITUD"]; ?></td>
+                    <td><?php echo $sol["CAJA"]; ?></td>
+                    <td><?php echo $sol["ITEM"]; ?></td>
+                    <td><?php echo $sol["DESC_1"]; ?></td>
+                    <td><?php echo $sol["DESC_2"]; ?></td>
+                    <td><?php echo $sol["DESC_3"]; ?></td>
+                    <td><?php echo $sol["DESC_4"]; ?></td>
+                    <td><?php echo $sol["CANTIDAD"]." ".$sol["UNIDAD"]; ?></td>
+                    <td><?php echo $sol["DIA_I"]."/".$sol["MES_I"]."/".$sol["ANO_I"]; ?></td>
+                    <td><?php echo $sol["DIA_F"]."/".$sol["MES_F"]."/".$sol["ANO_F"]; ?></td>
+                    <td><?php echo $sol["DEPARTAMENTO"]; ?></td>
+                    <td><?php echo $sol["ESTADO_INV"]; ?></td>
+                  </tr> 
+              <?php
+                  }
+                }
+              //  } 
+               ?>
               </tbody>
             </table>
             </div>
