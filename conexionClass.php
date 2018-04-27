@@ -159,6 +159,11 @@ class MiConexion{
         return $this->getArraySQL($sql);
     }
 
+    public function item_auth($id_sol){
+        $sql = "SELECT * FROM items_auth WHERE ID_SOLICITUD = $id_sol";
+        return $this->getArraySQL($sql);
+    }
+
     public function item_sol(){
         $sql = "SELECT * FROM items";
         return $this->getArraySQL($sql);
@@ -220,6 +225,14 @@ class MiConexion{
     public function pedidos($id_cliente){
         $sql = "SELECT s.ID_SOLICITUD, s.ID_USER, u.NOMBRE, u.APELLIDO, s.TIPO_ENVIO, s.TIPO_CONSULTA, s.DIRECCION_ENTREGA, s.FECHA_SOLICITUD, s.HORA_SOLICITUD, s.PROCESADO_POR, s.FECHA_ENTREGA, s.HORA_ENTREGA, s.ENTREGADO_POR, s.ESTADO, s.REGIONAL
                 FROM solicitud AS s JOIN usuarios AS u ON s.ID_USER = u.ID_USER 
+                WHERE s.ID_CLIENTE = $id_cliente
+                ORDER BY s.ID_SOLICITUD DESC";
+        return $this->getArraySQL($sql);
+    }
+
+    public function pedidos_auth($id_cliente){
+        $sql = "SELECT s.ID_SOLICITUD, s.ID_USER, u.NOMBRE, u.APELLIDO, s.TIPO_ENVIO, s.TIPO_CONSULTA, s.DIRECCION_ENTREGA, s.FECHA_SOLICITUD, s.HORA_SOLICITUD, s.PROCESADO_POR, s.FECHA_ENTREGA, s.HORA_ENTREGA, s.ENTREGADO_POR, s.ESTADO, s.REGIONAL
+                FROM solicitud_auth AS s JOIN usuarios AS u ON s.ID_USER = u.ID_USER 
                 WHERE s.ID_CLIENTE = $id_cliente
                 ORDER BY s.ID_SOLICITUD DESC";
         return $this->getArraySQL($sql);
@@ -305,6 +318,11 @@ class MiConexion{
         return $this-> getArraySQL($sql);
     }
 
+    public function solicitud_auth_id($id_sol){
+        $sql = "SELECT * FROM solicitud_auth WHERE ID_SOLICITUD = $id_sol ";
+        return $this-> getArraySQL($sql);
+    }
+
     public function modulos($id_user){
         $sql = "SELECT * FROM parametros WHERE ID_USER = $id_user AND ACCESO = 'SI' ";
         return $this-> getArraySQL($sql);
@@ -312,6 +330,12 @@ class MiConexion{
 
     public function asignacion($id_user, $modulo){
         $sql = "SELECT * FROM parametros WHERE ID_USER = $id_user 
+                AND ACCESO = 'SI' AND TIPO = '".$modulo."' AND HABILITADO = 'SI' ";
+        return $this-> getArraySQL($sql);
+    }
+
+    public function asign_auth($id_user, $modulo){
+        $sql = "SELECT * FROM parametros WHERE ASIGNACION = $id_user 
                 AND ACCESO = 'SI' AND TIPO = '".$modulo."' AND HABILITADO = 'SI' ";
         return $this-> getArraySQL($sql);
     }

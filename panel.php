@@ -9,6 +9,11 @@ $modulos = array_column($modulos, 'TIPO');//SOLO LA COLUMNA TIPO
 
 $modulos = array_unique($modulos);//EQUIVALENTE A UN DISTINCT
 
+//
+$asignacion = $con->asign_auth($usuario_session['ID_USER'], 'autorizacion');//ASIGNADO PARA APROBAR SOLICITUD
+
+$asignacion = array_column($asignacion, 'ASIGNACION');//seleccionando una columna
+
 ?>
 
   <!-- Left side column. contains the logo and sidebar -->
@@ -31,12 +36,13 @@ $modulos = array_unique($modulos);//EQUIVALENTE A UN DISTINCT
         <li class="header">Menú de Navegación</li>
 
         <?php 
-
+        // var_dump(($asignacion));
         // if($usuario_session['TIPO'] == 'IA_CONSULTA' || $usuario_session['TIPO'] == 'VISOR'){
          ?>
         <?php if(in_array("solicitud_consultas", $modulos)
          || in_array("solicitud_devoluciones", $modulos)
-         || $usuario_session['TIPO'] == 'IA_ADMIN'):?>
+         || $usuario_session['TIPO'] == 'IA_ADMIN'
+         || in_array($usuario_session['ID_USER'], $asignacion) ):?>
         <li class="treeview">
           <a href="#">
             <i class="fa fa-search"></i>
@@ -46,7 +52,9 @@ $modulos = array_unique($modulos);//EQUIVALENTE A UN DISTINCT
             </span>
           </a>
           <ul class="treeview-menu">
-          
+            <?php if(in_array($usuario_session['ID_USER'], $asignacion)): ?>
+            <li><a href="form_consulta_auth.php"><i class="fa fa-circle-o"></i>Aprobación Consultas </a></li>
+            <?php endif ?>
             <?php if(in_array("solicitud_consultas", $modulos) || $usuario_session['TIPO'] == 'IA_ADMIN'): ?>
             <li><a href="reportes.php"><i class="fa fa-circle-o"></i> Consultas </a></li>
             <?php endif ?>
@@ -90,7 +98,7 @@ $modulos = array_unique($modulos);//EQUIVALENTE A UN DISTINCT
           </a>
           <ul class="treeview-menu">
             <?php if(in_array("emision_reportes", $modulos)  || $usuario_session['TIPO'] == 'IA_ADMIN'): ?>
-            <li><a href="form_reporte_con_dev.php"><i class="fa fa-circle-o"></i> Reporte de Acceso</a></li>
+            <li><a href="form_reporte_con_dev.php"><i class="fa fa-circle-o"></i> Reporte de Solicitudes</a></li>
             <?php endif ?>
           </ul>
         </li>

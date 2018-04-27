@@ -8,6 +8,8 @@ $conexion = new MiConexion();
 // $anios = $conexion->anios();
 $devoluciones = $conexion->devoluciones($usuario_session['ID_CLIENTE']);
 // var_dump($devoluciones);
+$asignacion = $conexion->asignacion($usuario_session['ID_USER'], 'estado_devoluciones');//Cambiar segun modulo
+$asignacion = array_column($asignacion, 'ASIGNACION');//seleccionando una columna
 
 $mistrings = new MiStrings();
 $meses = $mistrings->meses();
@@ -18,7 +20,7 @@ $finalizada = 0;
 
 if($devoluciones > 0){
     foreach ($devoluciones as $dev) {
-        if ($dev['ID_USER'] == $usuario_session['ID_USER'] && $dev['REGIONAL'] == $usuario_session['REGIONAL']) {
+        if ((in_array('TODOS', $asignacion) || in_array($dev['ID_USER'], $asignacion) || $dev['ID_USER'] == $usuario_session['ID_USER'] ) && $dev['REGIONAL'] == $usuario_session['REGIONAL']) {
             if($dev["ESTADO"] == "POR PROCESAR"){
                 $por_proces++;
             }
@@ -33,7 +35,6 @@ if($devoluciones > 0){
 }
 
 ?>
-
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -74,7 +75,7 @@ if($devoluciones > 0){
                             </thead>
                             <tbody>
                             <?php foreach ($devoluciones as $dev) { ?>
-                                <?php if ($dev['ID_USER'] == $usuario_session['ID_USER'] && $dev['REGIONAL'] == $usuario_session['REGIONAL']): ?>
+                                <?php if ((in_array('TODOS', $asignacion) || in_array($dev['ID_USER'], $asignacion) || $dev['ID_USER'] == $usuario_session['ID_USER'] ) && $dev['REGIONAL'] == $usuario_session['REGIONAL']): ?>
                                     
                                     <tr>
                                     <td><a href='javascript:void(0);' onclick='cargar_formulario("<?php echo $dev["ID_DEV"]; ?>");'><i style='font-size:14px;' class='fa fa-expand text-blue'></i></a></td>

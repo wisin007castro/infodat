@@ -6,6 +6,8 @@
   $conexion = new MiConexion();
   $anios = $conexion->anios($usuario_session['ID_CLIENTE']);
   // var_dump($usuario);
+  $asignacion = $conexion->asignacion($usuario_session['ID_USER'], 'autorizacion');//Cambiar segun modulo
+  //$asignacion = array_column($asignacion, 'ASIGNACION');//seleccionando una columna
 
   $mistrings = new MiStrings();
   $meses = $mistrings->meses();
@@ -17,7 +19,7 @@
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <?php 
-
+      // var_dump($asignacion);
      ?>
     <section class="content-header">
       <h1>
@@ -195,7 +197,7 @@
             <div class="form-group">
               <div class="radio">
                 <label>
-                  <input type="radio" name="tipo_envio" id="fisico" value="FISICO">
+                  <input type="radio" name="tipo_envio" id="fisico" value="FISICO" checked="">
                   Fisico
                 </label>
               </div>
@@ -276,7 +278,17 @@ $(document).ready(function(){
 
   //Envio de formulario
   $('#btn-ingresar').click(function(){
+    var autorizacion = "<?php echo count($asignacion); ?>";
+    //console.log(variableJS);
+    if (autorizacion > 0) {
+      var url = "controllers/consultaAuthController.php";
+    }else{
       var url = "controllers/consultaController.php";
+    }
+    guardar(url);
+  });
+  function guardar(ruta){
+      url = ruta;
       var timout;
       $.ajax({                        
          type: "POST",                 
@@ -309,9 +321,8 @@ $(document).ready(function(){
                   }
               }
           }
-     });
-  });
-
+     }); 
+  }
   // Limpiamos el cuerpo tbody
   $("#limpiar").click(function(){
     $("#bNoCaja").val("");

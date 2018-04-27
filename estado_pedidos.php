@@ -7,8 +7,10 @@ require_once 'stringsClass.php';
 $conexion = new MiConexion();
 
 $pedidos = $conexion->pedidos($usuario_session['ID_CLIENTE']);
-// var_dump($usuario_session);
-// echo "------".$usuario_session['ID_CLIENTE'];
+
+$asignacion = $conexion->asignacion($usuario_session['ID_USER'], 'estado_consultas');//Cambiar segun modulo
+$asignacion = array_column($asignacion, 'ASIGNACION');//seleccionando una columna
+
 
 $mistrings = new MiStrings();
 $meses = $mistrings->meses();
@@ -23,7 +25,7 @@ $finalizada = 0;
 
 if($pedidos > 0){
     foreach($pedidos as $ped){
-        if ($ped['ID_USER'] == $usuario_session['ID_USER'] && $ped['REGIONAL'] == $usuario_session['REGIONAL']) {
+        if ((in_array('TODOS', $asignacion) || in_array($ped['ID_USER'], $asignacion) || $ped['ID_USER'] == $usuario_session['ID_USER'] ) && $ped['REGIONAL'] == $usuario_session['REGIONAL']) {
                     
             if($ped["TIPO_CONSULTA"] == "NORMAL"){
                 $normal++;
@@ -50,6 +52,11 @@ if($pedidos > 0){
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
+<?php   
+    // foreach($asignacion as $as){
+//   var_dump($asignacion);
+    // }
+  ?>
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
@@ -91,7 +98,7 @@ if($pedidos > 0){
                             </thead>
                             <tbody>
                             <?php foreach ($pedidos as $pedido) { ?>
-                                <?php if ($pedido['ID_USER'] == $usuario_session['ID_USER'] && $pedido['REGIONAL'] == $usuario_session['REGIONAL']): ?>
+                                <?php if ((in_array('TODOS', $asignacion) || in_array($ped['ID_USER'], $asignacion) || $ped['ID_USER'] == $usuario_session['ID_USER'] ) && $pedido['REGIONAL'] == $usuario_session['REGIONAL']): ?>
                                     <tr>
                                     <td><a href='javascript:void(0);' onclick='cargar_formulario("<?php echo $pedido["ID_SOLICITUD"]; ?>");'><i style='font-size:14px;' class='fa fa-expand text-blue'></i></a></td>
                                     <td><?php echo $pedido["ID_SOLICITUD"]; ?></td>
@@ -227,7 +234,7 @@ if($pedidos > 0){
       // $("#error").html("<div class='modal1'><div class='center1'> <center> <img src='img/gif-load.gif'> Buscando Informacion...</center></div></div>");
       // var id_inv = $("#id_inv").val();
       $("#seleccionados tbody").html("");
-        var id_usuario = $("#id_user").val();
+        // var id_usuario = $("#id_user").val();
 
       $.getJSON("obtieneEstadoSol.php",{id:id_sol},function(objetosretorna){
           // console.log(id_inv);

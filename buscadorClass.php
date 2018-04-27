@@ -53,6 +53,18 @@ class Json
         	$conexion = new conectorDB;
 			$this->json = $conexion->EjecutarSentencia($consulta);
 			return $this->json;
+	}
+
+	public function estado_pedidos_auth($filtro){
+        $consulta = "SELECT s.ID_SOLICITUD, inv.CAJA, inv.ITEM, inv.DESC_1, 
+		inv.DESC_2, inv.DESC_3, inv.DESC_4, inv.CANTIDAD, inv.UNIDAD, inv.DIA_I, inv.MES_I, 
+		inv.ANO_I, inv.DIA_F, inv.MES_F, inv.ANO_F, inv.DEPARTAMENTO, inv.ESTADO, inv.ID_INV
+                FROM solicitud_auth AS s JOIN usuarios AS u ON s.ID_USER = u.ID_USER 
+                JOIN items_auth AS item ON s.ID_SOLICITUD = item.ID_SOLICITUD
+                JOIN inventarios AS inv ON inv.ID_INV = item.ID_INV ".$filtro."";
+        	$conexion = new conectorDB;
+			$this->json = $conexion->EjecutarSentencia($consulta);
+			return $this->json;
     }
 
     public function estado_devoluciones($filtro){

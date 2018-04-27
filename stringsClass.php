@@ -27,6 +27,7 @@ Class MiStrings{
 	public function modulos(){
 		return array(
 			"solicitud_consultas",
+			"autorizacion",
 			"solicitud_devoluciones",//form_sol_dev.php
 			"estado_consultas",
 			"estado_devoluciones",

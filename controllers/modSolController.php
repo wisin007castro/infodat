@@ -144,8 +144,16 @@ foreach ($pedidos as $ped) {
 			PROCESADO_POR = '".$procesado_por."', FECHA_ENTREGA='".$fecha."', HORA_ENTREGA='".$hora."', ENTREGADO_POR='".$entregado_por."', ESTADO='".$estado."' WHERE ID_SOLICITUD = '".$id."' ";
 
 			foreach ($items as $item) {
-				$sql_inv = "UPDATE inventarios SET ESTADO = 'EN CONSULTA' 
-				WHERE ID_INV = '".$item['ID_INV']."' AND ESTADO !='DESESTIMADO' ";
+				
+				if ($ped["TIPO_ENVIO"] == 'INTERNET') {
+					$sql_inv = "UPDATE inventarios SET ESTADO = 'EN CUSTODIA' 
+					WHERE ID_INV = '".$item['ID_INV']."' AND ESTADO !='DESESTIMADO' ";
+				}
+				else {
+					$sql_inv = "UPDATE inventarios SET ESTADO = 'EN CONSULTA' 
+					WHERE ID_INV = '".$item['ID_INV']."' AND ESTADO !='DESESTIMADO' ";
+				}
+
 				if(!$resultado = mysqli_query($con, $sql_inv)) die();
 			}
 			if(!$resultado = mysqli_query($con, $sql)) die();

@@ -71,15 +71,15 @@
               <?php 
               // foreach($asignacion as $mod){
                foreach ($solicitudes as $sol) {  
-                if(in_array('TODOS', $asignacion)){//todos los usuarios
+                if($sol['ESTADO_INV'] == 'EN CONSULTA' AND in_array('TODOS', $asignacion)){//todos los usuarios
                 ?>
                   <tr>
                     <td>
-                      <?php if ($sol['ESTADO_INV'] == 'EN CONSULTA'): ?>
+                      <?php //if ($sol['ESTADO_INV'] == 'EN CONSULTA'): ?>
                         <a href='javascript:void(0);' onclick='cargar_formulario("<?php echo $sol["ID_INV"]; ?>");'><i style='font-size:14px;' class='fa fa-cart-arrow-down text-green'></i></a>
-                      <?php else: ?>
-                        <a href='javascript:void(0);'><i style='font-size:14px;' class='fa fa-cart-arrow-down text-muted'></i></a>
-                      <?php endif ?>
+                      <?php// else: ?>
+                        <!-- <a href='javascript:void(0);'><i style='font-size:14px;' class='fa fa-cart-arrow-down text-muted'></i></a> -->
+                      <?php// endif ?>
 
                     </td>
                     <td><?php echo $sol["ID_SOLICITUD"]; ?></td>
@@ -96,7 +96,7 @@
                     <td><?php echo $sol["ESTADO_INV"]; ?></td>
                   </tr>  
               <?php }
-              if($sol['ESTADO_INV'] == 'EN CONSULTA' AND ($sol['ID_USER'] == $usuario_session['ID_USER'] || in_array('ASIGNACION', $asignacion)) ){?>
+              elseif($sol['ESTADO_INV'] == 'EN CONSULTA' AND ($sol['ID_USER'] == $usuario_session['ID_USER'] || in_array($sol['ID_USER'], $asignacion)) ){?>
                   <tr>
                     <td>
 
@@ -188,13 +188,13 @@
         <div class="col-lg-6 col-xs-6">
           <div class="form-group">
             <label>Dirección de recojo</label>
-            <input class="form-control" name="direccion" value="<?php echo $usuario_session['DIRECCION']; ?>"></input>
+            <input style='text-transform:uppercase' class="form-control" name="direccion" value="<?php echo $usuario_session['DIRECCION']; ?>"></input>
           </div>
         </div>
         <div class="col-lg-5 col-xs-6">
           <div class="form-group">
             <label>Observaciones</label>
-            <textarea class="form-control" rows="4" name="observacion" placevaholder="Ingrese los detalles"></textarea>
+            <textarea style='text-transform:uppercase' class="form-control" rows="4" name="observacion" placevaholder="Ingrese los detalles"></textarea>
           </div>
         </div>
         <!-- ./col -->
@@ -240,17 +240,20 @@
                 if (result == 'success') {
                     $.get("msj_correcto.php?msj=Solicitud realizada exitosamente", function(result){
                     $("#resp").html(result);
+                    refrescar();
                     });
                 }
                 else{
                     if(result == 'vacio'){
                         $.get("msj_incorrecto.php?msj="+"Seleccione al menos un ITEM e ingrese los detalles", function(result){
                             $("#resp").html(result);
+                            refrescar();
                         });
                     }
                     else{
                         $.get("msj_incorrecto.php?msj="+"No se pudo realizar la solicitud", function(result){
                             $("#resp").html(result);
+                            refrescar();
                         });
                     }
                 }
@@ -303,6 +306,13 @@
     function deleteRow(btn) {
       var row = btn.parentNode.parentNode;
       row.parentNode.removeChild(row);
+    }
+
+    function refrescar(){
+  
+      timout=setTimeout(function(){
+          location.reload();
+      },3000,"JavaScript");//3 segundos
     }
 </script>
  

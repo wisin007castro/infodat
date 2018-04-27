@@ -52,7 +52,7 @@ $estados = $mistrings->estadoSol();
                                 <?php if(count($pedidos) > 0){ ?>
                                 <tr>
                                     <!-- <th></th> -->
-                                    <th>#</th>
+                                    <th>Solicitud</th>
                                     <th>Solicitado por</th>
                                     <th>Tipo de Envio</th>
                                     <th>Tipo de Consulta</th>
