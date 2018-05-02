@@ -6,9 +6,9 @@ class MiConexion{
     //Función que crea y devuelve un objeto de conexión a la base de datos y chequea el estado de la misma. 
     function conectarBD(){ 
             $server = "localhost";
-            $usuario = "admin";
-            $pass = "admin123";
-            $BD = "infoact_consultas";
+            $usuario = "root";
+            $pass = "";
+            $BD = "infoact_consultas_pruebas";
             //variable que guarda la conexión de la base de datos
             $conexion = mysqli_connect($server, $usuario, $pass, $BD); 
             //Comprobamos si la conexión ha tenido exito

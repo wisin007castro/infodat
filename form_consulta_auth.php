@@ -4,6 +4,28 @@ require_once 'header.php';
 require_once 'conexionClass.php';
 require_once 'stringsClass.php';
 
+//array_column for PHP <= 5.5 versions
+if (!function_exists('array_column')) {
+    function array_column(array $array, $columnKey, $indexKey = null)
+    {
+        $result = array();
+        foreach ($array as $subArray) {
+            if (!is_array($subArray)) {
+                continue;
+            } elseif (is_null($indexKey) && array_key_exists($columnKey, $subArray)) {
+                $result[] = $subArray[$columnKey];
+            } elseif (array_key_exists($indexKey, $subArray)) {
+                if (is_null($columnKey)) {
+                    $result[$subArray[$indexKey]] = $subArray;
+                } elseif (array_key_exists($columnKey, $subArray)) {
+                    $result[$subArray[$indexKey]] = $subArray[$columnKey];
+                }
+            }
+        }
+        return $result;
+    }
+  }
+
 $conexion = new MiConexion();
 
 $pedidos = $conexion->pedidos_auth($usuario_session['ID_CLIENTE']);

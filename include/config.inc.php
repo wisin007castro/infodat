@@ -1,9 +1,9 @@
 <?php
 	# configuration for database
 	$_config['database']['hostname'] = "localhost";
-	$_config['database']['username'] = "admin";
-	$_config['database']['password'] = "admin123";
-	$_config['database']['database'] = "infoact_consultas";
+	$_config['database']['username'] = "root";
+	$_config['database']['password'] = "";
+	$_config['database']['database'] = "infoact_consultas_pruebas";
 	
 	# connect the database server
 	$link = new mysqldb();
