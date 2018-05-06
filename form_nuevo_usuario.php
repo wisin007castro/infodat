@@ -9,28 +9,30 @@
 
   $deptos_access = $conexion->dptos_access($usuario_session['ID_CLIENTE']); 
   // var_dump($deptos_access);
+  $modulos = $con->modulos($usuario_session['ID_USER']);
+  $modulos = array_column($modulos, 'TIPO');//SOLO LA COLUMNA TIPO
+  $modulos = array_unique($modulos);//EQUIVALENTE A UN DISTINCT
 
  ?>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <section class="content">
+    <section>
       <div id="resp" class="col-lg-12">
     </section>
+
     <section class="content-header">
-      <h1>
-        Registro de usuarios
-        <!-- <small>Control panel</small> -->
-      </h1>
       <ol class="breadcrumb">
         <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Registro de usuarios</li>
       </ol>
+      <h1>
+        Registro de usuarios
+      </h1>
     </section>
 
-
-
+<?php if(in_array("gestion_usuarios", $modulos) || $usuario_session['TIPO'] == 'IA_ADMIN'): ?>
     <!-- Main content -->
     <section class="content">
       <div class="box box-default">
@@ -75,13 +77,13 @@
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>Nombres</label>
-                  <input type="text" name="nombre" placeholder="" class="form-control" required>
+                  <input style='text-transform:uppercase' type="text" name="nombre" placeholder="" class="form-control" required>
                 </div>
               </div>
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>Apellidos</label>
-                  <input type="text" name="apellido" placeholder="" class="form-control" required>
+                  <input style='text-transform:uppercase' type="text" name="apellido" placeholder="" class="form-control" required>
                 </div>
               </div>
             </div>
@@ -90,13 +92,13 @@
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>Cargo</label>
-                  <input type="text" name="cargo" class="form-control" required>
+                  <input style='text-transform:uppercase' type="text" name="cargo" class="form-control" required>
                 </div>
               </div>
               <div class="col-lg-8">
                 <div class="form-group">
                   <label>Dirección</label>
-                  <input type="text" name="direccion" class="form-control" required>
+                  <input style='text-transform:uppercase' type="text" name="direccion" class="form-control" required>
                 </div>
               </div>
             </div>
@@ -104,19 +106,19 @@
               <div class="col-lg-2">
                 <div class="form-group">
                   <label>Telefono</label>
-                  <input type="text" name="telefono" class="form-control" required>
+                  <input type="number" name="telefono" class="form-control" required onkeydown="javascript: return event.keyCode == 69 ? false : true"> <!-- press 'e' = false-->
                 </div>
               </div>
               <div class="col-lg-1">
                 <div class="form-group">
                   <label>Interno</label>
-                  <input type="text" name="interno" class="form-control">
+                  <input type="number" name="interno" class="form-control" onkeydown="javascript: return event.keyCode == 69 ? false : true"> <!-- press 'e' = false-->
                 </div>
               </div>
               <div class="col-lg-2">
                 <div class="form-group">
                   <label>Celular</label>
-                  <input type="text" name="celular" class="form-control">
+                  <input type="number" name="celular" class="form-control" onkeydown="javascript: return event.keyCode == 69 ? false : true"> <!-- press 'e' = false-->
                 </div>
               </div>
               <div class="col-lg-4">
@@ -144,7 +146,7 @@
               <div class="col-lg-2">
                 <div class="form-group">
                   <label>Nombre de Usuario</label>
-                  <input type="text" name="user" class="form-control" required>
+                  <input style='text-transform:uppercase' type="text" name="user" class="form-control" required>
                 </div>
               </div>
               <div class="col-lg-2">
@@ -190,11 +192,26 @@
           </div>
 
           <div class="box-footer">
-            <button id="btn-guardar" type="submit" class="btn btn-primary">Guardar</button>
+            <button id="btn-guardar" type="button" class="btn btn-primary">Guardar</button>
           </div>
         </form>       
       </div>
     </section>
+
+    <?php else:?>
+    <section>
+      <div class="col-xs-12">
+        <div class='restringido' style="text-align: center">
+          <span class="label label-primary"><i class="fa fa-warning"></i>  Restringido..!!!  <i class="fa fa-warning"></i></span><br/>
+          <label style='color:#1D4FC1'>
+                <?php  
+                echo "No tienes las credenciales para acceder al contenido";
+                ?> 
+          </label> 
+        </div>
+      </div> 
+    </section>
+    <?php endif ?>
 
   </div>
   <!-- /.content-wrapper -->
@@ -216,23 +233,37 @@
                 if (result == 'success') {
                     $.get("msj_correcto.php?msj=Usuario agregado correctamente", function(result){
                     $("#resp").html(result);
+                    refrescar();
                     });
                 }
                 else{
                     if(result == 'vacio'){
-                        $.get("msj_incorrecto.php?msj=Complete los datos faltantes", function(result){
-                            $("#resp").html(result);
-                        });
+                      $.get("msj_incorrecto.php?msj=Complete los datos faltantes", function(result){
+                          $("#resp").html(result);
+                      });
                     }
                     else{
+                      if (result == 'repetido') {
+                        $.get("msj_incorrecto.php?msj=El nombre de usuario ya fue usado, elija otro", function(result){
+                          $("#resp").html(result);
+                        });
+                      }
+                      else{
                         $.get("msj_incorrecto.php?msj="+"No se pudo agregar usuario", function(result){
                             $("#resp").html(result);
                         });
+                      }
                     }
                 }
             }
        });
     });
   });
+
+  function refrescar(){
+    timout=setTimeout(function(){
+        location.reload();
+    },2000,"JavaScript");//2 segundos
+  }
 
 </script>

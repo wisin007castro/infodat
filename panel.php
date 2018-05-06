@@ -24,11 +24,9 @@ if (!function_exists('array_column')) {
 }
 
 $con = new MiConexion();
+
 $modulos = $con->modulos($usuario_session['ID_USER']);
-
-
 $modulos = array_column($modulos, 'TIPO');//SOLO LA COLUMNA TIPO
-
 $modulos = array_unique($modulos);//EQUIVALENTE A UN DISTINCT
 
 //
@@ -78,9 +76,9 @@ $asignacion = array_column($asignacion, 'ASIGNACION');//seleccionando una column
             <li><a href="form_consulta_auth.php"><i class="fa fa-circle-o"></i>Aprobación Consultas </a></li>
             <?php endif ?>
             <?php if(in_array("solicitud_consultas", $modulos) || $usuario_session['TIPO'] == 'IA_ADMIN'): ?>
-            <li><a href="reportes.php"><i class="fa fa-circle-o"></i> Consultas </a></li>
+            <li><a href="form_consultas.php"><i class="fa fa-circle-o"></i> Consultas </a></li>
             <?php endif ?>
-            <?php if(in_array("solicitud_devoluciones", $modulos) || $usuario_session['TIPO'] == 'IA_ADMIN'): ?>   
+            <?php if(in_array("solicitud_devoluciones", $modulos) || $usuario_session['TIPO'] == 'IA_ADMIN'): ?>
             <li><a href="form_sol_dev.php"><i class="fa fa-circle-o"></i> Devoluciones </a></li>
             <?php endif ?>
           </ul>
@@ -152,7 +150,7 @@ $asignacion = array_column($asignacion, 'ASIGNACION');//seleccionando una column
          ?>
 
         <?php 
-        if($usuario_session['TIPO'] == 'ALMACEN'){
+        if($usuario_session['TIPO'] == 'ADMIN_ALMACEN'){
          ?>
 
         <li class="treeview">

@@ -23,6 +23,7 @@
       </ol>
     </section>
 
+<?php if(in_array("gestion_usuarios", $modulos) || $usuario_session['TIPO'] == 'IA_ADMIN'): ?>
     <!-- Main content -->
     <section class="content">
       <!-- Small boxes (Stat box) -->
@@ -93,12 +94,25 @@
       <!-- /.row -->
     </section>
 
+    <?php else:?>
+    <section>
+      <div class="col-xs-12">
+        <div class='restringido' style="text-align: center">
+          <span class="label label-primary"><i class="fa fa-warning"></i>  Restringido..!!!  <i class="fa fa-warning"></i></span><br/>
+          <label style='color:#1D4FC1'>
+                <?php
+                echo "No tienes las credenciales para acceder al contenido";
+                ?>
+          </label>
+        </div>
+      </div>
+    </section>
+    <?php endif ?>
 
   </div>
   <!-- /.content-wrapper -->
 
 </div>
-<!-- ./wrapper -->
 
 <?php require_once 'footer.php' ?>
 

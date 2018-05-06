@@ -107,8 +107,7 @@ class MiConexion{
         $sql = "SELECT ID_USER, c.CLIENTE, NOMBRE, APELLIDO, CARGO, DIRECCION, TELEFONO, INTERNO, CELULAR, CORREO, u.HABILITADO, TIPO, REGIONAL 
                   FROM usuarios AS u JOIN clientes AS c ON c.ID_CLIENTE = u.ID_CLIENTE 
                   WHERE c.CLIENTE = 'INFOACTIVA SRL'
-                  AND (u.TIPO = 'ALMACEN'
-                  OR u.TIPO = 'CONSULTA')
+                  AND u.TIPO = 'ALMACEN'
                   ORDER BY ID_USER ASC";
         return $this->getArraySQL($sql);
     }
@@ -239,7 +238,7 @@ class MiConexion{
     }
 
     public function pedidos_admin(){
-        $sql = "SELECT s.ID_SOLICITUD, s.ID_USER, u.NOMBRE, u.APELLIDO, s.TIPO_ENVIO, s.TIPO_CONSULTA, s.DIRECCION_ENTREGA, s.FECHA_SOLICITUD, 
+        $sql = "SELECT s.ID_SOLICITUD, s.ID_CLIENTE, s.ID_USER, u.NOMBRE, u.APELLIDO, s.TIPO_ENVIO, s.TIPO_CONSULTA, s.DIRECCION_ENTREGA, s.FECHA_SOLICITUD, 
                       s.HORA_SOLICITUD, s.PROCESADO_POR, s.FECHA_ENTREGA, s.HORA_ENTREGA, s.ENTREGADO_POR, s.ESTADO, s.REGIONAL
                 FROM solicitud AS s JOIN usuarios AS u ON s.ID_USER = u.ID_USER 
                 ORDER BY s.ESTADO DESC, s.ID_SOLICITUD  DESC";
@@ -301,7 +300,7 @@ class MiConexion{
     }
 
     public function devoluciones_admin(){
-        $sql = "SELECT d.ID_DEV, u.NOMBRE, u.APELLIDO, d.DIRECCION, d.FECHA_SOLICITUD, d.FECHA_PROGRAMADA, d.PROCESADO_POR, d.RECOGIDO_POR, d.ESTADO, d.REGIONAL
+        $sql = "SELECT d.ID_DEV, d.ID_USER, d.ID_CLIENTE, u.NOMBRE, u.APELLIDO, d.DIRECCION, d.FECHA_SOLICITUD, d.FECHA_PROGRAMADA, d.PROCESADO_POR, d.RECOGIDO_POR, d.ESTADO, d.REGIONAL
                 FROM devoluciones AS d JOIN usuarios AS u ON d.ID_USER = u.ID_USER 
                 ORDER BY d.ESTADO DESC, d.ID_DEV  DESC";
         return $this->getArraySQL($sql);

@@ -22,7 +22,6 @@ $estados = $mistrings->estadoSol();
     <section class="content-header">
         <h1>
             Estado de Solicitud
-            <!-- <small>Control panel</small> -->
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -34,12 +33,12 @@ $estados = $mistrings->estadoSol();
       <div id="resp" class="col-lg-12">
     </section>
 
+<?php if($usuario_session['TIPO'] == 'ADMIN_ALMACEN' || $usuario_session['TIPO'] == 'IA_ADMIN'): ?>
     <!-- Main content -->
-    <!-- /.content -->
     <section class="content">
 <input type="hidden" id="usuario" value="<?php echo $usuario_session['ID_USER']; ?>">
 
-        <div class="row" style="font-size:11px;">
+        <div class="row" style="font-size:10px;">
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
@@ -57,14 +56,12 @@ $estados = $mistrings->estadoSol();
                                     <th>Tipo de Envio</th>
                                     <th>Tipo de Consulta</th>
                                     <th>Dirección de entrega</th>
-                                    <th>Fecha Solicitud</th>
-                                    <th>Hora Solicitud</th>
+                                    <th>Fecha/Hora Solicitud</th>
                                     <th>Procesado por</th>
-                                    <th>Fecha Entrega</th>
-                                    <th>Hora Entrega</th>
+                                    <th>Fecha/Hora Entrega</th>
                                     <th>Entregado por</th>
                                     <th>Estado Actual</th>
-                                    <th>Estado Siguiente</th>
+                                    <th>Acción</th>
                                     <th></th>
                                 </tr>
                                 <?php }else{ ?>
@@ -78,7 +75,6 @@ $estados = $mistrings->estadoSol();
                                     </div> 
                                 <?php 
                                 }
-                                
                                 ?>
                                 </thead>
                                 <tbody>
@@ -90,11 +86,9 @@ $estados = $mistrings->estadoSol();
                                         <td><?php echo $pedido["TIPO_ENVIO"]; ?></td>
                                         <td><?php echo $pedido["TIPO_CONSULTA"]; ?></td>
                                         <td><?php echo $pedido["DIRECCION_ENTREGA"]; ?></td>
-                                        <td><?php echo $pedido["FECHA_SOLICITUD"]; ?></td>
-                                        <td><?php echo $pedido["HORA_SOLICITUD"]; ?></td>
+                                        <td><?php echo $pedido["FECHA_SOLICITUD"]." - ".$pedido["HORA_SOLICITUD"]; ?></td>
                                         <td><?php echo $pedido["PROCESADO_POR"]; ?></td>
-                                        <td><?php echo $pedido["FECHA_ENTREGA"]; ?></td>
-                                        <td><?php echo $pedido["HORA_ENTREGA"]; ?></td>
+                                        <td><?php echo $pedido["FECHA_ENTREGA"]." - ".$pedido["HORA_ENTREGA"]; ?></td>
                                         <td>
 
                                         <!-- ENTREGADO POR -->
@@ -110,11 +104,9 @@ $estados = $mistrings->estadoSol();
                                         }
                                         else{
                                         ?>
-                                        <select class="form-control" id="entrega-<?php echo $pedido['ID_SOLICITUD']; ?>">
+                                        <select class="form-control input-sm" id="entrega-<?php echo $pedido['ID_SOLICITUD']; ?>">
                                         <?php foreach ($usuarios as $user) { ?>
                                         <?php if ($user['REGIONAL'] == $pedido['REGIONAL']): ?>
-                                            
-
                                             <option value="<?php echo $user['ID_USER'] ?>"><?php echo $user['NOMBRE']." ".$user['APELLIDO'] ?></option>
                                         <?php else: ?>
                                             
@@ -131,24 +123,24 @@ $estados = $mistrings->estadoSol();
                                         <td>
                                             <?php if($pedido["ESTADO"] == "POR PROCESAR"){ ?>
 
-                                            <button type="button" class="btn btn-block btn-primary btn-sm update-sol" data-id="<?php echo $pedido["ID_SOLICITUD"]; ?>">EN PROCESO DE BUSQUEDA</button>
+                                            <button type="button" class="btn btn-block btn-primary btn-sm update-sol" data-id="<?php echo $pedido["ID_SOLICITUD"]; ?>">PROCESAR</button>
                                             <?php
                                             }
                                             elseif($pedido["ESTADO"] == "EN PROCESO DE BUSQUEDA"){
                                             ?>
                                             <!-- <button type="button" class="btn btn-block btn-warning btn-sm update-sol" data-id="<?php //echo $pedido["ID_SOLICITUD"]; ?>">DESPACHADA</button> -->
-                                            <button type="button" class="btn btn-block btn-warning" data-toggle="modal" onClick="modal('<?php echo $pedido['ID_SOLICITUD']?>')">DESPACHADA
+                                            <button type="button" class="btn btn-block btn-sm btn-warning" data-toggle="modal" onClick="modal('<?php echo $pedido['ID_SOLICITUD']?>')">DESPACHAR
                                             </button>
                                             <?php
                                             }
                                             elseif($pedido["ESTADO"] == "DESPACHADA"){
                                             ?>
-                                            <button type="button" class="btn btn-block btn-success btn-sm update-sol" data-id="<?php echo $pedido["ID_SOLICITUD"]; ?>">ATENDIDA/ENTREGADA</button>
+                                            <button type="button" class="btn btn-block btn-success btn-sm update-sol" data-id="<?php echo $pedido["ID_SOLICITUD"]; ?>">ENTREGADAR</button>
                                             <?php
                                             }
                                             elseif($pedido["ESTADO"] == "ATENDIDA/ENTREGADA"){
                                             ?>
-                                            <button disabled type="button" class="btn btn-block btn-default btn-sm update-sol" data-id="<?php echo $pedido["ID_SOLICITUD"]; ?>">ATENDIDA/ENTREGADA</button>
+                                            <button disabled type="button" class="btn btn-block btn-default btn-sm update-sol" data-id="<?php echo $pedido["ID_SOLICITUD"]; ?>">ATENDIDA</button>
                                             <?php
                                             }
                                             else{
@@ -237,7 +229,7 @@ $estados = $mistrings->estadoSol();
                 <!-- /.row -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-warning" onclick="GuardaEntrega()">DESPACHADA</button>
+                    <button type="button" class="btn btn-primary" onclick="GuardaEntrega()">DESPACHAR</button>
               </div>
                 
                 
@@ -250,6 +242,22 @@ $estados = $mistrings->estadoSol();
         </div>
     </form>
     </section>
+
+    <?php else:?>
+    <section>
+      <div class="col-xs-12">
+        <div class='restringido' style="text-align: center">
+          <span class="label label-primary"><i class="fa fa-warning"></i>  Restringido..!!!  <i class="fa fa-warning"></i></span><br/>
+          <label style='color:#1D4FC1'>
+                <?php  
+                echo "No tienes las credenciales para acceder al contenido";
+                ?> 
+          </label> 
+        </div>
+      </div> 
+    </section>
+    <?php endif ?>
+
 </div>
 <!-- /.content-wrapper -->
 
@@ -373,19 +381,20 @@ $estados = $mistrings->estadoSol();
                     $.get("msj_correcto.php?msj=Solicitud actualizada a DESPACHADA", function(result){
                     $("#resp").html(result);
                     });
-                    form104(id_sol);
+                    // form104(id_sol);
                     refresh_fast();
-                    
                 }
                 if(result == 'error'){
                     $.get("msj_incorrecto.php?msj=No se pudo actualizar la solicitud", function(result){
                         $("#resp").html(result);
                     });
+                    refresh_fast();
                 }
                 if(result == 'sin_items'){
                     $.get("msj_incorrecto.php?msj=Debe seleccionar al menos un item", function(result){
                         $("#resp").html(result);
                     });
+                    refresh_fast();
                 }
             }
         }

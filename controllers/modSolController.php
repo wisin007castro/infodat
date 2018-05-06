@@ -1,8 +1,8 @@
 <?php 
 require_once '../conexionClass.php';
+// require_once '..PHPMailer/';
 
 $conexion = new MiConexion();
-
 $con = $conexion->conectarBD();
 
 date_default_timezone_set('America/La_Paz'); //definiendo zona horaria
@@ -30,6 +30,14 @@ $count_items = 0;
 
 foreach ($pedidos as $ped) {
 	if ($ped['ID_SOLICITUD'] == $id) {
+		$solicitante = $conexion->usuario($ped['ID_USER']);
+		$cliente = $conexion->cliente($ped['ID_CLIENTE']);
+		if($ped['REGIONAL'] == 'LP'){
+			$reply_to = 'consultas.lp@infoactiva.com.bo';
+		}
+		else{
+			$reply_to = 'consultas.scz@infoactiva.com.bo';
+		}
 		if ($ped["ESTADO"] == "POR PROCESAR") {
 			$estado = "EN PROCESO DE BUSQUEDA";
 			$procesado_por = $usuario2[0]['NOMBRE']." ".$usuario2[0]['APELLIDO'];
@@ -40,11 +48,49 @@ foreach ($pedidos as $ped) {
 				if(!$resultado = mysqli_query($con, $sql_inv)) die();
 			}
 			if(!$resultado = mysqli_query($con, $sql)) die();
+
+			// Datos para Email Solicitudes
+			$destinatario = $solicitante[0]['CORREO']; //DATOS DEL CLIENTE
+			$asunto = "solicitud Nro: ".$ped['ID_SOLICITUD'].", Cliente: ".$cliente[0]['CLIENTE']; 
+			$cuerpo = "
+			<html>
+			<head>
+			<title>SOLICITUD DE CONSULTA INFODAT</title> 
+			</head> 
+			<body> 
+			<h3>Estimad@ ".$solicitante[0]['NOMBRE']." ".$solicitante[0]['APELLIDO']."</h3> 
+			<p> 
+			Su solicitud Nro: ".$ped['ID_SOLICITUD'].", con tipo de consulta: ".$ped['TIPO_CONSULTA']." tipo de envio: ".$ped['TIPO_ENVIO'].",
+			 pasó al estado: ".$estado." atendida por: ".$procesado_por."
+			<br>
+			Para realizar el seguimiento a su solicitud puede ingresar al menú ESTADO y seleccionar Solicitud de Documentos. 
+			<br><br>
+			Para mayor información puede comunicarse al teléfono: 2453147 o al celular: 77231547
+			<br><br>
+
+			Sistema de Consultas/Devoluciones de Documentos INFODAT
+			Infoactiva ®
+			</p> 
+			</body> 
+			</html> 
+			"; 
+			//para el envío en formato HTML 
+			$headers = "MIME-Version: 1.0\r\n"; 
+			$headers .= "Content-type: text/html; charset=utf-8\r\n"; 
+			//dirección del remitente 
+			$headers .= "From: INFODAT <sistema.consultas@infoactiva.com.bo>\r\n"; 
+			//dirección de respuesta, si queremos que sea distinta que la del remitente 
+			$headers .= "Reply-To: ".$reply_to."\r\n";
+			//direcciones que recibián copia 
+			$headers .= "Cc: wissindrako@gmail.com\r\n"; //cambiar a consultas.lp@infoactiva.com.bo 
+			mail($destinatario,$asunto,$cuerpo,$headers);
+
 			if ($resultado) {
 				echo "POR PROCESAR";
 			}
 			else{
 				echo "error";
+				// echo $destinatario." ".$asunto." ".$cuerpo." ".$headers;
 			}
 		}
 		elseif ($ped["ESTADO"] == "EN PROCESO DE BUSQUEDA") {
@@ -64,62 +110,48 @@ foreach ($pedidos as $ped) {
 						}
 					}
 				}
-	
-	$solicitante = $conexion->usuario($ped['ID_USER']);
-				// Datos para Email Solicitudes
-	$destinatario = $solicitante[0]['CORREO']; //DATOS DEL CLIENTE
-	$asunto = "Solicitud de archivos DESPACHADA"; 
-	$cuerpo = "
-	<html> 
-	<head> 
-	   <title>SOLICITUD DE CONSULTA INFODAT</title> 
-	</head> 
-	<body> 
-	<h1>Estimad@".$solicitante[0]['NOMBRE']." ".$solicitante[0]['APELLIDO']."</h1> 
-	<p> 
-	Su solicitud Nro: ".$ped['ID_SOLICITUD']." fue enviada para su entrega a ".$entregado_por."
-	<br>
-	Para mayor información puede comunicarse al teléfono: 2453147 o al celular: 77231547
-	<br>
-	
-	Favor no responder al remitente (sistema.consultas@infoactiva.com.bo) esta cuenta no es monitoreada, de ser necesario puede enviar un correo a consultas.lp@infoactiva.com.bo
-	
-	
-	Sistema de Consultas/Devoluciones de Documentos INFODAT
-	Infoactiva
-	</p> 
-	</body> 
-	</html> 
-	"; 
-	
-	//para el envío en formato HTML 
-	$headers = "MIME-Version: 1.0\r\n"; 
-	$headers .= "Content-type: text/html; charset=iso-8859-1\r\n"; 
-	
-	//dirección del remitente 
-	$headers .= "From: INFODAT <sistema.consultas@infoactiva.com.bo>\r\n"; 
-	
-	//dirección de respuesta, si queremos que sea distinta que la del remitente 
-	// $headers .= "Reply-To: mariano@desarrolloweb.com\r\n"; 
-	
-	//ruta del mensaje desde origen a destino 
-	// $headers .= "Return-path: holahola@desarrolloweb.com\r\n"; 
-	
-	//direcciones que recibián copia 
-	$headers .= "Cc: wissindrako@gmail.com\r\n"; //cambiar a consultas.lp@infoactiva.com.bo 
-	//$headers .= "Cc: castrow666@gmail.com\r\n"; //
-	
-	
-	//direcciones que recibirán copia oculta 
-	// $headers .= "Bcc: pepe@pepe.com,juan@juan.com\r\n"; 
-	
-			// mail($destinatario,$asunto,$cuerpo,$headers);
-				//echo $destinatario." ".$asunto." ".$cuerpo." ".$headers;
+
 				foreach ($items as $item) {
 					$sql_des = "UPDATE inventarios SET ESTADO = 'DESESTIMADO' WHERE ESTADO != 'DESPACHADA' AND ID_INV = '".$item['ID_INV']."' ";
 					if(!$resultado = mysqli_query($con, $sql_des)) die();
 				}
 
+				// Datos para Email Solicitudes
+				$destinatario = $solicitante[0]['CORREO']; //DATOS DEL CLIENTE
+				$asunto = "solicitud Nro: ".$ped['ID_SOLICITUD'].", Cliente: ".$cliente[0]['CLIENTE']; 
+				$cuerpo = "
+				<html>
+				<head>
+				<title>SOLICITUD DE CONSULTA INFODAT</title> 
+				</head> 
+				<body> 
+				<h3>Estimad@ ".$solicitante[0]['NOMBRE']." ".$solicitante[0]['APELLIDO']."</h3>
+				<p> 
+				Su solicitud Nro: ".$ped['ID_SOLICITUD'].", con tipo de consulta: ".$ped['TIPO_CONSULTA']." tipo de envio: ".$ped['TIPO_ENVIO'].",
+				atendida por: ".$procesado_por.", fue despachada de nuestros almacenes.
+				<br>
+				El/los Documentos seran entregados por: ".$entregado_por."
+				<br><br>
+				Para realizar el seguimiento a su solicitud puede ingresar al menú ESTADO y seleccionar Solicitud de Documentos. 
+				<br><br>
+				Para mayor información puede comunicarse al teléfono: 2453147 o al celular: 77231547
+				<br><br>
+				Sistema de Consultas/Devoluciones de Documentos INFODAT
+				Infoactiva ®
+				</p> 
+				</body> 
+				</html> 
+				"; 
+				//para el envío en formato HTML 
+				$headers = "MIME-Version: 1.0\r\n"; 
+				$headers .= "Content-type: text/html; charset=utf-8\r\n"; 
+				//dirección del remitente 
+				$headers .= "From: INFODAT <sistema.consultas@infoactiva.com.bo>\r\n"; 
+				//dirección de respuesta, si queremos que sea distinta que la del remitente 
+				$headers .= "Reply-To: ".$reply_to."\r\n";
+				//direcciones que recibián copia 
+				$headers .= "Cc: wissindrako@gmail.com\r\n"; //cambiar a consultas.lp@infoactiva.com.bo 
+				mail($destinatario,$asunto,$cuerpo,$headers);
 
 				if($count_items > 0){
 					if(!$resultado = mysqli_query($con, $sql)) die();
@@ -157,6 +189,40 @@ foreach ($pedidos as $ped) {
 				if(!$resultado = mysqli_query($con, $sql_inv)) die();
 			}
 			if(!$resultado = mysqli_query($con, $sql)) die();
+
+				// Datos para Email Solicitudes
+				$destinatario = $solicitante[0]['CORREO']; //DATOS DEL CLIENTE
+				$asunto = "solicitud Nro: ".$ped['ID_SOLICITUD'].", Cliente: ".$cliente[0]['CLIENTE']; 
+				$cuerpo = "
+				<html>
+				<head>
+				<title>SOLICITUD DE CONSULTA INFODAT</title> 
+				</head> 
+				<body> 
+				<h3>Estimad@ ".$solicitante[0]['NOMBRE']." ".$solicitante[0]['APELLIDO']."</h3> 
+				<p> 
+				Su solicitud Nro: ".$ped['ID_SOLICITUD'].", con tipo de consulta: ".$ped['TIPO_CONSULTA']." tipo de envio: ".$ped['TIPO_ENVIO'].",
+				atendida por: ".$procesado_por.", Fecha de entrega: ".$fecha.", Hora de entrega: ".$hora.". 
+				<br><br>
+				Para mayor información puede comunicarse al teléfono: 2453147 o al celular: 77231547
+				<br><br>
+				Sistema de Consultas/Devoluciones de Documentos INFODAT
+				Infoactiva ®
+				</p> 
+				</body> 
+				</html> 
+				"; 
+				//para el envío en formato HTML 
+				$headers = "MIME-Version: 1.0\r\n"; 
+				$headers .= "Content-type: text/html; charset=utf-8\r\n"; 
+				//dirección del remitente 
+				$headers .= "From: INFODAT <sistema.consultas@infoactiva.com.bo>\r\n"; 
+				//dirección de respuesta, si queremos que sea distinta que la del remitente 
+				$headers .= "Reply-To: ".$reply_to."\r\n";
+				//direcciones que recibián copia 
+				$headers .= "Cc: wissindrako@gmail.com\r\n"; //cambiar a consultas.lp@infoactiva.com.bo 
+				mail($destinatario,$asunto,$cuerpo,$headers);
+
 			if ($resultado) {
 				echo "DESPACHADA";
 			}

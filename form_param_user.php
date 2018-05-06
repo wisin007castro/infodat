@@ -15,6 +15,10 @@
   $MisStrings = new MiStrings();
   $modulos = $MisStrings->modulos();
 
+  $mod_auth = $conexion->modulos($usuario_session['ID_USER']);
+  $mod_auth = array_column($mod_auth, 'TIPO');//SOLO LA COLUMNA TIPO
+  $mod_auth = array_unique($mod_auth);//EQUIVALENTE A UN DISTINCT
+
  ?>
 
   <!-- Content Wrapper. Contains page content -->
@@ -34,8 +38,7 @@
       </ol>
     </section>
 
-
-
+    <?php if(in_array("parametricas", $mod_auth) || $usuario_session['TIPO'] == 'IA_ADMIN'): ?>
     <!-- Main content -->
     <section class="content">
       <div class="box box-primary">
@@ -83,6 +86,9 @@
                 </div>
               </div>
             </div>
+
+            <script> var var_cliente = $("#id_cliente").val(); </script>
+            
             <div class="row">
               <div class="col-lg-3">
                 <div class="form-group con-json">
@@ -125,10 +131,12 @@
                       <input name="asignacion[]" id="checkTodoDeptos" value="TODOS" type="checkbox">TODOS</label>
                   </div>
                   <?php foreach ($deptos_access as $key => $value): ?>
+                  <?php if ($usuario_session['TIPO'] != 'IA_ADMIN') :?>
                   <div class="checkbox">
                     <label>
                       <input name="asignacion[]" type="checkbox" value="<?php echo $value['DEPARTAMENTO']?>"><?php echo $value['DEPARTAMENTO']?></label>
                   </div>
+                  <?php endif ?>
                   <?php endforeach ?>
                   <div class="">
                     <label>
@@ -143,10 +151,12 @@
                       <input name="asignacion[]" id="checkTodoUsers" type="checkbox" value="TODOS">TODOS</label>
                   </div>
                   <?php foreach ($usuarios as $key => $value): ?>
+                  <?php if ($usuario_session['TIPO'] != 'IA_ADMIN') :?>
                   <div class="checkbox">
                     <label>
                       <input name="asignacion[]" type="checkbox" value="<?php echo $value['ID_USER'] ?>"><?php echo $value['NOMBRE']."".$value['APELLIDO']?></label>
                   </div>
+                  <?php endif ?>
                   <?php endforeach ?>
                   <div class="">
                     <label>
@@ -218,6 +228,20 @@
         <!-- /.row -->
     </section>
 
+    <?php else:?>
+    <section>
+      <div class="col-xs-12">
+        <div class='restringido' style="text-align: center">
+          <span class="label label-primary"><i class="fa fa-warning"></i>  Restringido..!!!  <i class="fa fa-warning"></i></span><br/>
+          <label style='color:#1D4FC1'>
+                <?php  
+                echo "No tienes las credenciales para acceder al contenido"; 
+                ?> 
+          </label> 
+        </div>
+      </div> 
+    </section>
+    <?php endif ?>
 
   </div>
   <!-- /.content-wrapper -->

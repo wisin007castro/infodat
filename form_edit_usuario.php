@@ -21,15 +21,15 @@
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <section class="content">
-      <div id="resp" class="col-lg-12">
+    <section>
+    <div id="resp" class="col-lg-12"></div>
     </section>
     <!-- MOSTRAR SI ES CLIENTE -->
 
     <section class="content-header">
+    
       <h1>
         Registro de usuarios
-        <!-- <small>Control panel</small> -->
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -67,13 +67,13 @@
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>Nombres</label>
-                  <input type="text" name="nombre" value="<?php echo $usuario[0]['NOMBRE'] ?>" placeholder="" class="form-control">
+                  <input style='text-transform:uppercase' type="text" name="nombre" value="<?php echo $usuario[0]['NOMBRE'] ?>" placeholder="" class="form-control">
                 </div>
               </div>
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>Apellidos</label>
-                  <input type="text" name="apellido" value="<?php echo $usuario[0]['APELLIDO'] ?>" placeholder="" class="form-control">
+                  <input style='text-transform:uppercase' type="text" name="apellido" value="<?php echo $usuario[0]['APELLIDO'] ?>" placeholder="" class="form-control">
                 </div>
               </div>
             </div>
@@ -82,13 +82,13 @@
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>Cargo</label>
-                  <input type="text" name="cargo" value="<?php echo $usuario[0]['CARGO'] ?>" class="form-control">
+                  <input style='text-transform:uppercase' type="text" name="cargo" value="<?php echo $usuario[0]['CARGO'] ?>" class="form-control">
                 </div>
               </div>
               <div class="col-lg-8">
                 <div class="form-group">
                   <label>Dirección</label>
-                  <input type="text" name="direccion" value="<?php echo $usuario[0]['DIRECCION'] ?>" class="form-control">
+                  <input style='text-transform:uppercase' type="text" name="direccion" value="<?php echo $usuario[0]['DIRECCION'] ?>" class="form-control">
                 </div>
               </div>
             </div>
@@ -96,19 +96,19 @@
               <div class="col-lg-2">
                 <div class="form-group">
                   <label>Telefono</label>
-                  <input type="text" name="telefono" value="<?php echo $usuario[0]['TELEFONO'] ?>" class="form-control">
+                  <input type="number" name="telefono" value="<?php echo $usuario[0]['TELEFONO'] ?>" class="form-control" required onkeydown="javascript: return event.keyCode == 69 ? false : true"> <!-- press 'e' = false-->
                 </div>
               </div>
               <div class="col-lg-1">
                 <div class="form-group">
                   <label>Interno</label>
-                  <input type="text" name="interno" value="<?php echo $usuario[0]['INTERNO'] ?>" class="form-control">
+                  <input type="number" name="interno" value="<?php echo $usuario[0]['INTERNO'] ?>" class="form-control" onkeydown="javascript: return event.keyCode == 69 ? false : true"> <!-- press 'e' = false-->
                 </div>
               </div>
               <div class="col-lg-2">
                 <div class="form-group">
                   <label>Celular</label>
-                  <input type="text" name="celular" value="<?php echo $usuario[0]['CELULAR'] ?>" class="form-control">
+                  <input type="number" name="celular" value="<?php echo $usuario[0]['CELULAR'] ?>" class="form-control" onkeydown="javascript: return event.keyCode == 69 ? false : true"> <!-- press 'e' = false-->
                 </div>
               </div>
               <div class="col-lg-7">
@@ -122,7 +122,7 @@
               <div class="col-lg-3">
                 <div class="form-group">
                   <label>Nombre de Usuario</label>
-                  <input type="text" name="user" value="<?php echo $usuario[0]['USER'] ?>" class="form-control">
+                  <input style='text-transform:uppercase' type="text" name="user" value="<?php echo $usuario[0]['USER'] ?>" class="form-control" disabled>
                 </div>
               </div>
               <div class="col-lg-3">
@@ -168,7 +168,7 @@
                           }
                       } ?>
                       <?php else: ?>
-                                              <?php foreach ($tipousuarios as $tusuario) { 
+                          <?php foreach ($tipousuarios as $tusuario) { 
                           if($usuario[0]['TIPO'] == $tusuario['TIPO']){
                           ?>
                           <option selected="<?php echo $usuario[0]['TIPO'] ?>" value="<?php echo $tusuario['TIPO'] ?>">* <?php echo $tusuario['TIPO'] ?></option>
@@ -207,7 +207,7 @@
           </div>
 
           <div class="box-footer">
-            <button id="btn-guardar" type="submit" class="btn btn-primary">Guardar</button>
+            <button id="btn-guardar" type="button" class="btn btn-primary">Guardar</button>
           </div>
         </form>       
       </div>
@@ -254,25 +254,32 @@ else{
            data: $("#form_datos_usuario").serialize(), 
            success: function(result){
                 if (result == 'success') {
-                    $.get("msj_correcto.php?msj=Usuario agregado correctamente", function(result){
+                  $.get("msj_correcto.php?msj=Usuario actualizado correctamente", function(result){
                     $("#resp").html(result);
-                    });
+                    refrescar();
+                  });
                 }
                 else{
-                    if(result == 'vacio'){
-                        $.get("msj_incorrecto.php?msj=Complete los datos faltantes", function(result){
-                            $("#resp").html(result);
-                        });
-                    }
-                    else{
-                        $.get("msj_incorrecto.php?msj="+"No se pudo agregar usuario", function(result){
-                            $("#resp").html(result);
-                        });
-                    }
+                  if(result == 'vacio'){
+                      $.get("msj_incorrecto.php?msj=Complete los datos faltantes", function(result){
+                        $("#resp").html(result);
+                      });
+                  }
+                  else{
+                    $.get("msj_incorrecto.php?msj="+"No se pudo actualizar usuario", function(result){
+                      $("#resp").html(result);
+                    });
+                  }
                 }
             }
        });
     });
   });
+
+  function refrescar(){
+    timout=setTimeout(function(){
+        location.reload();
+    },2000,"JavaScript");//2 segundos
+  }
 
 </script>

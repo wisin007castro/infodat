@@ -7,10 +7,9 @@
  unset($_SESSION['EmpUser']);
  if(isset($_REQUEST['user'])){
      $user = $_REQUEST['user'];
-     // $pass = $_REQUEST['pass'];
      $pass = md5($_REQUEST['pass']);//con hash
      $conn = new mysqldb();
-     // $sql="SELECT * FROM usuarios WHERE USER = '".$user."' AND PASS='".$pass."' ";
+
      $sql = "SELECT * FROM usuarios 
       WHERE USER='".$user."' AND PASS='".$pass."' "
       // mysql_real_escape_string($user),

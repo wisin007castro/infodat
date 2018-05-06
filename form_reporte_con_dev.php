@@ -10,6 +10,10 @@
   $repAccess = $conexion->repAccesso($usuario_session['ID_CLIENTE']);
   $clientes = $conexion->clientes();
 
+  $modulos = $con->modulos($usuario_session['ID_USER']);
+  $modulos = array_column($modulos, 'TIPO');//SOLO LA COLUMNA TIPO
+  $modulos = array_unique($modulos);//EQUIVALENTE A UN DISTINCT
+
   $mistrings = new MiStrings();
   $meses = $mistrings->meses();
 
@@ -27,6 +31,8 @@
         <li class="active">Reporte de Consultas</li>
       </ol>
     </section>
+
+    <?php if(in_array("emision_reportes", $modulos)  || $usuario_session['TIPO'] == 'IA_ADMIN'): ?>
 
     <section class="content">
 
@@ -134,6 +140,22 @@
 
       </div>
     </section>
+
+    <?php else:?>
+    <section>
+      <div class="col-xs-12">
+        <div class='restringido' style="text-align: center">
+          <span class="label label-primary"><i class="fa fa-warning"></i>  Restringido..!!!  <i class="fa fa-warning"></i></span><br/>
+          <label style='color:#1D4FC1'>
+                <?php  
+                echo "No tienes las credenciales para acceder al contenido"; 
+                // echo "Succefully";
+                ?> 
+          </label> 
+        </div>
+      </div> 
+    </section>
+    <?php endif ?>
 
   </div>
 

@@ -33,7 +33,8 @@ $pedidos = $conexion->pedidos_auth($usuario_session['ID_CLIENTE']);
 $asignacion = $conexion->asignacion($usuario_session['ID_USER'], 'estado_consultas');//Cambiar segun modulo
 $asignacion = array_column($asignacion, 'ASIGNACION');//seleccionando una columna
 
-
+$asig_auth = $con->asign_auth($usuario_session['ID_USER'], 'autorizacion');//ASIGNADO PARA APROBAR SOLICITUD
+$asig_auth = array_column($asig_auth, 'ASIGNACION');//seleccionando una columna
 ?>
 
 
@@ -60,6 +61,7 @@ $asignacion = array_column($asignacion, 'ASIGNACION');//seleccionando una column
         <div id="resp" class="col-lg-12">
     </section>
 
+<?php if(in_array($usuario_session['ID_USER'], $asig_auth)): ?>
     <!-- Main content -->
     <section class="content">
         <div class="row" style="font-size:11px;">
@@ -155,6 +157,23 @@ $asignacion = array_column($asignacion, 'ASIGNACION');//seleccionando una column
         </div>
         <!-- /.row -->
     </section>
+
+    <?php else:?>
+    <section>
+      <div class="col-xs-12">
+        <div class='restringido' style="text-align: center">
+          <span class="label label-primary"><i class="fa fa-warning"></i>  Restringido..!!!  <i class="fa fa-warning"></i></span><br/>
+          <label style='color:#1D4FC1'>
+                <?php  
+                echo "No tienes las credenciales para acceder al contenido"; 
+                // echo "Succefully";
+                ?> 
+          </label> 
+        </div>
+      </div> 
+    </section>
+    <?php endif ?>
+
 </div>
 <!-- /.content-wrapper -->
 

@@ -13,6 +13,11 @@
   $meses = $mistrings->meses();
 
   $datos_usuario = $conexion->usuario($usuario_session['ID_USER']);
+
+  $modulos = $conexion->modulos($usuario_session['ID_USER']);
+  $modulos = array_column($modulos, 'TIPO');//SOLO LA COLUMNA TIPO
+  $modulos = array_unique($modulos);//EQUIVALENTE A UN DISTINCT
+
  ?>
 
   <!-- Content Wrapper. Contains page content -->
@@ -27,15 +32,14 @@
         <!-- <small>Control panel</small> -->
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Solicitud de documentos</li>
       </ol>
     </section>
 
+<?php if(in_array("solicitud_consultas", $modulos) || $usuario_session['TIPO'] == 'IA_ADMIN'): ?>
     <!-- Main content -->
     <section class="content">
-      <!-- Small boxes (Stat box) -->
-
       <div class="row">
         <div class="col-lg-2 col-xs-6">
           <div class="form-group">
@@ -245,7 +249,22 @@
       <!-- /.row -->
     </section>
 
-
+    <?php else:?>
+    <section>
+      <div class="col-xs-12">
+        <div class='restringido' style="text-align: center">
+          <span class="label label-primary"><i class="fa fa-warning"></i>  Restringido..!!!  <i class="fa fa-warning"></i></span><br/>
+          <label style='color:#1D4FC1'>
+                <?php  
+                echo "No tienes las credenciales para acceder al contenido"; 
+                // echo "Succefully";
+                ?> 
+          </label> 
+        </div>
+      </div> 
+    </section>
+    <?php endif ?>
+ 
   </div>
   <!-- /.content-wrapper -->
 

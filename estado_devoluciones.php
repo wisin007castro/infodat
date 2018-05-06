@@ -33,6 +33,10 @@ $devoluciones = $conexion->devoluciones($usuario_session['ID_CLIENTE']);
 $asignacion = $conexion->asignacion($usuario_session['ID_USER'], 'estado_devoluciones');//Cambiar segun modulo
 $asignacion = array_column($asignacion, 'ASIGNACION');//seleccionando una columna
 
+$modulos = $con->modulos($usuario_session['ID_USER']);
+$modulos = array_column($modulos, 'TIPO');//SOLO LA COLUMNA TIPO
+$modulos = array_unique($modulos);//EQUIVALENTE A UN DISTINCT
+
 $mistrings = new MiStrings();
 $meses = $mistrings->meses();
 
@@ -72,8 +76,8 @@ if($devoluciones > 0){
         </ol>
     </section>
 
+<?php if(in_array("estado_devoluciones", $modulos) || $usuario_session['TIPO'] == 'IA_ADMIN'): ?>
     <!-- Main content -->
-    <!-- /.content -->
     <section class="content">
         <div class="row" style="font-size:11px;">
             <div class="col-xs-12">
@@ -192,6 +196,22 @@ if($devoluciones > 0){
         </div>
         <!-- /.row -->
     </section>
+
+    <?php else:?>
+    <section>
+      <div class="col-xs-12">
+        <div class='restringido' style="text-align: center">
+          <span class="label label-primary"><i class="fa fa-warning"></i>  Restringido..!!!  <i class="fa fa-warning"></i></span><br/>
+          <label style='color:#1D4FC1'>
+                <?php  
+                echo "No tienes las credenciales para acceder al contenido"; 
+                // echo "Succefully";
+                ?> 
+          </label> 
+        </div>
+      </div> 
+    </section>
+    <?php endif ?>
 </div>
 <!-- /.content-wrapper -->
 

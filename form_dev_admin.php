@@ -32,11 +32,11 @@ $meses = $mistrings->meses();
       <div id="resp" class="col-lg-12">
     </section>
 
+<?php if($usuario_session['TIPO'] == 'ADMIN_ALMACEN' || $usuario_session['TIPO'] == 'IA_ADMIN'): ?>
     <!-- Main content -->
-    <!-- /.content -->
     <section class="content">
 <input type="hidden" name="usuario" id="usuario" value="<?php echo $usuario_session['ID_USER']; ?>">
-        <div class="row" style="font-size:11px;">
+        <div class="row" style="font-size:10px;">
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
@@ -44,7 +44,9 @@ $meses = $mistrings->meses();
                     </div>
                     <div class="box-body table-responsive no-padding">
                         <table class="table table-bordered" id="tbEstadoSol">
-                            <thead><tr>
+                            <thead>
+                            <?php if(count($devoluciones) > 0){ ?>
+                            <tr>
                                 <!-- <th></th> -->
                                 <th>#</th>
                                 <th>Solicitado por</th>
@@ -54,8 +56,20 @@ $meses = $mistrings->meses();
                                 <th>Procesado por</th>
                                 <th>Recogido por</th>
                                 <th>Estado Actual</th>
-                                <th>Estado Siguente</th>
+                                <th>Acción</th>
                             </tr>
+                            <?php }else{ ?>
+                                    <div class="col-xs-12">
+                                    <div class='warning' style="text-align: center">
+                                        <span class="label label-warning"> Sin Solicitudes de devolución</span><br/>
+                                        <label class="text-muted">
+                                            No se encontraron registros                                          
+                                        </label> 
+                                    </div>
+                                    </div> 
+                                <?php 
+                                }
+                                ?>
                             </thead>
                             <tbody>
                             <?php foreach ($devoluciones as $dev) { ?>
@@ -73,7 +87,7 @@ $meses = $mistrings->meses();
                                         }
                                         else{
                                         ?>
-                                        <input type="text" class="form-control" data-inputmask="'alias': 'yyyy/mm/dd'" data-mask=""  id="fecha-<?php echo $dev["ID_DEV"]; ?>">
+                                        <input type="text" class="form-control input-sm" data-inputmask="'alias': 'yyyy/mm/dd'" data-mask=""  id="fecha-<?php echo $dev["ID_DEV"]; ?>">
                                         <?php } ?>
 
                                     </td>
@@ -109,12 +123,12 @@ $meses = $mistrings->meses();
                                     <td><?php echo $dev["ESTADO"]; ?></td>
                                     <td><input type="hidden" id="id_dev" value="<?php echo $dev['ID_DEV']; ?>">
                                         <?php if($dev["ESTADO"] == "POR PROCESAR"){ ?>
-                                            <button type="button" class="btn btn-block btn-primary btn-sm update-dev" data-id="<?php echo $dev["ID_DEV"]; ?>">PROGRAMADA</button>
+                                            <button type="button" class="btn btn-block btn-primary btn-sm update-dev" data-id="<?php echo $dev["ID_DEV"]; ?>">PROGRAMAR</button>
                                             <?php
                                             }
                                             elseif($dev["ESTADO"] == "PROGRAMADA"){
                                             ?>
-                                            <button type="button" class="btn btn-block btn-success btn-sm update-dev" data-id="<?php echo $dev["ID_DEV"]; ?>">FINALIZADA</button>
+                                            <button type="button" class="btn btn-block btn-success btn-sm update-dev" data-id="<?php echo $dev["ID_DEV"]; ?>">FINALIZAR</button>
                                             <?php
                                             }
                                             elseif($dev["ESTADO"] == "FINALIZADA"){
@@ -142,6 +156,22 @@ $meses = $mistrings->meses();
         </div>
         <!-- /.row -->
     </section>
+
+
+    <?php else:?>
+    <section>
+      <div class="col-xs-12">
+        <div class='restringido' style="text-align: center">
+          <span class="label label-primary"><i class="fa fa-warning"></i>  Restringido..!!!  <i class="fa fa-warning"></i></span><br/>
+          <label style='color:#1D4FC1'>
+                <?php  
+                echo "No tienes las credenciales para acceder al contenido";
+                ?> 
+          </label> 
+        </div>
+      </div> 
+    </section>
+    <?php endif ?>
 
 </div>
 <!-- /.content-wrapper -->

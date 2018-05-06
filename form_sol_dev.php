@@ -32,6 +32,10 @@ if (!function_exists('array_column')) {
 
   $asignacion = array_column($asignacion, 'ASIGNACION');//seleccionando una columna
   
+  $modulos = $conexion->modulos($usuario_session['ID_USER']);
+  $modulos = array_column($modulos, 'TIPO');//SOLO LA COLUMNA TIPO
+  $modulos = array_unique($modulos);//EQUIVALENTE A UN DISTINCT
+
   // var_dump($solicitudes);
   $mistrings = new MiStrings();
   $meses = $mistrings->meses();
@@ -53,13 +57,13 @@ if (!function_exists('array_column')) {
         <!-- <small>Control panel</small> -->
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Devolución de documentos</li>
       </ol>
     </section>
 
+<?php if(in_array("solicitud_devoluciones", $modulos) || $usuario_session['TIPO'] == 'IA_ADMIN'): ?>
     <!-- Main content -->
-    <!-- /.content -->
     <section class="content">
       <div class="row" style="font-size:11px;">
         <div class="col-xs-12">
@@ -233,6 +237,22 @@ if (!function_exists('array_column')) {
       </form>
     </section>
 
+    <?php else:?>
+    <section>
+      <div class="col-xs-12">
+        <div class='restringido' style="text-align: center">
+          <span class="label label-primary"><i class="fa fa-warning"></i>  Restringido..!!!  <i class="fa fa-warning"></i></span><br/>
+          <label style='color:#1D4FC1'>
+                <?php  
+                echo "No tienes las credenciales para acceder al contenido"; 
+                // echo "Succefully";
+                ?> 
+          </label> 
+        </div>
+      </div> 
+    </section>
+    <?php endif ?>
+
     <section>
       <div class="col-lg-12">
         <div class="div_contenido" style=" text-align: center">
@@ -267,16 +287,24 @@ if (!function_exists('array_column')) {
                 }
                 else{
                     if(result == 'vacio'){
-                        $.get("msj_incorrecto.php?msj="+"Seleccione al menos un ITEM e ingrese los detalles", function(result){
+                        $.get("msj_incorrecto.php?msj="+"Seleccione al menos un ITEM", function(result){
                             $("#resp").html(result);
                             refrescar();
                         });
                     }
                     else{
+                      if (result == 'sin_dirección') {
+                        $.get("msj_incorrecto.php?msj="+"Ingrese la dirección de donde se recojerá", function(result){
+                            $("#resp").html(result);
+                            refrescar();
+                        });
+                      }
+                      else{
                         $.get("msj_incorrecto.php?msj="+"No se pudo realizar la solicitud", function(result){
                             $("#resp").html(result);
                             refrescar();
                         });
+                      }
                     }
                 }
             }
