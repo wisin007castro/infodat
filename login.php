@@ -23,6 +23,7 @@
 
      if(!$query){
          echo "<script language='javascript'>alert('Nombre de Usuario o Password incorrecto..!')</script>";
+         echo "<meta http-equiv='refresh' content='0;url=login.php' />";
      }else{
 
       if ($query[0]['HABILITADO'] == 'SI') {
@@ -100,11 +101,14 @@
                   </div>
                   <br>
                     <button type="submit" class="mybtn"> Ingresar </button>
+                  <br><br>
+                  <div align="center">
+                    <a href="forgotPassword.php">¿Olvidaste tu contraseña?</a><br>
+                  </div>
                 </form>
 
-            </div><!-- /.login-box-body -->
-
-        </div><!-- /.login-box -->                
+            </div>
+        </div>             
 
   </div>
 

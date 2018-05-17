@@ -34,10 +34,8 @@ else{
 							INTERNO='".$_POST['interno']."',
 							CELULAR='".$_POST['celular']."',
 							CORREO='".$_POST['correo']."',
-							PASS='".$pass."',
-							HABILITADO='".$_POST['habilitado']."',
-							TIPO='".$_POST['tipo']."',
-							REGIONAL='".$_POST['regional']."' WHERE ID_USER='".$_POST['id_user']."'";
+							PASS='".$pass."'
+                            WHERE ID_USER='".$_POST['id_user']."'";
 
 	if(!$resultado = mysqli_query($con, $sql)) die();
 

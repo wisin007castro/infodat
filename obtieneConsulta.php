@@ -43,8 +43,8 @@ $log = new Logs();//llamando a la clase Logs
 			$filtro = " WHERE DESC_1 like '%".$desc_1."%' 
 			and DESC_2 like '%".$desc_2."%' 
 			and DESC_3 like '%".$desc_3."%'
-			and MES_I >= '".$mes."'
-			and ANO_I >= '".$anio."'
+			and MES_I LIKE '%".$mes."%'
+			and ANO_I LIKE '%".$anio."%'
 			and CAJA like '%".$caja."%'
 			and ID_CLIENTE = '".$cliente."'  
 			and REGIONAL = '".$regional."' " ;

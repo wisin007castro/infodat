@@ -1,6 +1,8 @@
 <?php
 
 require_once '../conexionClass.php';
+require_once '../PHPMailer/PHPMailerAutoload.php';
+
 $conexion = new MiConexion();
 $con = $conexion->conectarBD();
 
@@ -63,16 +65,7 @@ if ($fecha != '') {
 				</body> 
 				</html> 
 				"; 
-				//para el envío en formato HTML 
-				$headers = "MIME-Version: 1.0\r\n"; 
-				$headers .= "Content-type: text/html; charset=utf-8\r\n"; 
-				//dirección del remitente 
-				$headers .= "From: INFODAT <sistema.consultas@infoactiva.com.bo>\r\n"; 
-				//dirección de respuesta, si queremos que sea distinta que la del remitente 
-				$headers .= "Reply-To: ".$reply_to."\r\n";
-				//direcciones que recibián copia 
-				$headers .= "Cc: wissindrako@gmail.com\r\n"; //cambiar a consultas.lp@infoactiva.com.bo 
-				mail($destinatario,$asunto,$cuerpo,$headers);
+				enviar_email($destinatario, $reply_to, $asunto, $cuerpo);
 
 				if ($resultado) {
 					echo "POR PROCESAR";
@@ -115,16 +108,7 @@ if ($fecha != '') {
 				</body> 
 				</html> 
 				"; 
-				//para el envío en formato HTML 
-				$headers = "MIME-Version: 1.0\r\n"; 
-				$headers .= "Content-type: text/html; charset=utf-8\r\n"; 
-				//dirección del remitente 
-				$headers .= "From: INFODAT <sistema.consultas@infoactiva.com.bo>\r\n"; 
-				//dirección de respuesta, si queremos que sea distinta que la del remitente 
-				$headers .= "Reply-To: ".$reply_to."\r\n";
-				//direcciones que recibián copia 
-				$headers .= "Cc: wissindrako@gmail.com\r\n"; //cambiar a consultas.lp@infoactiva.com.bo 
-				mail($destinatario,$asunto,$cuerpo,$headers);
+				enviar_email($destinatario, $reply_to, $asunto, $cuerpo);
 
 				if ($resultado) {
 					echo "PROGRAMADA";
@@ -138,6 +122,37 @@ if ($fecha != '') {
 }
 else{
 	echo "fecha";
+}
+
+function enviar_email($destinatario, $reply_to, $asunto, $cuerpo){
+	$mail = new PHPMailer;
+
+	$mail->isSMTP();                                      // Set mailer to use SMTP
+	$mail->Host = 'mail.infoactiva.com.bo';  			  // Specify main and backup SMTP servers
+	$mail->SMTPAuth = true;                               // Enable SMTP authentication
+	$mail->Username = 'wcastro@infoactiva.com.bo';        // SMTP username
+	$mail->Password = 'wilTemoral123';                    // SMTP password
+	$mail->SMTPSecure = 'ssl';                            // Enable TLS encryption, `ssl` also accepted
+	$mail->Port = 465;                                    // TCP port to connect to
+
+	$mail->setFrom('sistema.consultas@infoactiva.com.bo', 'INFODAT');
+	$mail->addAddress($destinatario);               // Name is optional
+	$mail->addReplyTo($reply_to);
+	$mail->addCC('wissindrako@gmail.com');//cambiar a reply_to
+
+	// $mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
+	// $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+	$mail->isHTML(true);                                     // Set email format to HTML
+
+	$mail->Subject = $asunto;
+	$mail->Body    = $cuerpo;
+	if(!$mail->send()) {
+		echo 'Message could not be sent.';
+		echo 'Mailer Error: ' . $mail->ErrorInfo;
+	} else {
+		echo 'Message has been sent';
+	}
+
 }
 
 ?>

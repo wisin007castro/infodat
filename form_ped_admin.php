@@ -24,7 +24,7 @@ $estados = $mistrings->estadoSol();
             Estado de Solicitud
         </h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
             <li class="active">Estado de solicitud</li>
         </ol>
     </section>
@@ -381,7 +381,7 @@ $estados = $mistrings->estadoSol();
                     $.get("msj_correcto.php?msj=Solicitud actualizada a DESPACHADA", function(result){
                     $("#resp").html(result);
                     });
-                    // form104(id_sol);
+                    form104(id_sol);s
                     refresh_fast();
                 }
                 if(result == 'error'){

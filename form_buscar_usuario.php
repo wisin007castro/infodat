@@ -18,7 +18,7 @@
         <!-- <small>Control panel</small> -->
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Gestión de Usuarios</li>
       </ol>
     </section>
@@ -30,8 +30,8 @@
       <div class="row">
         <div class="col-lg-4 col-xs-6">
           <div class="form-group">
-              <label>Descripción</label>
-              <input type="text" class="form-control" id="bdesc_1" name="" placeholder="Descripción">
+              <label>Nombre</label>
+              <input type="text" class="form-control" id="bdesc_1" name="" placeholder="">
               <button type="button" class="btn btn-default" id="buscar"><i class="fa fa-search"> </i> </button>
                   <button type="button" class="btn btn-default pull-right" id="limpiar"><i class="fa fa-trash"></i> </button>
           </div>
@@ -61,13 +61,13 @@
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header">
-              <h3 class="box-title">Lista de archivos</h3>
+              <h3 class="box-title">Lista de usuarios</h3>
             </div>
             <div class="box-body table-responsive no-padding">
               <table class="table table-bordered" id="tb_busc_usuario">
               <thead><tr>
                   <th>Editar</th>
-                  <th>#</th>
+                  <!-- <th>#</th> -->
                   <th>CLIENTE</th>
                   <th>NOMBRE</th>
                   <th>CARGO</th>
@@ -149,7 +149,7 @@
         "<tr>"
         // +"<td><button type='button' class='btn btn-success' ><i class='fa fa-shopping-cart'></i></button></td>"
         +"<td><a href='form_edit_usuario.php?id="+usuarios.ID_USER+"'><i style='font-size:14px;' class='fa fa-edit text-blue'></i></a></td>"
-        +"<td>"+usuarios.ID_USER+"</td>"
+        // +"<td>"+usuarios.ID_USER+"</td>"
         +"<td>"+usuarios.ID_CLIENTE+"</td>"
         +"<td>"+usuarios.NOMBRE+" "+usuarios.APELLIDO+"</td>"
         +"<td>"+usuarios.CARGO+"</td>"

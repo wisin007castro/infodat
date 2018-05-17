@@ -76,13 +76,13 @@
               </div>
               <div class="col-lg-4">
                 <div class="form-group">
-                  <label>Nombres</label>
+                  <label>Nombres *</label>
                   <input style='text-transform:uppercase' type="text" name="nombre" placeholder="" class="form-control" required>
                 </div>
               </div>
               <div class="col-lg-4">
                 <div class="form-group">
-                  <label>Apellidos</label>
+                  <label>Apellidos *</label>
                   <input style='text-transform:uppercase' type="text" name="apellido" placeholder="" class="form-control" required>
                 </div>
               </div>
@@ -91,13 +91,13 @@
             <div class="row">
               <div class="col-lg-4">
                 <div class="form-group">
-                  <label>Cargo</label>
+                  <label>Cargo *</label>
                   <input style='text-transform:uppercase' type="text" name="cargo" class="form-control" required>
                 </div>
               </div>
               <div class="col-lg-8">
                 <div class="form-group">
-                  <label>Dirección</label>
+                  <label>Dirección *</label>
                   <input style='text-transform:uppercase' type="text" name="direccion" class="form-control" required>
                 </div>
               </div>
@@ -105,26 +105,26 @@
             <div class="row">
               <div class="col-lg-2">
                 <div class="form-group">
-                  <label>Telefono</label>
-                  <input type="number" name="telefono" class="form-control" required onkeydown="javascript: return event.keyCode == 69 ? false : true"> <!-- press 'e' = false-->
+                  <label>Telefono *</label>
+                  <input type="number" name="telefono" min="2000000" max="4999999" class="form-control" required onkeydown="javascript: return event.keyCode == 69 ? false : true"> <!-- press 'e' = false-->
                 </div>
               </div>
               <div class="col-lg-1">
                 <div class="form-group">
                   <label>Interno</label>
-                  <input type="number" name="interno" class="form-control" onkeydown="javascript: return event.keyCode == 69 ? false : true"> <!-- press 'e' = false-->
+                  <input type="number" name="interno" min="1" class="form-control" onkeydown="javascript: return event.keyCode == 69 ? false : true"> <!-- press 'e' = false-->
                 </div>
               </div>
               <div class="col-lg-2">
                 <div class="form-group">
                   <label>Celular</label>
-                  <input type="number" name="celular" class="form-control" onkeydown="javascript: return event.keyCode == 69 ? false : true"> <!-- press 'e' = false-->
+                  <input type="number" name="celular" min="6000000" max="7999999" class="form-control" onkeydown="javascript: return event.keyCode == 69 ? false : true"> <!-- press 'e' = false-->
                 </div>
               </div>
               <div class="col-lg-4">
                 <div class="form-group">
-                  <label>Correo</label>
-                  <input type="text" name="correo" class="form-control" required>
+                  <label>Correo *</label>
+                  <input type="email" name="correo" class="form-control" required>
                 </div>
               </div>
               <div class="col-lg-3">
@@ -145,13 +145,13 @@
             <div class="row">
               <div class="col-lg-2">
                 <div class="form-group">
-                  <label>Nombre de Usuario</label>
+                  <label>Nombre de Usuario *</label>
                   <input style='text-transform:uppercase' type="text" name="user" class="form-control" required>
                 </div>
               </div>
               <div class="col-lg-2">
                 <div class="form-group">
-                  <label>Password</label>
+                  <label>Password *</label>
                   <input type="password" name="pass" class="form-control" required>
                 </div>
               </div>
@@ -238,20 +238,27 @@
                 }
                 else{
                     if(result == 'vacio'){
-                      $.get("msj_incorrecto.php?msj=Complete los datos faltantes", function(result){
+                      $.get("msj_incorrecto.php?msj=Complete los campos obligatorios (*)", function(result){
                           $("#resp").html(result);
                       });
                     }
                     else{
-                      if (result == 'repetido') {
+                      if (result == 'user-repetido') {
                         $.get("msj_incorrecto.php?msj=El nombre de usuario ya fue usado, elija otro", function(result){
                           $("#resp").html(result);
                         });
                       }
                       else{
+                        if(result == 'correo-repetido'){
+                          $.get("msj_incorrecto.php?msj=El correo ya fue usado, ingrese otro", function(result){
+                          $("#resp").html(result);
+                        });
+                        }
+                        else{
                         $.get("msj_incorrecto.php?msj="+"No se pudo agregar usuario", function(result){
                             $("#resp").html(result);
                         });
+                      }
                       }
                     }
                 }

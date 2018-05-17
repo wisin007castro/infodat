@@ -20,20 +20,20 @@
   $mod_auth = array_unique($mod_auth);//EQUIVALENTE A UN DISTINCT
 
  ?>
-
+    <section>
+      <div id="resp" class="col-lg-12">
+    </section>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <section class="content">
-      <div id="resp" class="col-lg-12">
-    </section>
+
     <section class="content-header">
       <h1>
         Parametrización de usuarios
         <!-- <small>Control panel</small> -->
       </h1>
       <ol class="breadcrumb">
-        <li><a href="index.php"><i class="fa fa-dashboard"></i> Administración</a></li>
+        <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Parametrización de usuarios</li>
       </ol>
     </section>
@@ -72,7 +72,7 @@
                   </select>
                   <?php }
                   else{ ?>
-                    <select class="form-control" name="cliente" id="id_cliente">
+                  <select class="form-control" name="cliente" id="id_cliente">
                     <!-- <option value="0">--- SELECCIONE UN CLIENTE ---</option> -->
                     <?php foreach ($clientes as $cli) {
                       if($usuario_session['ID_CLIENTE'] == $cli['ID_CLIENTE']){
@@ -87,8 +87,6 @@
               </div>
             </div>
 
-            <script> var var_cliente = $("#id_cliente").val(); </script>
-            
             <div class="row">
               <div class="col-lg-3">
                 <div class="form-group con-json">
@@ -154,7 +152,7 @@
                   <?php if ($usuario_session['TIPO'] != 'IA_ADMIN') :?>
                   <div class="checkbox">
                     <label>
-                      <input name="asignacion[]" type="checkbox" value="<?php echo $value['ID_USER'] ?>"><?php echo $value['NOMBRE']."".$value['APELLIDO']?></label>
+                      <input name="asignacion[]" type="checkbox" value="<?php echo $value['ID_USER'] ?>"><?php echo $value['NOMBRE']." ".$value['APELLIDO']?></label>
                   </div>
                   <?php endif ?>
                   <?php endforeach ?>
@@ -198,7 +196,7 @@
                     <div class="box-body table-responsive no-padding scrollable">
                         <table class="table table-bordered" id="tb_busc_acceso">
                             <thead><tr>
-                                <th>ID Usuario</th>
+                                <!-- <th>ID Usuario</th> -->
                                 <th>Nombre</th>
                                 <th>Modulo</th>
                                 <th>Acceso</th>
@@ -259,7 +257,7 @@
       cargaUsuarios();
     });
 
-    $("#id_user").change(function(){
+    $(".con-json select").change(function(){
       cargaParametrizados();
     });
 
@@ -283,7 +281,7 @@
     function cargaParametrizados(){
       $("#tb_busc_acceso tbody").html("");
         // $("#error").html("<div class='modal1'><div class='center1'> <center> <img src='img/gif-load.gif'> Buscando Informacion...</center></div></div>");
-      var sel_user = $("#id_user").val();
+      var sel_user = $(".con-json select").val();
       var sel_modulo = $("#modulos").val();
 
       // console.log($("#anio").val());
@@ -299,7 +297,7 @@
           if (accesos.HABILITADO == 'SI') {
             var nuevaFila =
             "<tr>"
-            +"<td>"+accesos.ID_USER+"</td>"
+            // +"<td>"+accesos.ID_USER+"</td>"
             +"<td>"+accesos.NOMBRE+" "+accesos.APELLIDO+"</td>"
             +"<td>"+accesos.TIPO+"</td>"
             +"<td>"+accesos.ACCESO+"</td>"
@@ -310,7 +308,7 @@
           else{
             var nuevaFila =
             "<tr>"
-            +"<td>"+accesos.ID_USER+"</td>"
+            // +"<td>"+accesos.ID_USER+"</td>"
             +"<td>"+accesos.NOMBRE+" "+accesos.APELLIDO+"</td>"
             +"<td>"+accesos.TIPO+"</td>"
             +"<td>"+accesos.ACCESO+"</td>"

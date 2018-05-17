@@ -2,7 +2,7 @@
     <div class="pull-right hidden-xs">
       <b>Version</b> 3.0.0
     </div>
-    <strong>Copyright &copy; 2018 <a href="http://www.infoactiva.com.bo">Infoactiva</a>.</strong> Todos los derechos reservados.
+    <strong>Copyright &copy; 2018 <a href="https://www.infoactiva.com.bo">Infoactiva</a>.</strong> Todos los derechos reservados.
   </footer>
 <!-- jQuery 3 -->
 <script src="bower_components/jquery/dist/jquery.min.js"></script>

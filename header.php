@@ -96,52 +96,8 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
- <!--          <li class="dropdown tasks-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-flag-o"></i>
-              <span class="label label-danger">9</span>
-            </a>
-            <ul class="dropdown-menu">
-              <li class="header">You have 9 tasks</li>
-              <li>
-                <ul class="menu">
-                  <li>
-                    <a href="#">
-                      <h3>
-                        Design some buttons
-                        <small class="pull-right">20%</small>
-                      </h3>
-                      <div class="progress xs">
-                        <div class="progress-bar progress-bar-aqua" style="width: 20%" role="progressbar"
-                             aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                          <span class="sr-only">20% Complete</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <h3>
-                        Create a nice theme
-                        <small class="pull-right">40%</small>
-                      </h3>
-                      <div class="progress xs">
-                        <div class="progress-bar progress-bar-green" style="width: 40%" role="progressbar"
-                             aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                          <span class="sr-only">40% Complete</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="footer">
-                <a href="#">View all tasks</a>
-              </li>
-            </ul>
-          </li> -->
-          <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
+          <input type="hidden" name="id_user" id="id_user" value="<?php echo $usuario_session['ID_USER']; ?>">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
               <span class="hidden-xs"><?php echo $usuario_session['NOMBRE']." ".$usuario_session['APELLIDO']; ?></span>
@@ -156,25 +112,10 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
                   <!-- <small>Member since Nov. 2012</small> -->
                 </p>
               </li>
-              <!-- Menu Body -->
-<!--               <li class="user-body">
-                <div class="row">
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Followers</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Cargo: <?php //echo $usuario_session['CARGO']; ?></a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Friends</a>
-                  </div>
-                </div>
-                
-              </li> -->
-              <!-- Menu Footer-->
+
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="#" class="btn btn-default btn-flat">Perfil</a>
+                  <a onclick="editar()" class="btn btn-default btn-flat">Perfil</a>
                 </div>
                 <div class="pull-right">
                   <a href="logout.php" class="btn btn-default btn-flat">Salir</a>
@@ -186,8 +127,25 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
       </div>
     </nav>
   </header>
+  
 
 <?php 
   include "panel.php"; 
   // include "conexionClass.php";
+  
+  // require_once 'footer.php';
 ?>
+<div id="perfil"></div>
+<script  type="text/javascript">
+  function editar(){//CON CONFIRMACION DESPACHADO
+  id_user = $("#id_user").val();
+  $.ajax({
+    type:'POST',
+    url:"form_edit_perfil.php",
+    data:{'id_user':id_user},
+      success: function(data){
+        $("#contenidos").html(data);
+      }
+    }
+  )};
+</script>

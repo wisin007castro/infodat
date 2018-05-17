@@ -5,7 +5,6 @@
 	  <label style='color:#177F6B'>
           <?php  
           echo $_GET['msj']; 
-          // echo "Succefully";
           ?> 
 	  </label> 
 	</div>

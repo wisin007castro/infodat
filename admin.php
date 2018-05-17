@@ -179,7 +179,7 @@
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">Menú de Navegación</li>
         <li class="treeview">
-          <a href="#">
+          <a href="index.php">
             <i class="fa fa-files-o"></i>
             <span>Home</span>
             <span class="pull-right-container">
@@ -231,7 +231,7 @@
         <!-- <small>Control panel</small> -->
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Administración</li>
       </ol>
     </section>
@@ -298,7 +298,7 @@
     <div class="pull-right hidden-xs">
       <b>Version</b> 1.0.0
     </div>
-    <strong>Copyright &copy; 2018 <a href="http://www.infoactiva.com.bo">infoactiva</a>.</strong> Todos los derechos reservados.
+    <strong>Copyright &copy; 2018 <a href="https://www.infoactiva.com.bo">infoactiva</a>.</strong> Todos los derechos reservados.
   </footer>
 </div>
 <!-- ./wrapper -->
