@@ -146,6 +146,7 @@
 <input type="hidden" name="cliente" id="cliente" value="<?php echo $usuario_session['ID_CLIENTE']; ?>">
 <input type="hidden" name="usuario" id="usuario" value="<?php echo $usuario_session['ID_USER']; ?>">
 <input type="hidden" name="regional" id="regional" value="<?php echo $usuario_session['REGIONAL']; ?>">
+<input type="hidden" name="asignado" id="asignado" value="<?php echo $asignacion[0]['ASIGNACION']; ?>">
         <div class="row" style="font-size:11px;">
           <div class="col-xs-12">
             <div class="box">
@@ -256,8 +257,7 @@
           <span class="label label-primary"><i class="fa fa-warning"></i>  Restringido..!!!  <i class="fa fa-warning"></i></span><br/>
           <label style='color:#1D4FC1'>
                 <?php  
-                echo "No tienes las credenciales para acceder al contenido"; 
-                // echo "Succefully";
+                  echo "No tiene el perfil adecuado para ver este contenido, contáctese con su Administrador"; 
                 ?> 
           </label> 
         </div>

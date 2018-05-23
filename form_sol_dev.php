@@ -315,7 +315,7 @@ if (!function_exists('array_column')) {
   function cargar_formulario(id_inv){
 
       var usuario = $("#usuario").val();
-      $.getJSON("obtieneConsulta.php",{id:id_inv, desc_1:"", desc_2:"", desc_3:"", caja:"",  anio:"0",  mes:"0",control:"1", cli:"", user:usuario},function(objetosretorna){
+      $.getJSON("obtieneConsultaFin.php",{id:id_inv, desc_1:"", desc_2:"", desc_3:"", caja:"",  anio:"0",  mes:"0",control:"1", cli:"", user:usuario},function(objetosretorna){
           // console.log(id_inv);
           
         $("#error").html("");

@@ -41,7 +41,7 @@
   		<h5>ENTREGA CAJAS / DOCUMENTOS</h5>
         </td>
         <td width="25%" style="font-size:16px;" align="center">
-            Número: <?php echo $pedidos[0]['ID_SOLICITUD']." / ".$tiempo['year']; ?>
+            Número: <?php echo $pedidos[0]['ID_SOLICITUD']." / ".substr($tiempo['year'], 2, 4); ?>
             <small><br><?php echo $tiempo['mday']."/".$tiempo['mon']."/".$tiempo['year']; ?></small>
              - <small><?php echo $hora; ?></small>
         </td>

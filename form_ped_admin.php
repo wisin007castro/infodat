@@ -381,7 +381,7 @@ $estados = $mistrings->estadoSol();
                     $.get("msj_correcto.php?msj=Solicitud actualizada a DESPACHADA", function(result){
                     $("#resp").html(result);
                     });
-                    form104(id_sol);s
+                    form104(id_sol);
                     refresh_fast();
                 }
                 if(result == 'error'){

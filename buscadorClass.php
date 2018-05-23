@@ -79,7 +79,9 @@ class Json
 
 	public function BuscaUsuarios($filtro){
 		if($filtro <> ""){
-			$consulta = "SELECT * FROM usuarios ".$filtro." ";//Los espacios son importantes
+			$consulta = "SELECT u.ID_USER, u.ID_CLIENTE, c.CLIENTE, u.NOMBRE, u.APELLIDO, u.CARGO, u.DIRECCION,
+			 u.TELEFONO, u.CELULAR, u.CORREO, u.TIPO, u.REGIONAL
+			FROM usuarios AS u JOIN clientes AS c ON u.ID_CLIENTE = c.ID_CLIENTE ".$filtro." ";//Los espacios son importantes
 			//echo $consulta;
 			$conexion = new conectorDB;
 			$this->json = $conexion->EjecutarSentencia($consulta);
@@ -90,13 +92,26 @@ class Json
 	public function deptos($id_usuario)
     {
     	$conexion = new conectorDB;
+
+		$sql = "SELECT DISTINCT ASIGNACION FROM (
+			SELECT * FROM parametros WHERE ID_USER = $id_usuario AND HABILITADO = 'SI'
+		) a ";
+        $this->json = $conexion->EjecutarSentencia($sql);
+		return $this->json;
+	}
+
+	public function deptos_consultas($id_usuario)
+    {
+    	$conexion = new conectorDB;
         // $sql = "SELECT DISTINCT DEPARTAMENTO FROM (
         //             SELECT * FROM accesos WHERE ID_USER = $id_usuario AND HABILITADO = 'SI'
 		// 		) a ";
 		$sql = "SELECT DISTINCT ASIGNACION FROM (
-			SELECT * FROM parametros WHERE ID_USER = $id_usuario AND HABILITADO = 'SI'
+			SELECT * FROM parametros WHERE ID_USER = $id_usuario
+				AND TIPO = 'solicitud_consultas' 
+				AND HABILITADO = 'SI'
 		) a ";
-        			$this->json = $conexion->EjecutarSentencia($sql);
+        $this->json = $conexion->EjecutarSentencia($sql);
 		return $this->json;
     }
 	
@@ -104,7 +119,7 @@ class Json
 
 		$conexion = new conectorDB;
 		$resultado = array();
-		$deptos = $this->deptos($id_usuario);
+		$deptos = $this->deptos_consultas($id_usuario);
 
 		if($filtro <> ""){
 			//Los espacios son importantes

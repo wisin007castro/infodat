@@ -118,7 +118,7 @@
               <div class="col-lg-2">
                 <div class="form-group">
                   <label>Celular</label>
-                  <input type="number" name="celular" min="6000000" max="7999999" class="form-control" onkeydown="javascript: return event.keyCode == 69 ? false : true"> <!-- press 'e' = false-->
+                  <input type="number" name="celular" min="60000000" max="79999999" class="form-control" onkeydown="javascript: return event.keyCode == 69 ? false : true"> <!-- press 'e' = false-->
                 </div>
               </div>
               <div class="col-lg-4">

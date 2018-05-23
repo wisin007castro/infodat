@@ -6,17 +6,26 @@ require_once 'conexionClass.php';
 	$c = $conexion->cliente("1");
 	$u = $conexion->usuario("6");
 
+	$correo = $conexion->correo();
+
+	// $correo = mysqli_fetch_object($correo);
+
+	//var_dump($correo);
+
+	// echo $correo[1]['TELEFONO'];
+
 	// var_dump($c[0]['CLIENTE']);
 
 	// $cliente = $c['CLIENTE'];
 	// $usuario = $u['NOMBRE']." ".$u['APELLIDO'];
 
-	// date_default_timezone_set('America/La_Paz'); //definiendo zona horaria
-	// $script_tz = date_default_timezone_get();
-	// // echo $script_tz;
-	// $tiempo = getdate();
-	// $fecha = $tiempo['year']."-".$tiempo['mon']."-".$tiempo['mday'];
-	// $hora = $tiempo['hours'].":".$tiempo['minutes'];
+	date_default_timezone_set('America/La_Paz'); //definiendo zona horaria
+	$script_tz = date_default_timezone_get();
+	// echo $script_tz;
+	$tiempo = getdate();
+	$fecha = $tiempo['year']."-".$tiempo['mon']."-".$tiempo['mday'];
+	$hora = $tiempo['hours'].":".$tiempo['minutes'];
+	echo substr($tiempo['year'], 2, 4);
 
 	// $sql = "INSERT INTO log_eventos (ID_CLIENTE, ID_USER, FECHA, HORA, EVENTO) 
 	// 	VALUES ('".$cliente."','".$usuario."', '".$fecha."','".$hora."','".$evento."')";
@@ -31,17 +40,17 @@ require_once 'conexionClass.php';
 	// 	echo $value['DEPARTAMENTO'];
 	// }
 
-	$perl = "DICTAMEN DE AUDITORES INDEPENDIENTES || AUDITORIA EXTERNA DEL 1? AL 31 DE DIC. 2013 || INFOACTIVA S.R.L. ";
-	echo $perl."<br>" ;
-	// $perl = substr($perl, 0, 60);
-	$descripcion = "";
-	while (strlen($perl) >= 40) {
+// 	$perl = "DICTAMEN DE AUDITORES INDEPENDIENTES || AUDITORIA EXTERNA DEL 1? AL 31 DE DIC. 2013 || INFOACTIVA S.R.L. ";
+// 	echo $perl."<br>" ;
+	
+// 	$descripcion = "";
+// 	while (strlen($perl) >= 40) {
 
-		$descripcion = $descripcion."+".substr($perl, 0, 39);
-		$perl = substr($perl, 39);
+// 		$descripcion = $descripcion."+".substr($perl, 0, 39);
+// 		$perl = substr($perl, 39);
 
-	}
+// 	}
 
-echo $descripcion." ".$perl;
+// echo $descripcion." ".$perl;
 	
  ?>

@@ -60,7 +60,7 @@ if (!function_exists('array_column')) {
 			$pdf->SetFont('Arial', 'B', 11);
 			$pdf->Cell(120, 10, 'FORMULARIO 106', 0,0,'C');
 			$pdf->SetFont('Arial', '', 10);
-			$pdf->Cell(50, 10, 'Numero: '.$id_sol." / ".$value['ID_SOLICITUD']." - ".$tiempo['year'].'', 0,1);
+			$pdf->Cell(50, 10, 'Numero: '.$id_sol." / ".$value['ID_SOLICITUD']." - ".substr($tiempo['year'], 2, 4).'', 0,1);
 			$pdf->Cell(0, 10, ''.date('d/m/Y').' - '.$hora.' ', 0,0,'R');
 			
 			$pdf->SetFont('Arial', 'B', 11);

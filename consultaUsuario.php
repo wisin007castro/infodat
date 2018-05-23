@@ -4,7 +4,7 @@
     $cliente = $_GET["cli"];
     
     if($nombre <> ""){
-        $filtro = " WHERE (NOMBRE like '%".$nombre."%' or APELLIDO like '%".$nombre."%' or CARGO like '%".$nombre."%') AND ID_CLIENTE = '".$cliente."' " ;       
+        $filtro = " WHERE NOMBRE like '%".$nombre."%' or APELLIDO like '%".$nombre."%' " ;       
     }
     else{
         $filtro = "WHERE ID_CLIENTE = '".$cliente."' ";

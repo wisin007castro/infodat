@@ -87,6 +87,10 @@ class MiConexion{
         return $this->getArraySQL($sql);
     }
 
+    public function correo(){
+        $sql = "SELECT * FROM correos";
+        return $this->getArraySQL($sql);
+    }
     // public function deptos($id_usuario)
     // {
         // $sql = "SELECT DISTINCT DEPARTAMENTO FROM (

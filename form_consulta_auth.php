@@ -102,7 +102,7 @@ $asig_auth = array_column($asig_auth, 'ASIGNACION');//seleccionando una columna
                                     <td><?php echo $pedido["PROCESADO_POR"]; ?></td>
                                     <td><?php echo $pedido["FECHA_ENTREGA"]." ".$pedido["HORA_ENTREGA"]; ?></td>
                                     <td><?php echo $pedido["ENTREGADO_POR"]; ?></td>
-                                    <td><button type="button" class="btn btn-primary" onclick='guardar("<?php echo $pedido["ID_SOLICITUD"]; ?>");'>Guardar</button></td>
+                                    <td><button type="button" class="btn btn-primary" onclick='guardar("<?php echo $pedido["ID_SOLICITUD"]; ?>");'>Aprobar</button></td>
 
 
                                 </tr>
@@ -165,8 +165,7 @@ $asig_auth = array_column($asig_auth, 'ASIGNACION');//seleccionando una columna
           <span class="label label-primary"><i class="fa fa-warning"></i>  Restringido..!!!  <i class="fa fa-warning"></i></span><br/>
           <label style='color:#1D4FC1'>
                 <?php  
-                echo "No tienes las credenciales para acceder al contenido"; 
-                // echo "Succefully";
+                    echo "No tiene el perfil adecuado para ver este contenido, contáctese con su Administrador"; 
                 ?> 
           </label> 
         </div>

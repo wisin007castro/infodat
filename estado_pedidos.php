@@ -123,7 +123,7 @@ if($pedidos > 0){
                             </thead>
                             <tbody>
                             <?php foreach ($pedidos as $pedido) { ?>
-                                <?php if ((in_array('TODOS', $asignacion) || in_array($ped['ID_USER'], $asignacion) || $ped['ID_USER'] == $usuario_session['ID_USER'] ) && $pedido['REGIONAL'] == $usuario_session['REGIONAL']): ?>
+                                <?php if ((in_array('TODOS', $asignacion) || in_array($pedido['ID_USER'], $asignacion) || $pedido['ID_USER'] == $usuario_session['ID_USER'] ) && $pedido['REGIONAL'] == $usuario_session['REGIONAL']): ?>
                                     <tr>
                                     <td><a href='javascript:void(0);' onclick='cargar_formulario("<?php echo $pedido["ID_SOLICITUD"]; ?>");'><i style='font-size:14px;' class='fa fa-expand text-blue'></i></a></td>
                                     <td><?php echo $pedido["ID_SOLICITUD"]; ?></td>
@@ -158,7 +158,7 @@ if($pedidos > 0){
 
                                 </tr>
 <?php else: ?>
-    
+
 <?php endif ?>
                             <?php } ?>
                             </tbody>
